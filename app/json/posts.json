@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "title": "Hello, world!",
+    "datestamp": 42439.4915625,
+    "author": "jamrizzi",
+    "filename": "42439.4915625",
+    "permalink": "hello-world"
+  },
+  {
+    "id": 1,
+    "title": "2ndpost",
+    "datestamp": 42449.4915625,
+    "author": "jamrizzi",
+    "filename": "42449.4915625",
+    "permalink": "2ndpost"
+  }
+]

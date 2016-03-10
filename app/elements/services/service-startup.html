@@ -1,0 +1,51 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="service-startup">
+  <template>
+
+    <!-- Load posts -->
+    <iron-ajax id="posts"
+      url="../../json/posts.json"
+      handle-as="json"
+      on-response="postsResponse"
+      on-error="postsError"
+      last-response="{{postsResponseData}}"
+    ></iron-ajax>
+
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'service-startup',
+
+        ready: function() {
+          this.$.posts.generateRequest();
+        },
+
+        postsResponse: function() {
+          if (this.postsResponseData) {
+            app.posts = this.postsResponseData;
+          } else {
+            var error = 'WARNING: SyntaxError in posts.json';
+            app.toast(error);
+            app.debug(error);
+          }
+          this._loaded();
+        },
+
+        postsError: function() {
+          app.debug('WARNING: Posts failed to load');
+          this._loaded();
+        },
+
+        _loaded: function() {
+          app.loaded = true;
+          app.debug(app.settings.title + ' loaded');
+        }
+      });
+    })();
+  </script>
+
+</dom-module>

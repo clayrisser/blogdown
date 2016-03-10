@@ -1,0 +1,33 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="page-posts">
+  <template>
+
+    <span>This page lists the posts.</span>
+
+    <template is="dom-repeat" items="{{posts}}" as="post">
+      <paper-button on-click="goToPost">[[post.title]]</paper-button>
+    </template>
+
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'page-posts',
+
+        ready: function() {
+          app.pageTitle = 'Posts';
+          this.posts = app.posts;
+        },
+
+        goToPost: function(e) {
+          var model = e.model;
+          app.goTo('/posts/' + model.post.permalink);
+        }
+      });
+    })();
+  </script>
+
+</dom-module>

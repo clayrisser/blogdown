@@ -1,0 +1,7 @@
+{
+  "title": "BlogDown",
+  "debugging": "true",
+  "easterEggs": "true",
+  "ajaxTimeout": "10000",
+  "toastDuration": "5000"
+}

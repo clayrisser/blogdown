@@ -1,0 +1,23 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="page-home">
+  <template>
+
+    <span>This is the homepage</span>
+
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'page-home',
+
+        ready: function() {
+          app.pageTitle = app.settings.title;
+        }
+      });
+    })();
+  </script>
+
+</dom-module>

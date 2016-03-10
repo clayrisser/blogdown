@@ -1,0 +1,57 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="page-post">
+  <template>
+
+    <span>[[postContent]]</span>
+
+    <!-- Load post -->
+    <iron-ajax id="post"
+      url="[[postUrl]]"
+      handle-as="text"
+      on-response="postResponse"
+      on-error="postError"
+      last-response="{{postResponseData}}"
+    ></iron-ajax>
+
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'page-post',
+
+        ready: function() {
+          this.filename = null;
+          app.pageTitle = 'Post';
+          this.permlink = app.params.id;
+          for (var i = 0; i < app.posts.length; i++) {
+            if (app.posts[i].permalink === this.permlink) {
+              this.post = app.posts[i];
+              break;
+            }
+          }
+          if (!this.post.filename) {
+            app.debug('WARNING: Post not found');
+          }
+          app.pageTitle = this.post.title;
+          this.postUrl = '../../posts/' + this.post.filename + '.md';
+          this.$.post.generateRequest();
+        },
+
+        postResponse: function() {
+          this.postContent = this.postResponseData;
+          app.debug(this.post.filename + '.md post loaded');
+        },
+
+        postError: function() {
+          var error = 'WARNING: Post failed to load';
+          app.toast(error);
+          app.debug(error);
+        }
+      });
+    })();
+  </script>
+
+</dom-module>

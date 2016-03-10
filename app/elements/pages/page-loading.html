@@ -1,0 +1,23 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="page-loading">
+  <template>
+
+    <span>Loading . . .</span>
+    <service-startup></service-startup>
+
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'page-loading',
+        ready: function() {
+          app.pageTitle = 'Loading';
+        }
+      });
+    })();
+  </script>
+
+</dom-module>
