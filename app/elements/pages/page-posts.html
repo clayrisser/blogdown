@@ -2,14 +2,44 @@
 
 <dom-module id="page-posts">
   <template>
+    <style>
+      :host {
+        --paper-card-header-image: {
+          max-height: 400px;
+        }
+        --paper-card-header-text: {
+          font-size: 38px;
+        }
+        --paper-card-header-image-text: {
+          font-size: 38px;
+          text-shadow: 0 0 3px #000000;
+        }
+      }
+      paper-card.white {
+        --paper-card-header-color: #ffffff;
+      }
+    </style>
 
     <template is="dom-repeat" items="{{posts}}" as="post">
-      <paper-card heading="[[post.title]]">
-        <div class="card-content">[[post.summary]]</div>
-        <div class="card-actions">
-          <paper-button on-click="goToPost">Read More</paper-button>
-        </div>
-      </paper-card>
+      <!-- Contains featured image -->
+      <template is="dom-if" if="[[post.featuredImage]]">
+        <paper-card heading="[[post.title]]" on-click="goToPost" image="../images/uploads/[[post.featuredImage]]" class="white">
+          <div class="card-content">[[post.summary]]</div>
+          <div class="card-actions">
+            <paper-button on-click="goToPost">Read More</paper-button>
+          </div>
+        </paper-card>
+      </template>
+
+      <!-- Doesn't contain featured image -->
+      <template is="dom-if" if="[[!post.featuredImage]]">
+        <paper-card heading="[[post.title]]" on-click="goToPost">
+          <div class="card-content">[[post.summary]]</div>
+          <div class="card-actions">
+            <paper-button on-click="goToPost">Read More</paper-button>
+          </div>
+        </paper-card>
+      </template>
     </template>
 
   </template>
@@ -21,7 +51,6 @@
         is: 'page-posts',
 
         ready: function() {
-          app.pageTitle = 'Posts';
           this.posts = app.posts;
         },
 

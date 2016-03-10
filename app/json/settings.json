@@ -13,5 +13,9 @@
       "type": "twitter",
       "url": "https://twitter.com"
     }
+  ],
+  "backgrounds": [
+    "0099ff.png",
+    "ff9900.png"
   ]
 }

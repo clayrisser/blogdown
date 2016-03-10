@@ -2,14 +2,41 @@
 
 <dom-module id="page-post">
   <template>
+    <style>
+      :host {
+        --paper-card-header-image: {
+          max-height: 150px;
+        }
+        --paper-card-header-text: {
+          font-size: 38px;
+        }
+        --paper-card-header-image-text: {
+          font-size: 38px;
+          text-shadow: 0 0 5px #000000;
+        }
+      }
+      paper-card.white {
+        --paper-card-header-color: #ffffff;
+      }
+    </style>
 
-    <paper-card>
-      <div class="card-content">
-        <juicy-markdown value="[[postContent]]"></juicy-markdown>
-      </div>
-    </paper-card>
+    <!-- Contains featured image -->
+    <template is="dom-if" if="[[post.featuredImage]]">
+      <paper-card heading="[[post.title]]" on-click="goToPost" image="../images/uploads/[[post.featuredImage]]" class="white">
+        <div class="card-content">
+          <juicy-markdown value="[[postContent]]"></juicy-markdown>
+        </div>
+      </paper-card>
+    </template>
 
-    <span></span>
+    <!-- Doesn't contain featured image -->
+    <template is="dom-if" if="[[!post.featuredImage]]">
+      <paper-card heading="[[post.title]]" on-click="goToPost">
+        <div class="card-content">
+          <juicy-markdown value="[[postContent]]"></juicy-markdown>
+        </div>
+      </paper-card>
+    </template>
 
     <!-- Load post -->
     <iron-ajax id="post"
@@ -30,7 +57,6 @@
 
         ready: function() {
           this.filename = null;
-          app.pageTitle = 'Post';
           this.permlink = app.params.id;
           for (var i = 0; i < app.posts.length; i++) {
             if (app.posts[i].permalink === this.permlink) {
@@ -41,7 +67,6 @@
           if (!this.post.filename) {
             app.debug('WARNING: Post not found');
           }
-          app.pageTitle = this.post.title;
           this.postUrl = '../../posts/' + this.post.filename + '.md';
           this.$.post.generateRequest();
         },
