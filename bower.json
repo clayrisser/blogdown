@@ -8,7 +8,8 @@
     "paper-elements": "PolymerElements/paper-elements#^1.0.1",
     "platinum-elements": "PolymerElements/platinum-elements#^1.1.0",
     "polymer": "Polymer/polymer#^1.2.0",
-    "fa-awesome": "^2.0.2"
+    "fa-awesome": "^2.0.2",
+    "juicy-markdown": "^1.0.0"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

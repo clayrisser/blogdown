@@ -3,7 +3,13 @@
 <dom-module id="page-post">
   <template>
 
-    <span>[[postContent]]</span>
+    <paper-card>
+      <div class="card-content">
+        <juicy-markdown value="[[postContent]]"></juicy-markdown>
+      </div>
+    </paper-card>
+
+    <span></span>
 
     <!-- Load post -->
     <iron-ajax id="post"
