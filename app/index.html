@@ -83,6 +83,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <div id="drawer" drawer>
               <paper-menu>
                 <paper-item id="page-home" on-click="pageHome">Home</paper-item>
+                <paper-item id="page-posts" on-click="pageSearch">Search</paper-item>
                 <paper-item id="page-posts" on-click="pagePosts">Posts</paper-item>
                 <paper-item id="page-contact" on-click="pageContact">Contact</paper-item>
               </paper-menu>
@@ -117,6 +118,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   <section data-route="home">
                     <template is="dom-if" if="{{isEqual(route, 'home')}}" restamp>
                       <page-home></page-home>
+                    </template>
+                  </section>
+
+                  <section data-route="search">
+                    <template is="dom-if" if="{{isEqual(route, 'search')}}" restamp>
+                      <page-search></page-search>
                     </template>
                   </section>
 

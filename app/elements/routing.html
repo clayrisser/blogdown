@@ -33,8 +33,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       app.route = 'posts';
     });
 
-    page('/posts/:id', function(data) {
+    page('/posts/:post', function(data) {
       app.route = 'post';
+      app.params = data.params;
+    });
+
+    page('/search', function(data) {
+      app.route = 'search';
+      app.params = data.params;
+    });
+
+    page('/posts/:query', function(data) {
+      app.route = 'search';
       app.params = data.params;
     });
 
