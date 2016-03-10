@@ -12,3 +12,12 @@ body {
   font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   color: #333;
 }
+
+.content {
+  padding: 20px 20px 0px 20px
+}
+
+paper-card {
+  width:100%;
+  margin-bottom: 20px;
+}

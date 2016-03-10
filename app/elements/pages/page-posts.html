@@ -3,10 +3,13 @@
 <dom-module id="page-posts">
   <template>
 
-    <span>This page lists the posts.</span>
-
     <template is="dom-repeat" items="{{posts}}" as="post">
-      <paper-button on-click="goToPost">[[post.title]]</paper-button>
+      <paper-card heading="[[post.title]]">
+        <div class="card-content">[[post.summary]]</div>
+        <div class="card-actions">
+          <paper-button on-click="goToPost">Read More</paper-button>
+        </div>
+      </paper-card>
     </template>
 
   </template>

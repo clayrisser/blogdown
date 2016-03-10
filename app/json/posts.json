@@ -5,7 +5,8 @@
     "datestamp": 42439.4915625,
     "author": "jamrizzi",
     "filename": "42439.4915625",
-    "permalink": "hello-world"
+    "permalink": "hello-world",
+    "summary": "This is my awsome first post"
   },
   {
     "id": 1,
@@ -13,6 +14,7 @@
     "datestamp": 42449.4915625,
     "author": "jamrizzi",
     "filename": "42449.4915625",
-    "permalink": "2ndpost"
+    "permalink": "2ndpost",
+    "summary": "This is my totally awsome second post"
   }
 ]

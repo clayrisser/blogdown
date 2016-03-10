@@ -65,6 +65,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     app.goTo('/contact');
   };
 
+  app.goToSocialPage = function(e) {
+    var model = e.model;
+    window.open(model.socialAccount.url);
+  }
+
   // Redirects app to another page with a given title and optional temporay value
   app.goTo = function(route, temp) {
     // Set temparary variable <app.temp>

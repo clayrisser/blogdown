@@ -104,7 +104,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </template>
                 <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
                 <div class="title">[[pageTitle]]</div>
-                <paper-icon-button icon="face" on-click="profileButton"></paper-icon-button>
+                <template is="dom-repeat" items=[[settings.socialAccounts]] as="socialAccount">
+                    <paper-icon-button icon="fa:[[socialAccount.type]]" on-click="goToSocialPage"></paper-icon-button>
+                </template>
               </paper-toolbar>
               <!-- End Header -->
 

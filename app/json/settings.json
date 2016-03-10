@@ -3,5 +3,15 @@
   "debugging": "true",
   "easterEggs": "true",
   "ajaxTimeout": "10000",
-  "toastDuration": "5000"
+  "toastDuration": "5000",
+  "socialAccounts": [
+    {
+      "type": "facebook",
+      "url": "https://facebook.com"
+    },
+    {
+      "type": "twitter",
+      "url": "https://twitter.com"
+    }
+  ]
 }
