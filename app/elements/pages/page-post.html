@@ -22,7 +22,7 @@
 
     <!-- Contains featured image -->
     <template is="dom-if" if="[[post.featuredImage]]">
-      <paper-card heading="[[post.title]]" on-click="goToPost" image="../images/uploads/[[post.featuredImage]]" class="white">
+      <paper-card heading="[[post.title]]" image="../images/uploads/[[post.featuredImage]]" class="white">
         <div class="card-content">
           <juicy-markdown value="[[postContent]]"></juicy-markdown>
         </div>
@@ -31,9 +31,25 @@
 
     <!-- Doesn't contain featured image -->
     <template is="dom-if" if="[[!post.featuredImage]]">
-      <paper-card heading="[[post.title]]" on-click="goToPost">
+      <paper-card heading="[[post.title]]">
         <div class="card-content">
           <juicy-markdown value="[[postContent]]"></juicy-markdown>
+        </div>
+      </paper-card>
+    </template>
+
+    <!-- Disqus commenting -->
+    <template is="dom-if" if="[[postLoaded]]">
+      <paper-card heading="Commenting">
+        <div class="card-content">
+          <service-disqus
+            shortname="jamrizzi"
+            identifier="[[post.datestamp]]"
+            title="[[post.title]]"
+            url="[[url]]"
+            categoryId="[[categoryId]]"
+            https=false
+          ></service-disqus>
         </div>
       </paper-card>
     </template>
@@ -69,10 +85,15 @@
           }
           this.postUrl = '../../posts/' + this.post.filename + '.md';
           this.$.post.generateRequest();
+          this.url = window.location.href;
         },
 
         postResponse: function() {
           this.postContent = this.postResponseData;
+          if (post.categoryId) {
+            this.categoryId = post.categoryId;
+          }
+          this.postLoaded = true;
           app.debug(this.post.filename + '.md post loaded');
         },
 
