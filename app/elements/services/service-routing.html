@@ -1,0 +1,171 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="service-routing">
+  <template>
+
+    <excess-route route="/" on-excess-route-will-activate="_homeRouteActivated"></excess-route>
+    <excess-route route="/:parent" parent="{{parentSlug}}" on-excess-route-will-activate="_parentRouteActivated"></excess-route>
+    <excess-route route="/:parent/" parent="{{parentSlug}}" on-excess-route-will-activate="_parentRouteActivated"></excess-route>
+    <excess-route route="/:parent/:child" parent="{{parentSlug}}" child="{{childSlug}}" on-excess-route-will-activate="_childRouteActivated"></excess-route>
+    <excess-route route="/:parent/:child/" parent="{{parentSlug}}" child="{{childSlug}}" on-excess-route-will-activate="_childRouteActivated"></excess-route>
+
+    <restamp-page route="home" current-route="[[route]]" page-type="hard" current-type="[[pageType]]">
+      <page-home></page-home>
+    </restamp-page>
+
+    <restamp-page route="posts" current-route="[[route]]" page-type="hard" current-type="[[pageType]]">
+      <page-posts></page-posts>
+    </restamp-page>
+
+    <restamp-page route="contact" current-route="[[route]]" page-type="hard" current-type="[[pageType]]">
+      <page-contact></page-contact>
+    </restamp-page>
+
+    <restamp-page route="404" current-route="[[route]]" page-type="hard" current-type="[[pageType]]">
+      <page-404></page-404>
+    </restamp-page>
+
+    <restamp-page route="" current-route="[[route]]" page-type="soft" current-type="[[pageType]]"></restamp-page>
+
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'service-routing',
+
+        properties: {
+          parentSlug: {
+            type: String,
+            observer: '_routeChanged'
+          },
+          childSlug: {
+            type: String,
+            observer: '_routeChanged'
+          }
+        },
+
+        ready: function() {
+          this._buildPageArray();
+          console.log('i loaded');
+        },
+
+        initializePage: function() {
+          var validPage = false;
+          if (this._pagesLoaded === true) { // Prevents comparing route with pages before pages are loaded
+            if (this.routeType === 'parent') { // Parent page
+              for (var i = 0; i < this.pages.length; i++) {
+                if (this.parent === this.pages[i].route) {
+                  if (this.pages[i].type === 'hard') { // Hard page
+                    this.set('pageType', 'hard');
+                  } else { // Soft page
+                    this.set('pageType', 'soft');
+                  }
+                  this.set('route', this.pages[i].route);
+                  validPage = true;
+                  this.set('pageElement', this.parent);
+                  break;
+                }
+              }
+            } else if (this.routeType === 'child') { // Child page
+              for (var i = 0; i < this.pages.length; i++) {
+                if (this.child === this.pages[i].route) {
+                  validPage = true;
+                  this.set('pageElement', this.child);
+                  break;
+                }
+              }
+            }
+            if (!validPage){ // 404 error
+              this.set('route', '404');
+              this.set('pageType', 'hard');
+              var error = 'This page is invalid';
+              app.toast(error);
+              console.warn(error);
+            }
+          }
+        },
+
+        _homeRouteActivated: function() {
+          this.routeType = 'home';
+          this._routeChanged(); // Runs this because parentSlug and childSlug don't fire the _routeChanged event
+        },
+
+        _parentRouteActivated: function() {
+          this.routeType = 'parent';
+        },
+
+        _childRouteActivated: function() {
+          this.routeType = 'child';
+        },
+
+        _routeChanged: function() {
+          if (this.routeType === 'home') {
+            this.parent = 'home';
+            this.child = null;
+            this.routeType = 'parent'; // Treats home route like a parent route
+          } else if (this.routeType === 'parent') {
+            this.parent = this.parentSlug;
+            this.child = null;
+          } else if (this.routeType === 'child') {
+            this.parent = this.parentSlug;
+            this.child = this.childSlug;
+          } else {
+             this.parent = null;
+             this.child = null;
+             app.warn('Invalid route');
+          }
+          this.initializePage();
+        },
+
+        _buildPageArray: function() {
+          this.pages = [];
+          var hardPages = app.settings.hardPages;
+          var softPages = app.settings.softPages;
+          for (var i = 0; i < hardPages.length; i++) { // Add hard pages
+            var page = {};
+            var route = hardPages[i].title.toLowerCase().replace(' ', '-');
+            if (route === 'home') {
+              var slug = '/';
+            } else {
+              var slug = '/' + route;
+            }
+            if (hardPages[i].dataParam) {
+              page = {
+                title: hardPages[i].title,
+                route: route,
+                slug: slug,
+                dataParam: hardPages[i].dataParam,
+                type: "hard"
+              };
+            } else {
+              page = {
+                title: hardPages[i].title,
+                route: route,
+                slug: slug,
+                type: "hard"
+              };
+            }
+            this.push('pages', page);
+          }
+          for (var i = 0; i < softPages.length; i++) { // Add soft pages
+            var route = softPages[i].title.toLowerCase().replace(' ', '-');
+            var slug = '/' + route;
+            page = {
+              title: softPages[i].title,
+              route: route,
+              slug: slug,
+              type: "soft"
+            };
+            this.push('pages', page);
+          }
+          this._pagesLoaded = true;
+          console.log(this.pages);
+          this.initializePage();
+        }
+      });
+    })();
+  </script>
+
+</dom-module>

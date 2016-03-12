@@ -1,0 +1,33 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="restamp-template">
+  <template>
+
+    <template is="dom-if" if="[[_restampTemplate]]" restamp>
+      <content></content>
+    </template>
+
+    <template is="dom-if" if="[[!_restampTemplate]]" restamp>
+      <content></content>
+    </template>
+
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'restamp-template',
+
+        restamp: function() {
+          if (this._restampTemplate) {
+            this._restampTemplate = false;
+          } else {
+            this._restampTemplate = true;
+          }
+        }
+      });
+    })();
+  </script>
+
+</dom-module>

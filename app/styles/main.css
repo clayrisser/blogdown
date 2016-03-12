@@ -21,3 +21,11 @@ paper-card {
   width:100%;
   margin-bottom: 20px;
 }
+
+.title { /* Hack to fix title from being chopped off */
+	line-height: normal !important;
+}
+
+paper-progress {
+	width: 100%;
+}

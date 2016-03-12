@@ -33,6 +33,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <!-- Custom elements -->
 <link rel="import" href="../bower_components/fa-awesome/fa-awesome.html">
 <link rel="import" href="../bower_components/juicy-markdown/juicy-markdown.html">
+<link rel="import" href="../bower_components/excess-router/excess-router.html">
 
 <!-- Uncomment next block to enable Service Worker Support (2/2) -->
 <!--
@@ -40,12 +41,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/platinum-sw/platinum-sw-register.html">
 -->
 
-<!-- Configure your routes here -->
-<link rel="import" href="routing.html">
-
 <!-- Page elements -->
+<link rel="import" href="pages/root-page.html">
+<link rel="import" href="pages/page-soft.html">
 <link rel="import" href="pages/page-loading.html">
 <link rel="import" href="pages/page-home.html">
+<link rel="import" href="pages/page-404.html">
 <link rel="import" href="pages/page-posts.html">
 <link rel="import" href="pages/page-post.html">
 <link rel="import" href="pages/page-search.html">
@@ -54,6 +55,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <!-- Service elements -->
 <link rel="import" href="services/service-startup.html">
 <link rel="import" href="services/service-disqus.html">
+<link rel="import" href="services/service-routing.html">
+
+<!-- Helper elements -->
+<link rel="import" href="helpers/restamp-template.html">
+<link rel="import" href="helpers/restamp-page.html">
 
 <!-- Add your style elements here -->
 <link rel="import" href="../styles/shared-styles.html">

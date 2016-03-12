@@ -39,7 +39,7 @@
     </template>
 
     <!-- Disqus commenting -->
-    <template is="dom-if" if="[[postLoaded]]">
+    <template is="dom-if" if="[[enableDisqus]]">
       <paper-card heading="Commenting">
         <div class="card-content">
           <service-disqus
@@ -93,7 +93,9 @@
           if (post.categoryId) {
             this.categoryId = post.categoryId;
           }
-          this.postLoaded = true;
+          if (app.settings.disqusShortname) {
+            this.enableDisqus = true;
+          }
           app.debug(this.post.filename + '.md post loaded');
         },
 

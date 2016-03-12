@@ -1,0 +1,60 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="restamp-page">
+  <template>
+
+    <template is="dom-if" if="{{_isHard(currentRoute)}}" restamp>
+      <content></content>
+    </template>
+
+    <template is="dom-if" if="{{_isSoft(currentRoute)}}" restamp>
+      <page-soft route=[[route]]></page-soft>
+    </template>
+
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'restamp-page',
+
+        properties: {
+          pageType: {
+            type: String,
+            value: 'hard'
+          },
+          currentType: {
+            type: String,
+            value: 'hard'
+          },
+          route: {
+            type: String,
+            value: '404'
+          },
+          currentRoute: {
+            type: String,
+            value: '404'
+          }
+        },
+
+        _isHard: function(currentRoute) {
+          if (this.pageType === 'hard' && this.pageType === this.currentType && this.route === this.currentRoute) {
+            return true;
+          } else {
+            return false;
+          }
+        },
+
+        _isSoft: function(currentRoute) {
+          if (this.pageType === 'soft' && this.pageType === this.currentType) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+      });
+    })();
+  </script>
+
+</dom-module>
