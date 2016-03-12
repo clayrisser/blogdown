@@ -2,8 +2,53 @@
 
 <dom-module id="root-page">
   <template>
+    <style>
+      paper-progress {
+        width: 100%;
+      }
+    </style>
 
-    <service-routing></service-routing>
+    <excess-route id="router" route="/:first"></excess-route>
+
+    <paper-drawer-panel id="drawer" narrow="[[mobile]]">
+      <!-- Drawer -->
+      <div id="drawer" drawer>
+        <paper-menu>
+          <template is="dom-repeat" items="[[menuItems]]" as="menuItem">
+              <paper-item id="[[menuItem.route]]" on-click="_goToPage">[[menuItem.title]]</paper-item>
+          </template>
+        </paper-menu>
+      </div>
+      <!-- End Drawer -->
+
+      <!-- Header -->
+      <paper-header-panel main>
+        <paper-toolbar>
+          <template is="dom-if" if="[[loading]]" restamp>
+            <iron-flex-layout class="fit">
+              <paper-progress indeterminate="[[!progress]]"></paper-progress>
+            </iron-flex-layout>
+          </template>
+          <template is="dom-if" if="[[progress]]" restamp>
+            <iron-flex-layout class="fit">
+              <paper-progress value="[[progressAmount]]"></paper-progress>
+            </iron-flex-layout>
+          </template>
+          <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
+          <div class="title">[[pageTitle]]</div>
+          <template is="dom-repeat" items="[[socialAccounts]]" as="socialAccount">
+              <paper-icon-button icon="fa:[[socialAccount.type]]" on-click="_goToSocialPage"></paper-icon-button>
+          </template>
+        </paper-toolbar>
+        <!-- End Header -->
+
+        <!-- Content -->
+        <div class="content">
+          <service-routing id="serviceRouting"></service-routing>
+        </div>
+      </paper-header-panel>
+      <!-- End content -->
+    </paper-drawer-panel>
 
   </template>
 
@@ -14,8 +59,89 @@
         is: 'root-page',
 
         ready: function() {
+          app.loading = true;
+          app.progress = false;
+          this._buildPageArray();
+          this.set('socialAccounts', app.settings.socialAccounts);
+          this.set('pageTitle', app.pageTitle);
+          this.set('loading', app.loading);
+          this.set('progress', app.progress);
+          this.set('progressAmount', app.progressAmount);
+          this.set('route', app.route);
+          this.set('mobile', app.mobile);
+        },
 
-        }
+        _goToPage: function(e) {
+          var model = e.model;
+  //        app.goTo(model.page.slug);
+          console.log('I just went to ' + model.page.slug);
+        },
+
+        _goToSocialPage: function(e) {
+          var model = e.model;
+          window.open(model.socialAccount.url);
+        },
+
+        _buildPageArray: function() {
+          this.pages = [];
+          this.menuItems = [];
+          var hardPages = app.settings.hardPages;
+          var softPages = app.settings.softPages;
+          for (var i = 0; i < hardPages.length; i++) { // Add hard pages
+            if (hardPages[i].addToMenu) {
+              var menuItem = {
+                title: hardPages[i].title,
+                route: route
+              };
+              this.push('menuItems', menuItem);
+            }
+            var page = {};
+            var route = hardPages[i].title.toLowerCase().replace(' ', '-');
+            if (route === 'home') {
+              var slug = '/';
+            } else {
+              var slug = '/' + route;
+            }
+            if (hardPages[i].dataParam) {
+              page = {
+                title: hardPages[i].title,
+                route: route,
+                slug: slug,
+                dataParam: hardPages[i].dataParam,
+                type: "hard"
+              };
+            } else {
+              page = {
+                title: hardPages[i].title,
+                route: route,
+                slug: slug,
+                type: "hard"
+              };
+            }
+            this.push('pages', page);
+          }
+          for (var i = 0; i < softPages.length; i++) { // Add soft pages
+            if (softPages[i].addToMenu) {
+              var menuItem = {
+                title: softPages[i].title,
+                route: route
+              };
+              this.push('menuItems', menuItem);
+            }
+            var route = softPages[i].title.toLowerCase().replace(' ', '-');
+            var slug = '/' + route;
+            page = {
+              title: softPages[i].title,
+              route: route,
+              slug: slug,
+              type: "soft"
+            };
+            this.push('pages', page);
+          }
+          app.pages = this.pages;
+          app.pagesLoaded = true;
+          this.$.serviceRouting.initializePage();
+        },
       });
     })();
   </script>

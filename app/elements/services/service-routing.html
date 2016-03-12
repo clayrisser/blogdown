@@ -25,7 +25,7 @@
       <page-404></page-404>
     </restamp-page>
 
-    <restamp-page route="" current-route="[[route]]" page-type="soft" current-type="[[pageType]]"></restamp-page>
+    <restamp-page current-route="[[route]]" page-type="soft" current-type="[[pageType]]" page-title="[[pageTitle]]"></restamp-page>
 
   </template>
 
@@ -46,31 +46,27 @@
           }
         },
 
-        ready: function() {
-          this._buildPageArray();
-          console.log('i loaded');
-        },
-
         initializePage: function() {
           var validPage = false;
-          if (this._pagesLoaded === true) { // Prevents comparing route with pages before pages are loaded
+          if (app.pagesLoaded === true) { // Prevents comparing route with pages before pages are loaded
             if (this.routeType === 'parent') { // Parent page
-              for (var i = 0; i < this.pages.length; i++) {
-                if (this.parent === this.pages[i].route) {
-                  if (this.pages[i].type === 'hard') { // Hard page
+              for (var i = 0; i < app.pages.length; i++) {
+                if (this.parent === app.pages[i].route) {
+                  if (app.pages[i].type === 'hard') { // Hard page
                     this.set('pageType', 'hard');
                   } else { // Soft page
                     this.set('pageType', 'soft');
+                    this.set('pageTitle', app.pages[i].title);
                   }
-                  this.set('route', this.pages[i].route);
+                  this.set('route', app.pages[i].route);
                   validPage = true;
                   this.set('pageElement', this.parent);
                   break;
                 }
               }
             } else if (this.routeType === 'child') { // Child page
-              for (var i = 0; i < this.pages.length; i++) {
-                if (this.child === this.pages[i].route) {
+              for (var i = 0; i < app.pages.length; i++) {
+                if (this.child === app.pages[i].route) {
                   validPage = true;
                   this.set('pageElement', this.child);
                   break;
@@ -116,52 +112,6 @@
              this.child = null;
              app.warn('Invalid route');
           }
-          this.initializePage();
-        },
-
-        _buildPageArray: function() {
-          this.pages = [];
-          var hardPages = app.settings.hardPages;
-          var softPages = app.settings.softPages;
-          for (var i = 0; i < hardPages.length; i++) { // Add hard pages
-            var page = {};
-            var route = hardPages[i].title.toLowerCase().replace(' ', '-');
-            if (route === 'home') {
-              var slug = '/';
-            } else {
-              var slug = '/' + route;
-            }
-            if (hardPages[i].dataParam) {
-              page = {
-                title: hardPages[i].title,
-                route: route,
-                slug: slug,
-                dataParam: hardPages[i].dataParam,
-                type: "hard"
-              };
-            } else {
-              page = {
-                title: hardPages[i].title,
-                route: route,
-                slug: slug,
-                type: "hard"
-              };
-            }
-            this.push('pages', page);
-          }
-          for (var i = 0; i < softPages.length; i++) { // Add soft pages
-            var route = softPages[i].title.toLowerCase().replace(' ', '-');
-            var slug = '/' + route;
-            page = {
-              title: softPages[i].title,
-              route: route,
-              slug: slug,
-              type: "soft"
-            };
-            this.push('pages', page);
-          }
-          this._pagesLoaded = true;
-          console.log(this.pages);
           this.initializePage();
         }
       });
