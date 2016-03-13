@@ -90,9 +90,10 @@
         },
 
         _homeRouteActivated: function() {
-          this.set('routeType', 'home');
-          this._routeChanged(); // Runs this because parentSlug and childSlug
-        },                      //   don't fire the "_routeChanged" event
+          this.set('routeType', 'parent');
+          this.set('parentSlug', 'home');
+          this.set('childSlug', null);
+        },
 
         _parentRouteActivated: function() {
           this.set('routeType', 'parent');
@@ -103,11 +104,7 @@
         },
 
         _routeChanged: function() {
-          if (this.routeType === 'home') { // Home route
-            this.set('parent', 'home');
-            this.set('child', null);
-            this.set('routeType', 'parent'); // Treats home route like a parent route
-          } else if (this.routeType === 'parent') { // Parent route
+          if (this.routeType === 'parent') { // Parent route
             this.set('parent', this.parentSlug);
             this.set('child', null);
           } else if (this.routeType === 'child') { // Child route
