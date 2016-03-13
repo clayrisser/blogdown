@@ -80,11 +80,13 @@
               }
             }
             if (!validPage){ // 404 error
+              this.set('pageType', 'hard');   // pageType, routeType, and route must be set in this order
+              this.set('routeType', 'parent');
               this.set('route', '404');
-              this.set('pageType', 'hard');
-              var error = 'This page is invalid';
+              var error = '404 Error: This page cannot be found.';
               app.toast(error);
               console.warn(error);
+              console.log(this.pageType);
             }
           }
         },

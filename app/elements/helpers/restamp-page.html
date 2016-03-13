@@ -47,6 +47,9 @@
         },
 
         _isHard: function(currentRoute, currentRoutetype) {
+          if (!this.routeType) { // Hacky fix to issue #3 bug "404 Loading issue"
+            this.routeType = 'parent';
+          }
           if (this.pageType === 'hard' && this.pageType === this.currentPagetype &&
             this.route === this.currentRoute && this.routeType === this.currentRoutetype) {
             if (this.currentRoutetype === 'child') {
@@ -74,7 +77,7 @@
           this.importHref('../elements/pages/page-' + name + '.html', function(e) {
               app.debug('page-' + name + '.html was imported.');
           }, function(e) {
-              app.debug('WARNING: import failed to load');
+              app.debug('WARNING: page-' + name + '.html import failed to load');
           });
         }
       });
