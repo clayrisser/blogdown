@@ -72,10 +72,9 @@
         is: 'page-post',
 
         ready: function() {
-          this.filename = null;
-          this.permlink = app.params.post;
+          this.post = {};
           for (var i = 0; i < app.posts.length; i++) {
-            if (app.posts[i].permalink === this.permlink) {
+            if (app.posts[i].permalink === this.dataParam) {
               this.post = app.posts[i];
               break;
             }

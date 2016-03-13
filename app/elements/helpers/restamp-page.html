@@ -3,11 +3,11 @@
 <dom-module id="restamp-page">
   <template>
 
-    <template is="dom-if" if="{{_isHard(currentRoute)}}" restamp>
+    <template is="dom-if" if="{{_isHard(currentRoute, currentRoutetype)}}" restamp>
       <content></content>
     </template>
 
-    <template is="dom-if" if="{{_isSoft(currentRoute)}}" restamp>
+    <template is="dom-if" if="{{_isSoft(currentRoute, currentRoutetype)}}" restamp>
       <page-soft route=[[currentRoute]] title="[[pageTitle]]"></page-soft>
     </template>
 
@@ -24,7 +24,7 @@
             type: String,
             value: 'hard'
           },
-          currentType: {
+          currentPagetype: {
             type: String,
             value: 'hard'
           },
@@ -35,23 +35,47 @@
           currentRoute: {
             type: String,
             value: '404'
+          },
+          routeType: {
+            type: String,
+            value: 'parent'
+          },
+          currentRoutetype: {
+            type: String,
+            value: 'parent'
           }
         },
 
-        _isHard: function(currentRoute) {
-          if (this.pageType === 'hard' && this.pageType === this.currentType && this.route === this.currentRoute) {
+        _isHard: function(currentRoute, currentRoutetype) {
+          if (this.pageType === 'hard' && this.pageType === this.currentPagetype &&
+            this.route === this.currentRoute && this.routeType === this.currentRoutetype) {
+            if (this.currentRoutetype === 'child') {
+              var name = this.currentRoute.substring(0, this.currentRoute.length - 1);
+              this._loadElement(name);
+            } else {
+              this._loadElement(this.currentRoute);
+            }
             return true;
           } else {
             return false;
           }
         },
 
-        _isSoft: function(currentRoute) {
-          if (this.pageType === 'soft' && this.pageType === this.currentType) {
+        _isSoft: function(currentRoute, currentRoutetype) {
+          if (this.pageType === 'soft' && this.pageType === this.currentPagetype) {
+            this._loadElement('soft');
             return true;
           } else {
             return false;
           }
+        },
+
+        _loadElement: function(name) {
+          this.importHref('../elements/pages/page-' + name + '.html', function(e) {
+              app.debug('page-' + name + '.html was imported.');
+          }, function(e) {
+              app.debug('WARNING: import failed to load');
+          });
         }
       });
     })();

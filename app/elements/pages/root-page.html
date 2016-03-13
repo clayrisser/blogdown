@@ -73,8 +73,8 @@
 
         _goToPage: function(e) {
           var model = e.model;
-  //        app.goTo(model.page.slug);
-          console.log('I just went to ' + model.page.slug);
+          app.goTo(model.menuItem.slug);
+          console.log('I just went to ' + model.menuItem.slug);
         },
 
         _goToSocialPage: function(e) {
@@ -88,39 +88,31 @@
           var hardPages = app.settings.hardPages;
           var softPages = app.settings.softPages;
           for (var i = 0; i < hardPages.length; i++) { // Add hard pages
+            var slug = '';
+            var route = hardPages[i].title.toLowerCase().replace(' ', '-');
+            if (route === 'home') {
+              slug = '/';
+            } else {
+              slug = '/' + route;
+            }
             if (hardPages[i].addToMenu) {
               var menuItem = {
                 title: hardPages[i].title,
-                route: route
+                slug: slug
               };
               this.push('menuItems', menuItem);
             }
-            var page = {};
-            var route = hardPages[i].title.toLowerCase().replace(' ', '-');
-            if (route === 'home') {
-              var slug = '/';
-            } else {
-              var slug = '/' + route;
-            }
-            if (hardPages[i].dataParam) {
-              page = {
-                title: hardPages[i].title,
-                route: route,
-                slug: slug,
-                dataParam: hardPages[i].dataParam,
-                type: "hard"
-              };
-            } else {
-              page = {
-                title: hardPages[i].title,
-                route: route,
-                slug: slug,
-                type: "hard"
-              };
-            }
+            var page = {
+              title: hardPages[i].title,
+              route: route,
+              slug: slug,
+              type: "hard"
+            };
             this.push('pages', page);
           }
           for (var i = 0; i < softPages.length; i++) { // Add soft pages
+            var route = softPages[i].title.toLowerCase().replace(' ', '-');
+            var slug = '/' + route;
             if (softPages[i].addToMenu) {
               var menuItem = {
                 title: softPages[i].title,
@@ -128,8 +120,6 @@
               };
               this.push('menuItems', menuItem);
             }
-            var route = softPages[i].title.toLowerCase().replace(' ', '-');
-            var slug = '/' + route;
             page = {
               title: softPages[i].title,
               route: route,

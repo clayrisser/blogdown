@@ -38,7 +38,7 @@
       app.temp = temp;
       app.debug('app.temp = ' + app.temp);
     }
-    document.getElementById('root-page').pageRedirect(route); // Redirect page
+    window.open('/#' + route, '_self');
     if (app.mobile) { // Close drawer when page redirects
       document.getElementById('root-page').drawer.closeDrawer();
     }

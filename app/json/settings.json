@@ -21,7 +21,6 @@
     },
     {
       "title": "Posts",
-      "dataParam": "post",
       "addToMenu": true
     },
     {

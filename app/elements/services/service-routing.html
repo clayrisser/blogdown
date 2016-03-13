@@ -9,23 +9,27 @@
     <excess-route route="/:parent/:child" parent="{{parentSlug}}" child="{{childSlug}}" on-excess-route-will-activate="_childRouteActivated"></excess-route>
     <excess-route route="/:parent/:child/" parent="{{parentSlug}}" child="{{childSlug}}" on-excess-route-will-activate="_childRouteActivated"></excess-route>
 
-    <restamp-page route="home" current-route="[[route]]" page-type="hard" current-type="[[pageType]]">
+    <restamp-page route="home" current-route="[[route]]" current-pagetype="[[pageType]]" current-routetype="[[routeType]]">
       <page-home></page-home>
     </restamp-page>
 
-    <restamp-page route="posts" current-route="[[route]]" page-type="hard" current-type="[[pageType]]">
-      <page-posts></page-posts>
-    </restamp-page>
-
-    <restamp-page route="contact" current-route="[[route]]" page-type="hard" current-type="[[pageType]]">
-      <page-contact></page-contact>
-    </restamp-page>
-
-    <restamp-page route="404" current-route="[[route]]" page-type="hard" current-type="[[pageType]]">
+    <restamp-page route="404" current-route="[[route]]" current-pagetype="[[pageType]]" current-routetype="[[routeType]]">
       <page-404></page-404>
     </restamp-page>
 
-    <restamp-page current-route="[[route]]" page-type="soft" current-type="[[pageType]]" page-title="[[pageTitle]]"></restamp-page>
+    <restamp-page route="posts" current-route="[[route]]" current-pagetype="[[pageType]]" current-routetype="[[routeType]]">
+      <page-posts></page-posts>
+    </restamp-page>
+
+    <restamp-page route="posts" current-route="[[route]]" current-pagetype="[[pageType]]" route-type="child" current-routetype="[[routeType]]">
+      <page-post data-param="[[child]]"></page-post>
+    </restamp-page>
+
+    <restamp-page route="contact" current-route="[[route]]" current-pagetype="[[pageType]]" current-routetype="[[routeType]]">
+      <page-contact></page-contact>
+    </restamp-page>
+
+    <restamp-page current-route="[[route]]" page-type="soft" current-pagetype="[[pageType]]" current-routetype="[[routeType]]" page-title="[[pageTitle]]"></restamp-page>
 
   </template>
 
@@ -58,17 +62,19 @@
                     this.set('pageType', 'soft');
                     this.set('pageTitle', app.pages[i].title);
                   }
-                  this.set('route', app.pages[i].route);
+                  this.set('route', this.parent);
+                  this.set('routeType', 'parent');
                   validPage = true;
-                  this.set('pageElement', this.parent);
                   break;
                 }
               }
             } else if (this.routeType === 'child') { // Child page
               for (var i = 0; i < app.pages.length; i++) {
-                if (this.child === app.pages[i].route) {
+                if (this.parent === app.pages[i].route) {
+                  this.set('pageType', 'hard');
+                  this.set('route', this.parent);
+                  this.set('routeType', 'child');
                   validPage = true;
-                  this.set('pageElement', this.child);
                   break;
                 }
               }
@@ -84,33 +90,33 @@
         },
 
         _homeRouteActivated: function() {
-          this.routeType = 'home';
-          this._routeChanged(); // Runs this because parentSlug and childSlug don't fire the _routeChanged event
-        },
+          this.set('routeType', 'home');
+          this._routeChanged(); // Runs this because parentSlug and childSlug
+        },                      //   don't fire the "_routeChanged" event
 
         _parentRouteActivated: function() {
-          this.routeType = 'parent';
+          this.set('routeType', 'parent');
         },
 
         _childRouteActivated: function() {
-          this.routeType = 'child';
+          this.set('routeType', 'child');
         },
 
         _routeChanged: function() {
-          if (this.routeType === 'home') {
-            this.parent = 'home';
-            this.child = null;
-            this.routeType = 'parent'; // Treats home route like a parent route
-          } else if (this.routeType === 'parent') {
-            this.parent = this.parentSlug;
-            this.child = null;
-          } else if (this.routeType === 'child') {
-            this.parent = this.parentSlug;
-            this.child = this.childSlug;
-          } else {
-             this.parent = null;
-             this.child = null;
-             app.warn('Invalid route');
+          if (this.routeType === 'home') { // Home route
+            this.set('parent', 'home');
+            this.set('child', null);
+            this.set('routeType', 'parent'); // Treats home route like a parent route
+          } else if (this.routeType === 'parent') { // Parent route
+            this.set('parent', this.parentSlug);
+            this.set('child', null);
+          } else if (this.routeType === 'child') { // Child route
+            this.set('parent', this.parentSlug);
+            this.set('child', this.childSlug);
+          } else { // Undefined route
+            this.set('parent', null);
+            this.set('child', null);
+            app.warn('Invalid route');
           }
           this.initializePage();
         }
