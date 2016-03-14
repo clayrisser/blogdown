@@ -3,11 +3,11 @@
 <dom-module id="restamp-page">
   <template>
 
-    <template is="dom-if" if="{{_isHard(currentRoute, currentRoutetype)}}" restamp>
+    <template is="dom-if" if="{{_hard}}" restamp>
       <content></content>
     </template>
 
-    <template is="dom-if" if="{{_isSoft(currentRoute, currentRoutetype)}}" restamp>
+    <template is="dom-if" if="{{_soft}}" restamp>
       <page-soft route=[[currentRoute]] title="[[pageTitle]]"></page-soft>
     </template>
 
@@ -34,7 +34,8 @@
           },
           currentRoute: {
             type: String,
-            value: '404'
+            value: '404',
+            observer: 'restamp'
           },
           routeType: {
             type: String,
@@ -42,14 +43,38 @@
           },
           currentRoutetype: {
             type: String,
-            value: 'parent'
+            value: 'parent',
+            observer: 'restamp'
+          },
+          _hard: {
+            type: Boolean,
+            value: false
+          },
+          _soft: {
+            type: Boolean,
+            value: false
           }
         },
 
-        _isHard: function(currentRoute, currentRoutetype) {
-          if (!this.routeType) { // Hacky fix to issue #3 bug "404 Loading issue"
-            this.routeType = 'parent';
+        ready: function() {
+          this.restamp();
+        },
+
+        restamp: function() {
+          if (this._isHard()) {
+            this._hard = true;
+            this._soft = false;
+          } else if (this._isSoft()) {
+            this._hard = false;
+            this._soft = true;
+          } else {
+            this._hard = false;
+            this._soft = false;
           }
+        },
+
+        _isHard: function() {
+          console.log(this.routeType + ' === ' + this.currentRoutetype);
           if (this.pageType === 'hard' && this.pageType === this.currentPagetype &&
             this.route === this.currentRoute && this.routeType === this.currentRoutetype) {
             if (this.currentRoutetype === 'child') {
@@ -64,7 +89,7 @@
           }
         },
 
-        _isSoft: function(currentRoute, currentRoutetype) {
+        _isSoft: function() {
           if (this.pageType === 'soft' && this.pageType === this.currentPagetype) {
             this._loadElement('soft');
             return true;
