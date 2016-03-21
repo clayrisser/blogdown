@@ -5,43 +5,47 @@
 
   // Load settings
   app.settingsResponse = function() {
-    app.pageTitle = app.settings.title;
-    for (var property in app.settings) {
-      if (app.settings.hasOwnProperty(property)) {
-        app.debug('app.settings.' + property + ' = ' + app.settings[property]);
+    for (var setting in app.settings) {
+      if (app.settings.hasOwnProperty(setting)) {
+        app.debug('app.settings.' + setting + ' = ' + app.settings[setting]);
       }
     }
     var pageLoading = document.createElement('page-loading');
     app.$.loading.appendChild(pageLoading);
+    app.pageTitle = app.settings.title;
   };
   app.settingsError = function() {
-    console.log('App failed to load settings');
+    console.warn('App failed to load settings');
   };
 
   // Writes to the console if debugging is enabled
-  app.debug = function(message) {
+  app.debug = function(message, type) {
     if (app.settings.debugging) {
-      console.log(message);
+      if (type === 'warn') {
+        console.warn(message);
+      } else {
+        console.log(message);
+      }
     }
   };
 
   // App toast
-  app.toast = function(text) {
-    app.$.toast.text = text;
+  app.toast = function(message) {
+    app.$.toast.text = message;
     app.$.toast.show();
-  }
+  };
 
-  app.goTo = function(route, temp) { // Redirects app to another page with a given title and optional temporay value
-    if (temp && app.temp !== '') {
-      app.temp = '';
-    } else if (temp) {
-      app.temp = temp;
-      app.debug('app.temp = ' + app.temp);
-    }
+  // Redirects app to another page
+  app.goTo = function(route) {
     window.open('/#' + route, '_self');
     if (app.mobile) { // Close drawer when page redirects
-      document.getElementById('root-page').drawer.closeDrawer();
+      app.closeDrawer();
     }
+  };
+
+  // Closes the drawer
+  app.closeDrawer = function() {
+    this.$.rootPage.drawer.closeDrawer();
   };
 
 })(document);

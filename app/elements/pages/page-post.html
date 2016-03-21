@@ -2,66 +2,6 @@
 
 <dom-module id="page-post">
   <template>
-    <style>
-      :host {
-        --paper-card-header-image: {
-          max-height: 150px;
-        }
-        --paper-card-header-text: {
-          font-size: 38px;
-        }
-        --paper-card-header-image-text: {
-          font-size: 38px;
-          text-shadow: 0 0 5px #000000;
-        }
-      }
-      paper-card.white {
-        --paper-card-header-color: #ffffff;
-      }
-    </style>
-
-    <!-- Contains featured image -->
-    <template is="dom-if" if="[[post.featuredImage]]">
-      <paper-card heading="[[post.title]]" image="../images/uploads/[[post.featuredImage]]" class="white">
-        <div class="card-content">
-          <juicy-markdown value="[[postContent]]"></juicy-markdown>
-        </div>
-      </paper-card>
-    </template>
-
-    <!-- Doesn't contain featured image -->
-    <template is="dom-if" if="[[!post.featuredImage]]">
-      <paper-card heading="[[post.title]]">
-        <div class="card-content">
-          <juicy-markdown value="[[postContent]]"></juicy-markdown>
-        </div>
-      </paper-card>
-    </template>
-
-    <!-- Disqus commenting -->
-    <template is="dom-if" if="[[enableDisqus]]">
-      <paper-card heading="Commenting">
-        <div class="card-content">
-          <service-disqus
-            shortname="jamrizzi"
-            identifier="[[post.datestamp]]"
-            title="[[post.title]]"
-            url="[[url]]"
-            categoryId="[[categoryId]]"
-            https=false
-          ></service-disqus>
-        </div>
-      </paper-card>
-    </template>
-
-    <!-- Load post -->
-    <iron-ajax id="post"
-      url="[[postUrl]]"
-      handle-as="text"
-      on-response="postResponse"
-      on-error="postError"
-      last-response="{{postResponseData}}"
-    ></iron-ajax>
 
   </template>
 
@@ -71,37 +11,11 @@
       Polymer({
         is: 'page-post',
 
+        properties: {
+        },
+
         ready: function() {
-          this.post = {};
-          for (var i = 0; i < app.posts.length; i++) {
-            if (app.posts[i].permalink === this.dataParam) {
-              this.post = app.posts[i];
-              break;
-            }
-          }
-          if (!this.post.filename) {
-            app.debug('WARNING: Post not found');
-          }
-          this.postUrl = '../../posts/' + this.post.filename + '.md';
-          this.$.post.generateRequest();
-          this.url = window.location.href;
-        },
-
-        postResponse: function() {
-          this.postContent = this.postResponseData;
-          if (post.categoryId) {
-            this.categoryId = post.categoryId;
-          }
-          if (app.settings.disqusShortname) {
-            this.enableDisqus = true;
-          }
-          app.debug(this.post.filename + '.md post loaded');
-        },
-
-        postError: function() {
-          var error = 'WARNING: Post failed to load';
-          app.toast(error);
-          app.debug(error);
+          this.restamp();
         }
       });
     })();

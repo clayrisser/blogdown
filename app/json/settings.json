@@ -4,14 +4,16 @@
   "easterEggs": "true",
   "ajaxTimeout": "10000",
   "toastDuration": "5000",
-  "socialAccounts": [
+  "theme": "drawer",
+  "socialAccounts": {
+    "facebook": "https://facebook.com",
+    "twitter": "https://twitter.com",
+    "google-plus": "https://google.com"
+  },
+  "softPages": [
     {
-      "type": "facebook",
-      "url": "https://facebook.com"
-    },
-    {
-      "type": "twitter",
-      "url": "https://twitter.com"
+      "title": "Chinchilla",
+      "addToMenu": true
     }
   ],
   "hardPages": [
@@ -28,15 +30,5 @@
       "addToMenu": true
     }
   ],
-  "softPages": [
-    {
-      "title": "Chinchilla",
-      "addToMenu": true
-    }
-  ],
-  "disqusShortname": "jamrizzi",
-  "backgrounds": [
-    "0099ff.png",
-    "ff9900.png"
-  ]
+  "disqusShortname": "jamrizzi"
 }

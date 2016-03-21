@@ -2,15 +2,7 @@
 
 <dom-module id="restamp-page">
   <template>
-
-    <template is="dom-if" if="{{_hard}}" restamp>
-      <content></content>
-    </template>
-
-    <template is="dom-if" if="{{_soft}}" restamp>
-      <page-soft route=[[currentRoute]] title="[[pageTitle]]"></page-soft>
-    </template>
-
+    
   </template>
 
   <script>
@@ -19,91 +11,8 @@
       Polymer({
         is: 'restamp-page',
 
-        properties: {
-          pageType: {
-            type: String,
-            value: 'hard'
-          },
-          currentPagetype: {
-            type: String,
-            value: 'hard'
-          },
-          route: {
-            type: String,
-            value: '404'
-          },
-          currentRoute: {
-            type: String,
-            value: '404',
-            observer: 'restamp'
-          },
-          routeType: {
-            type: String,
-            value: 'parent'
-          },
-          currentRoutetype: {
-            type: String,
-            value: 'parent',
-            observer: 'restamp'
-          },
-          _hard: {
-            type: Boolean,
-            value: false
-          },
-          _soft: {
-            type: Boolean,
-            value: false
-          }
-        },
-
         ready: function() {
-          this.restamp();
-        },
 
-        restamp: function() {
-          if (this._isHard()) {
-            this._hard = true;
-            this._soft = false;
-          } else if (this._isSoft()) {
-            this._hard = false;
-            this._soft = true;
-          } else {
-            this._hard = false;
-            this._soft = false;
-          }
-        },
-
-        _isHard: function() {
-          console.log(this.routeType + ' === ' + this.currentRoutetype);
-          if (this.pageType === 'hard' && this.pageType === this.currentPagetype &&
-            this.route === this.currentRoute && this.routeType === this.currentRoutetype) {
-            if (this.currentRoutetype === 'child') {
-              var name = this.currentRoute.substring(0, this.currentRoute.length - 1);
-              this._loadElement(name);
-            } else {
-              this._loadElement(this.currentRoute);
-            }
-            return true;
-          } else {
-            return false;
-          }
-        },
-
-        _isSoft: function() {
-          if (this.pageType === 'soft' && this.pageType === this.currentPagetype) {
-            this._loadElement('soft');
-            return true;
-          } else {
-            return false;
-          }
-        },
-
-        _loadElement: function(name) {
-          this.importHref('../elements/pages/page-' + name + '.html', function(e) {
-              app.debug('page-' + name + '.html was imported.');
-          }, function(e) {
-              app.debug('WARNING: page-' + name + '.html import failed to load');
-          });
         }
       });
     })();

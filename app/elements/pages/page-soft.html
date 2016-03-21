@@ -2,31 +2,6 @@
 
 <dom-module id="page-soft">
   <template>
-    <style>
-      :host {
-        --paper-card-header-image: {
-          max-height: 150px;
-        }
-        --paper-card-header-text: {
-          font-size: 38px;
-        }
-      }
-    </style>
-
-    <paper-card heading="[[title]]">
-      <div class="card-content">
-        <juicy-markdown value="[[pageContent]]"></juicy-markdown>
-      </div>
-    </paper-card>
-
-    <!-- Load page -->
-    <iron-ajax id="page"
-      url="[[pageUrl]]"
-      handle-as="text"
-      on-response="pageResponse"
-      on-error="pageError"
-      last-response="{{pageResponseData}}"
-    ></iron-ajax>
 
   </template>
 
@@ -37,19 +12,7 @@
         is: 'page-soft',
 
         ready: function() {
-          this.pageUrl = '../../pages/' + this.route + '.md';
-          this.$.page.generateRequest();
-        },
 
-        pageResponse: function() {
-          this.set('pageContent', this.pageResponseData);
-          app.debug(this.route + '.md page loaded');
-        },
-
-        pageError: function() {
-          var error = 'WARNING: Page failed to load';
-          app.toast(error);
-          app.debug(error);
         }
       });
     })();

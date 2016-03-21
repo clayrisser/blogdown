@@ -1,0 +1,122 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="theme-drawer">
+  <template>
+  <style>
+    .paper-progress-main {
+      width: 100%;
+      --paper-progress-height: 100px;
+      --paper-progress-container-color: rgba(255, 255, 255, 0);
+    }
+    .title {
+      z-index: 0;
+    }
+  </style>
+
+  <paper-drawer-panel id="drawer" narrow="{{mobile}}">
+
+    <!-- Drawer -->
+    <div id="drawer" drawer>
+      <paper-menu>
+        <template is="dom-repeat" items="[[menuItems]]" as="menuItem">
+            <paper-item id="[[menuItem.slug]]" on-click="_goToPage">[[menuItem.title]]</paper-item>
+        </template>
+      </paper-menu>
+    </div>
+    <!-- End Drawer -->
+
+    <!-- Header -->
+    <paper-header-panel main>
+      <paper-toolbar>
+        <template is="dom-if" if="[[loading]]" restamp>
+          <iron-flex-layout class="fit">
+            <paper-progress class="paper-progress-main" value="[[progress]]" indeterminate="[[_indeterminateLoading]]"></paper-progress>
+          </iron-flex-layout>
+        </template>
+        <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
+        <div class="title">[[pageTitle]]</div>
+        <template is="dom-repeat" items="[[_socialAccountsArray]]" as="socialAccount">
+            <paper-icon-button icon="fa:[[socialAccount.type]]" on-click="_goToSocialPage"></paper-icon-button>
+        </template>
+      </paper-toolbar>
+      <!-- End Header -->
+
+      <!-- Content -->
+      <div class="content">
+        <service-routing id="serviceRouting"></service-routing>
+      </div>
+    </paper-header-panel>
+    <!-- End content -->
+
+  </paper-drawer-panel>
+
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'theme-drawer',
+
+        properties: {
+          mobile: {
+            type: Boolean,
+            notify: true
+          },
+          loading: {
+            type: Boolean,
+            value: false
+          },
+          progress: {
+            type: Number,
+            value: -1,
+            observer: '_setIndeterminateLoading'
+          },
+          _indeterminateLoading: {
+            type: Boolean,
+            value: true
+          }
+        },
+
+        ready: function() {
+          this.set('pages', app.pages);
+          this._loadSocialAccounts();
+        },
+
+        _goToPage: function(e) {
+          var model = e.model;
+          app.goTo(model.menuItem.route);
+        },
+
+        _goToSocialPage: function(e) {
+          var model = e.model;
+          window.open(model.socialAccount.url);
+        },
+
+        _setIndeterminateLoading: function() {
+          if (this.progress >= 0) {
+            this._indeterminateLoading = false;
+          } else {
+            this._indeterminateLoading = true;
+          }
+        },
+
+        _loadSocialAccounts: function() {
+          this._socialAccountsArray = [];
+          if (app.settings.socialAccounts) {
+            var socialAccounts = app.settings.socialAccounts;
+            for (var socialAccount in socialAccounts) {
+              if (socialAccounts.hasOwnProperty(socialAccount)) {
+                this.push('_socialAccountsArray', {
+                  type: socialAccount,
+                  url: socialAccounts[socialAccount]
+                });
+              }
+            }
+          }
+        }
+      });
+    })();
+  </script>
+
+</dom-module>

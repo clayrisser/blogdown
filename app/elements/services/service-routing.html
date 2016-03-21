@@ -3,34 +3,6 @@
 <dom-module id="service-routing">
   <template>
 
-    <excess-route route="/" on-excess-route-will-activate="_homeRouteActivated"></excess-route>
-    <excess-route route="/:parent" parent="{{parentSlug}}" on-excess-route-will-activate="_parentRouteActivated"></excess-route>
-    <excess-route route="/:parent/" parent="{{parentSlug}}" on-excess-route-will-activate="_parentRouteActivated"></excess-route>
-    <excess-route route="/:parent/:child" parent="{{parentSlug}}" child="{{childSlug}}" on-excess-route-will-activate="_childRouteActivated"></excess-route>
-    <excess-route route="/:parent/:child/" parent="{{parentSlug}}" child="{{childSlug}}" on-excess-route-will-activate="_childRouteActivated"></excess-route>
-
-    <restamp-page route="home" current-route="[[route]]" current-pagetype="[[pageType]]" current-routetype="[[routeType]]">
-      <page-home></page-home>
-    </restamp-page>
-
-    <restamp-page route="404" current-route="[[route]]" current-pagetype="[[pageType]]" current-routetype="[[routeType]]">
-      <page-404></page-404>
-    </restamp-page>
-
-    <restamp-page route="posts" current-route="[[route]]" current-pagetype="[[pageType]]" current-routetype="[[routeType]]">
-      <page-posts></page-posts>
-    </restamp-page>
-
-    <restamp-page route="posts" current-route="[[route]]" current-pagetype="[[pageType]]" route-type="child" current-routetype="[[routeType]]">
-      <page-post data-param="[[child]]"></page-post>
-    </restamp-page>
-
-    <restamp-page route="contact" current-route="[[route]]" current-pagetype="[[pageType]]" current-routetype="[[routeType]]">
-      <page-contact></page-contact>
-    </restamp-page>
-
-    <restamp-page current-route="[[route]]" page-type="soft" current-pagetype="[[pageType]]" current-routetype="[[routeType]]" page-title="[[pageTitle]]"></restamp-page>
-
   </template>
 
   <script>
@@ -39,84 +11,8 @@
       Polymer({
         is: 'service-routing',
 
-        properties: {
-          parentSlug: {
-            type: String,
-            observer: '_routeChanged'
-          },
-          childSlug: {
-            type: String,
-            observer: '_routeChanged'
-          }
-        },
+        ready: function() {
 
-        initializePage: function() {
-          var validPage = false;
-          if (app.pagesLoaded === true) { // Prevents comparing route with pages before pages are loaded
-            if (this.routeType === 'parent') { // Parent page
-              for (var i = 0; i < app.pages.length; i++) {
-                if (this.parent === app.pages[i].route) {
-                  if (app.pages[i].type === 'hard') { // Hard page
-                    this.set('pageType', 'hard');
-                  } else { // Soft page
-                    this.set('pageType', 'soft');
-                    this.set('pageTitle', app.pages[i].title);
-                  }
-                  this.set('route', this.parent);
-                  this.set('routeType', 'parent');
-                  validPage = true;
-                  break;
-                }
-              }
-            } else if (this.routeType === 'child') { // Child page
-              for (var i = 0; i < app.pages.length; i++) {
-                if (this.parent === app.pages[i].route) {
-                  this.set('pageType', 'hard');
-                  this.set('route', this.parent);
-                  this.set('routeType', 'child');
-                  validPage = true;
-                  break;
-                }
-              }
-            }
-            if (!validPage){ // 404 error
-              this.set('pageType', 'hard');   // pageType, routeType, and route must be set in this order
-              this.set('routeType', 'parent');
-              this.set('route', '404');
-              var error = '404 Error: This page cannot be found.';
-              app.toast(error);
-              console.warn(error);
-            }
-          }
-        },
-
-        _homeRouteActivated: function() {
-          this.set('routeType', 'parent');
-          this.set('parentSlug', 'home');
-          this.set('childSlug', null);
-        },
-
-        _parentRouteActivated: function() {
-          this.set('routeType', 'parent');
-        },
-
-        _childRouteActivated: function() {
-          this.set('routeType', 'child');
-        },
-
-        _routeChanged: function() {
-          if (this.routeType === 'parent') { // Parent route
-            this.set('parent', this.parentSlug);
-            this.set('child', null);
-          } else if (this.routeType === 'child') { // Child route
-            this.set('parent', this.parentSlug);
-            this.set('child', this.childSlug);
-          } else { // Undefined route
-            this.set('parent', null);
-            this.set('child', null);
-            app.warn('Invalid route');
-          }
-          this.initializePage();
         }
       });
     })();

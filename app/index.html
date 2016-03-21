@@ -66,21 +66,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <span id="browser-sync-binding"></span>
   <template is="dom-bind" id="app">
 
-    		<!-- Load the app -->
-        <span id="loading"></span>
-    		<iron-ajax id="settings" auto
-    			url="json/settings.json"
-    			handle-as="json"
-    			on-response="settingsResponse"
-    			on-error="settingsError"
-    			last-response="{{settings}}"
-    		></iron-ajax>
+		<!-- Load the app -->
+    <span id="loading"></span>
+		<iron-ajax id="settings" auto
+			url="json/settings.json"
+			handle-as="json"
+			on-response="settingsResponse"
+			on-error="settingsError"
+			last-response="{{settings}}"
+		></iron-ajax>
 
-        <template is="dom-if" if="[[loaded]]" restamp="true">
-          <root-page id="root-page"></root-page>
-        </template>
+    <template is="dom-if" if="[[loaded]]" restamp>
+      <root-page id="rootPage"
+        mobile="{{mobile}}"
+        loading="[[loading]]"
+        progress="[[progress]]"
+        page-title="[[pageTitle]]"
+      ></root-page>
+    </template>
 
-    		<paper-toast id="toast" text="[[message]]" duration="[[settings.toastDuration]]"></paper-toast>
+		<paper-toast id="toast" text="[[message]]" duration="[[settings.toastDuration]]"></paper-toast>
 
     <!-- Uncomment next block to enable Service Worker support (1/2) -->
     <!--
