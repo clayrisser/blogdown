@@ -71,9 +71,10 @@
         
         _loadElement: function(name) {
           this.importHref('../elements/themes/theme-' + name + '.html', function() {
-            // Theme loaded
+            app.debug('theme-' + name + ' loaded');
           }.bind(this), function() {
-            // Theme failed to load
+            app.toast('Error 1: ' + name + ' theme failed to load', 'http://blogdown.info/error/1', '_blank');
+            app.debug('theme-' + name + ' failed to load', 'warn');
           }.bind(this));
         }
       });

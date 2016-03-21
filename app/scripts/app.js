@@ -30,9 +30,21 @@
   };
 
   // App toast
-  app.toast = function(message) {
+  app.toast = function(message, link, target) {
     app.$.toast.text = message;
+    if (link) {
+      app.toastLink = link;
+      app.toastTarget = target;
+    }
     app.$.toast.show();
+  };
+  
+  // Toast clicked
+  app.toastClicked = function() {
+    if (!app.toastTarget) {
+      app.toastTarget = '_self';
+    }
+    window.open(app.toastLink, app.toastTarget);
   };
 
   // Redirects app to another page

@@ -85,7 +85,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       ></root-page>
     </template>
 
-		<paper-toast id="toast" text="[[message]]" duration="[[settings.toastDuration]]"></paper-toast>
+	<paper-toast id="toast" text="[[message]]" duration="[[settings.toastDuration]]" on-click="toastClicked"></paper-toast>
 
     <!-- Uncomment next block to enable Service Worker support (1/2) -->
     <!--
