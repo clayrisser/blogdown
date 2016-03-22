@@ -1,9 +1,6 @@
-## Customize the test machine
-machine:
-
 ## Customize dependencies
 dependencies:
-  pre:
+  override:
     - npm install -g gulp
     - npm install -g bower
     - npm install
@@ -11,5 +8,5 @@ dependencies:
 
 ## Customize test commands
 test:
-  override:
+  post:
     - gulp serve
