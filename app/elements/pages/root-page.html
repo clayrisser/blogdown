@@ -3,7 +3,7 @@
 <dom-module id="root-page">
   <template>
 
-      <theme-drawer></theme-drawer>
+    <theme-drawer></theme-drawer>
 
   </template>
 
@@ -20,7 +20,6 @@
 
         _buildPageArray: function() {
           this.pages = [];
-          this.menuItems = [];
           var hardPages = app.settings.hardPages;
           var softPages = app.settings.softPages;
           for (var i = 0; i < hardPages.length; i++) { // Add hard pages
@@ -31,36 +30,24 @@
             } else {
               route = '/' + slug;
             }
-            if (hardPages[i].addToMenu) {
-              var menuItem = {
-                title: hardPages[i].title,
-                route: route
-              };
-              this.push('menuItems', menuItem);
-            }
             var page = {
               title: hardPages[i].title,
               route: route,
               slug: slug,
-              type: "hard"
+              type: "hard",
+              addToMenu: hardPages[i].addToMenu
             };
             this.push('pages', page);
           }
           for (var i = 0; i < softPages.length; i++) { // Add soft pages
             var slug = hardPages[i].title.toLowerCase().replace(/[^\s\w+\-_#.]/g, '').replace(/\s+/g, '-');
             var route = '/' + slug;
-            if (softPages[i].addToMenu) {
-              var menuItem = {
-                title: softPages[i].title,
-                route: route
-              };
-              this.push('menuItems', menuItem);
-            }
             page = {
               title: softPages[i].title,
               route: route,
               slug: slug,
-              type: "soft"
+              type: "soft",
+              addToMenu: hardPages[i].addToMenu
             };
             this.push('pages', page);
           }

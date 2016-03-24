@@ -5,6 +5,6 @@ if (localStorage.style) {
 	style = localStorage.style;
 }
 link.setAttribute('rel', 'import');
-link.setAttribute('href', '../styles/' + style + '-style.html');
+link.setAttribute('href', '../styles/style-' + style + '.html');
 head.appendChild(link);
-console.log(style + ' style loaded');
+console.log('style-' + style + ' loaded');

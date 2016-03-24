@@ -2,53 +2,54 @@
 
 <dom-module id="theme-drawer">
   <template>
-  <style>
-    .paper-progress-main {
-      width: 100%;
-      --paper-progress-height: 100px;
-      --paper-progress-container-color: rgba(255, 255, 255, 0);
-    }
-    .title {
-      z-index: 0;
-    }
-  </style>
+    <style>
+      .paper-progress-main {
+        width: 100%;
+        --paper-progress-height: 100px;
+        --paper-progress-container-color: rgba(255, 255, 255, 0);
+      }
+      
+      .title {
+        z-index: 0;
+      }
+    </style>
 
-  <paper-drawer-panel id="drawer" narrow="{{mobile}}">
+    <paper-drawer-panel id="drawer" narrow="{{mobile}}">
 
-    <!-- Drawer -->
-    <div id="drawer" drawer>
-      <paper-menu>
-        <template is="dom-repeat" items="[[menuItems]]" as="menuItem">
+      <!-- Drawer -->
+      <div id="drawer" drawer>
+        <paper-menu>
+          <template is="dom-repeat" items="[[menuItems]]" as="menuItem">
             <paper-item id="[[menuItem.slug]]" on-click="_goToPage">[[menuItem.title]]</paper-item>
-        </template>
-      </paper-menu>
-    </div>
-    <!-- End Drawer -->
-
-    <!-- Header -->
-    <paper-header-panel main>
-      <paper-toolbar>
-        <template is="dom-if" if="[[loading]]" restamp>
-          <iron-flex-layout class="fit">
-            <paper-progress class="paper-progress-main" value="[[progress]]" indeterminate="[[_indeterminateLoading]]"></paper-progress>
-          </iron-flex-layout>
-        </template>
-        <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
-        <div class="title">[[pageTitle]]</div>
-        <template is="dom-repeat" items="[[_socialAccountsArray]]" as="socialAccount">
-            <paper-icon-button icon="fa:[[socialAccount.type]]" on-click="_goToSocialPage"></paper-icon-button>
-        </template>
-      </paper-toolbar>
-      <!-- End Header -->
-
-      <!-- Content -->
-      <div class="content">
-        <service-routing id="serviceRouting"></service-routing>
+          </template>
+        </paper-menu>
       </div>
-    </paper-header-panel>
-    <!-- End content -->
+      <!-- End Drawer -->
 
-  </paper-drawer-panel>
+      <!-- Header -->
+      <paper-header-panel main>
+        <paper-toolbar>
+          <template is="dom-if" if="[[loading]]" restamp>
+            <iron-flex-layout class="fit">
+              <paper-progress class="paper-progress-main" value="[[progress]]" indeterminate="[[_indeterminateLoading]]"></paper-progress>
+            </iron-flex-layout>
+          </template>
+          <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
+          <div class="title">[[pageTitle]]</div>
+          <template is="dom-repeat" items="[[_socialAccountsArray]]" as="socialAccount">
+            <paper-icon-button icon="fa:[[socialAccount.type]]" on-click="_goToSocialPage"></paper-icon-button>
+          </template>
+        </paper-toolbar>
+        <!-- End Header -->
+
+        <!-- Content -->
+        <div class="content">
+          <service-routing id="serviceRouting"></service-routing>
+        </div>
+      </paper-header-panel>
+      <!-- End content -->
+
+    </paper-drawer-panel>
 
   </template>
 
@@ -79,7 +80,7 @@
         },
 
         ready: function() {
-          this.set('pages', app.pages);
+          this._loadMenuItems();
           this._loadSocialAccounts();
         },
 
@@ -98,6 +99,19 @@
             this._indeterminateLoading = false;
           } else {
             this._indeterminateLoading = true;
+          }
+        },
+        
+        _loadMenuItems: function() {
+          this.menuItems = [];
+          for (var i = 0; i < app.pages.length; i++) {
+            if (app.pages[i].addToMenu) {
+              var menuItem = {
+                title: app.pages[i].title,
+                route: app.pages[i].route
+              }
+              this.push('menuItems', menuItem);
+            }
           }
         },
 
