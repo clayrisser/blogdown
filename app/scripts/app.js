@@ -51,14 +51,8 @@
   // Redirects app to another page
   app.goTo = function(route) {
     window.open('/#' + route, '_self');
-    if (app.mobile) { // Close drawer when page redirects
-      app.closeDrawer();
-    }
-  };
-
-  // Closes the drawer
-  app.closeDrawer = function() {
-    this.$.rootPage.drawer.closeDrawer();
+    var pageChanged = new Event('pageChanged');
+    app.dispatchEvent(pageChanged);
   };
 
 })(document);
