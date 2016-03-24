@@ -2,7 +2,11 @@
 
 <dom-module id="restamp-page">
   <template>
-    
+
+    <template is="dom-if" if="[[_display]]" restamp>
+      <content></content>
+    </template>
+
   </template>
 
   <script>
@@ -10,9 +14,63 @@
       'use strict';
       Polymer({
         is: 'restamp-page',
+        
+        properties: {
+          routeType: {
+            type: String
+          },
+          currentRoutetype: {
+            type: String
+          },
+          slug: {
+            type: String
+          },
+          currentSlug: {
+            type: String
+          },
+          pageType: {
+            type: String
+          },
+          currentPagetype: {
+            type: String
+          },
+          _display: {
+            type: Boolean,
+            value: false
+          }
+        },
 
         ready: function() {
 
+        },
+        
+        restamp: function() {
+          this._display = false;
+          if (this.routeType === this.currentRoutetype &&
+            this.slug === this.currentSlug &&
+            this.pageType === this.currentPagetype) {
+            this._debug();
+            this._loadElement(this.slug);
+          }
+        },
+        
+        _debug: function() {
+          console.log('**************************');
+          console.log(this.routeType + ' === ' + this.currentRoutetype);
+          console.log(this.slug + ' === ' + this.currentSlug);
+          console.log(this.pageType + ' === ' + this.currentPagetype);
+          console.log('===========================');
+        },
+        
+        _loadElement: function(name) {
+          this.importHref('../elements/pages/page-' + name + '.html', function() {
+            this._display = true;
+            app.debug('page-' + name + '.html was imported.');
+          }.bind(this), function() {
+              window.history.back();
+              app.debug('WARNING: page-' + name + '.html import failed to load');
+              app.toast(this.failedToLoad);
+          }.bind(this));
         }
       });
     })();

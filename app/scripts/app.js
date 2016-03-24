@@ -13,6 +13,7 @@
     var pageLoading = document.createElement('page-loading');
     app.$.loading.appendChild(pageLoading);
     app.pageTitle = app.settings.title;
+    app.firstPage = true;
   };
   app.settingsError = function() {
     console.warn('App failed to load settings');
@@ -50,6 +51,7 @@
   // Redirects app to another page
   app.goTo = function(route) {
     window.open('/#' + route, '_self');
+    app.firstPage = false;
     if (app.mobile) { // Close drawer when page redirects
       app.closeDrawer();
     }

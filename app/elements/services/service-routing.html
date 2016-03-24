@@ -2,7 +2,43 @@
 
 <dom-module id="service-routing">
   <template>
-
+    
+    <excess-route route="/" on-excess-route-will-activate="_homeRouteActivated"></excess-route>
+    <excess-route route="/:page" page="{{page}}" on-excess-route-will-activate="_pageRouteActivated"></excess-route>
+    <excess-route route="/:page/" page="{{page}}" on-excess-route-will-activate="_pageRouteActivated"></excess-route>
+    <excess-route route="/post/:post" post="{{post}}" on-excess-route-will-activate="_postsRouteActivated"></excess-route>
+    <excess-route route="/post/:post/" post="{{post}}" on-excess-route-will-activate="_postsRouteActivated"></excess-route>
+    
+    <!-- Hard pages -->
+    <restamp-page route-type="page" current-routetype="[[routeType]]" slug="home" current-slug="[[page]]" page-type="hard" current-pagetype="[[pageType]]">
+      <page-home></page-home>
+    </restamp-page>
+    
+    <restamp-page route-type="page" current-routetype="[[routeType]]" slug="posts" current-slug="[[page]]" page-type="hard" current-pagetype="[[pageType]]">
+      <page-posts></page-posts>
+    </restamp-page>
+    
+    <restamp-page route-type="page" current-routetype="[[routeType]]" slug="contact" current-slug="[[page]]" page-type="hard" current-pagetype="[[pageType]]">
+      <page-contact></page-contact>
+    </restamp-page>
+    <!-- End hard pages -->
+    
+    <restamp-page route-type="home" current-routetype="[[routeType]]" slug="home" current-slug="home" page-type="hard" current-pagetype="hard">
+      <page-home></page-home>
+    </restamp-page>
+    
+    <restamp-page route-type="404" current-routetype="[[routeType]]" slug="404" current-slug="404" page-type="hard" current-pagetype="hard">
+      <page-404></page-404>
+    </restamp-page>
+    
+    <restamp-page route-type="page" current-routetype="[[routeType]]" slug="soft" current-slug="soft" page-type="soft" current-pagetype="[[pageType]]">
+      <page-soft currentSlug="[[page]]"></page-soft>
+    </restamp-page>
+    
+    <restamp-page route-type="post" current-routetype="[[routeType]]" slug="post" current-slug="post" page-type="na" current-pagetype="na">
+      <page-post slug="[[post]]"></page-post>
+    </restamp-page>
+    
   </template>
 
   <script>
@@ -10,9 +46,84 @@
       'use strict';
       Polymer({
         is: 'service-routing',
+        
+        properties: {
+          page: {
+            type: String,
+            observer: '_slugChanged'
+          },
+          post: {
+            type: String,
+            observer: '_slugChanged'
+          }
+        },
 
         ready: function() {
 
+        },
+        
+        _homeRouteActivated: function() {
+          this.set('routeType', 'home');
+          this.initializePage();
+        },
+        
+        _pageRouteActivated: function() {
+          this.set('routeType', 'page');
+        },
+        
+        _postsRouteActivated: function() {
+          this.set('routeType', 'post');
+        },
+        
+        _slugChanged: function() {
+          console.log('slug changed');
+          this.initializePage();
+        },
+        
+        initializePage: function() {
+          var validPage = false;
+          if (app.pagesLoaded === true) {
+            if (this.routeType === 'home') { // Home route
+              validPage = true;
+            } else if (this.routeType === 'page') { // Page route
+              for (var i = 0; i < app.pages.length; i++) {
+                if (this.page === app.pages[i].slug) {
+                  if (app.pages[i].type === 'hard') { // Hard page
+                    this.set('pageType', 'hard');
+                  } else { // Soft page
+                    this.set('pageType', 'soft');
+                  }
+                  validPage = true;
+                  break;
+                }
+              }
+            } else if (this.routeType ==='post') { // Posts route
+              validPage = true;
+            } else {
+              app.debug('routeType not specified', 'warn');
+            }
+            if (validPage) {
+              this.restampPages();
+            } else { // Page does not exist
+              if (app.firstPage) {
+                this.set('routeType', '404');
+                this.restampPages();
+              } else {
+                var error = 'Error 404: page does not exist';
+                app.debug(error, 'warn');
+                app.toast(error, 'http://blogdown.info/error/404', '_blank');
+              }
+            }
+          }
+        },
+          
+        restampPages: function() {
+          if (document.getElementsByTagName('restamp-page')[0]) {
+            var restampPages = document.getElementsByTagName('restamp-page');
+            for (var i = 0; i < restampPages.length; i++) {
+              restampPages[i].restamp();
+            }
+          }
         }
       });
     })();
