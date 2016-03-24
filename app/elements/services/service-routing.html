@@ -76,13 +76,12 @@
         },
         
         _slugChanged: function() {
-          console.log('slug changed');
           this.initializePage();
         },
         
         initializePage: function() {
           var validPage = false;
-          if (app.pagesLoaded === true) {
+          if (app.loaded) {
             if (this.routeType === 'home') { // Home route
               validPage = true;
             } else if (this.routeType === 'page') { // Page route

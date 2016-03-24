@@ -82,6 +82,9 @@
         ready: function() {
           this._loadMenuItems();
           this._loadSocialAccounts();
+        },
+        
+        attached: function() {
           this.$.serviceRouting.initializePage();
         },
 

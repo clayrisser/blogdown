@@ -21,23 +21,73 @@
         is: 'service-startup',
 
         ready: function() {
+          this._buildPageArray();
+        },
+        
+        _buildPageArray: function() {
+          this.pages = [];
+          var hardPages = app.settings.hardPages;
+          var softPages = app.settings.softPages;
+          for (var i = 0; i < hardPages.length; i++) { // Add hard pages
+            var slug = hardPages[i].title.toLowerCase().replace(/[^\s\w+\-_#.]/g, '').replace(/\s+/g, '-');
+            var route = '';
+            if (slug === 'home') {
+              route = '/';
+            } else {
+              route = '/' + slug;
+            }
+            var page = {
+              title: hardPages[i].title,
+              route: route,
+              slug: slug,
+              type: "hard",
+              addToMenu: hardPages[i].addToMenu
+            };
+            this.push('pages', page);
+          }
+          for (var i = 0; i < softPages.length; i++) { // Add soft pages
+            var slug = softPages[i].title.toLowerCase().replace(/[^\s\w+\-_#.]/g, '').replace(/\s+/g, '-');
+            var route = '/' + slug;
+            page = {
+              title: softPages[i].title,
+              route: route,
+              slug: slug,
+              type: "soft",
+              addToMenu: hardPages[i].addToMenu
+            };
+            this.push('pages', page);
+          }
+          app.pages = this.pages;
           this.$.posts.generateRequest();
+          console.log(app.pages);
         },
 
         postsResponse: function() {
           if (this.postsResponseData) {
             app.posts = this.postsResponseData;
           } else {
-            var error = 'WARNING: SyntaxError in posts.json';
+            var error = 'Error 2: SyntaxError in posts.json';
             app.toast(error);
-            app.debug(error);
+            app.debug(error, 'warn');
           }
-          this._loaded();
+          this._loadElement(app.settings.theme);
         },
 
         postsError: function() {
-          app.debug('WARNING: Posts failed to load');
-          this._loaded();
+          app.debug('Posts failed to load', 'warn');
+          this._loadElement(app.settings.theme);
+        },
+        
+        _loadElement: function(name) {
+          this.importHref('../elements/themes/theme-' + name + '.html', function() {
+            app.debug('theme-' + name + ' loaded');
+            this._loaded();
+          }.bind(this), function() {
+            var error = 'Error 1: ' + name + ' theme failed to load';
+            app.debug(error, 'warn');
+            app.toast(error, 'http://blogdown.info/error/1', '_blank');
+            this._loaded();
+          }.bind(this));
         },
 
         _loaded: function() {

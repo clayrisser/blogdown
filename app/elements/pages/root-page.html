@@ -3,7 +3,12 @@
 <dom-module id="root-page">
   <template>
 
-    <theme-drawer></theme-drawer>
+    <theme-drawer
+      mobile="{{mobile}}"
+      loading="[[loading]]"
+      progress="[[progress]]"
+      page-title="[[pageTitle]]"
+    ></theme-drawer>
 
   </template>
 
@@ -12,58 +17,12 @@
       'use strict';
       Polymer({
         is: 'root-page',
-
-        ready: function() {
-          this._buildPageArray();
-          this._loadElement(app.settings.theme);
-        },
-
-        _buildPageArray: function() {
-          this.pages = [];
-          var hardPages = app.settings.hardPages;
-          var softPages = app.settings.softPages;
-          for (var i = 0; i < hardPages.length; i++) { // Add hard pages
-            var slug = hardPages[i].title.toLowerCase().replace(/[^\s\w+\-_#.]/g, '').replace(/\s+/g, '-');
-            var route = '';
-            if (slug === 'home') {
-              route = '/';
-            } else {
-              route = '/' + slug;
-            }
-            var page = {
-              title: hardPages[i].title,
-              route: route,
-              slug: slug,
-              type: "hard",
-              addToMenu: hardPages[i].addToMenu
-            };
-            this.push('pages', page);
-          }
-          for (var i = 0; i < softPages.length; i++) { // Add soft pages
-            var slug = hardPages[i].title.toLowerCase().replace(/[^\s\w+\-_#.]/g, '').replace(/\s+/g, '-');
-            var route = '/' + slug;
-            page = {
-              title: softPages[i].title,
-              route: route,
-              slug: slug,
-              type: "soft",
-              addToMenu: hardPages[i].addToMenu
-            };
-            this.push('pages', page);
-          }
-          app.pages = this.pages;
-          app.pagesLoaded = true;
-//          this.$.serviceRouting.initializePage();
-        },
         
-        _loadElement: function(name) {
-          this.importHref('../elements/themes/theme-' + name + '.html', function() {
-            app.debug('theme-' + name + ' loaded');
-          }.bind(this), function() {
-            var error = 'Error 1: ' + name + ' theme failed to load';
-            app.debug(error, 'warn');
-            app.toast(error, 'http://blogdown.info/error/1', '_blank');
-          }.bind(this));
+        properties: {
+          mobile: {
+            type: Boolean,
+            notify: true
+          }
         }
       });
     })();
