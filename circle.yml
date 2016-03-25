@@ -14,4 +14,4 @@ dependencies:
 ## Customize test commands
 test:
   override:
-    - gulp serve
+    - gulp
