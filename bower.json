@@ -10,7 +10,8 @@
     "polymer": "Polymer/polymer#^1.2.0",
     "fa-awesome": "^2.0.2",
     "juicy-markdown": "^1.0.0",
-    "excess-router": "^0.9.13"
+    "excess-router": "^0.9.13",
+    "juicy-html": "^1.1.0"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

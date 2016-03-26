@@ -4,39 +4,35 @@
   <template>
     
     <excess-route route="/" on-excess-route-will-activate="_homeRouteActivated"></excess-route>
-    <excess-route route="/:page" page="{{page}}" on-excess-route-will-activate="_pageRouteActivated"></excess-route>
-    <excess-route route="/:page/" page="{{page}}" on-excess-route-will-activate="_pageRouteActivated"></excess-route>
-    <excess-route route="/post/:post" post="{{post}}" on-excess-route-will-activate="_postsRouteActivated"></excess-route>
-    <excess-route route="/post/:post/" post="{{post}}" on-excess-route-will-activate="_postsRouteActivated"></excess-route>
+    <excess-route route="/:page" page="{{pageSlug}}" on-excess-route-will-activate="_pageRouteActivated"></excess-route>
+    <excess-route route="/:page/" page="{{pageSlug}}" on-excess-route-will-activate="_pageRouteActivated"></excess-route>
+    <excess-route route="/post/:post" post="{{postSlug}}" on-excess-route-will-activate="_postsRouteActivated"></excess-route>
+    <excess-route route="/post/:post/" post="{{postSlug}}" on-excess-route-will-activate="_postsRouteActivated"></excess-route>
     
     <!-- Hard pages -->
-    <restamp-page route-type="page" current-routetype="[[routeType]]" slug="home" current-slug="[[page]]" page-type="hard" current-pagetype="[[pageType]]">
+    <restamp-page route-type="page" current-routetype="[[routeType]]" slug="home" current-slug="[[pageSlug]]" page-type="hard" current-pagetype="[[pageType]]">
       <page-home></page-home>
     </restamp-page>
     
-    <restamp-page route-type="page" current-routetype="[[routeType]]" slug="posts" current-slug="[[page]]" page-type="hard" current-pagetype="[[pageType]]">
+    <restamp-page route-type="page" current-routetype="[[routeType]]" slug="posts" current-slug="[[pageSlug]]" page-type="hard" current-pagetype="[[pageType]]">
       <page-posts></page-posts>
     </restamp-page>
     
-    <restamp-page route-type="page" current-routetype="[[routeType]]" slug="contact" current-slug="[[page]]" page-type="hard" current-pagetype="[[pageType]]">
+    <restamp-page route-type="page" current-routetype="[[routeType]]" slug="contact" current-slug="[[pageSlug]]" page-type="hard" current-pagetype="[[pageType]]">
       <page-contact></page-contact>
     </restamp-page>
     <!-- End hard pages -->
-    
-    <restamp-page route-type="home" current-routetype="[[routeType]]" slug="home" current-slug="home" page-type="hard" current-pagetype="hard">
-      <page-home></page-home>
-    </restamp-page>
     
     <restamp-page route-type="404" current-routetype="[[routeType]]" slug="404" current-slug="404" page-type="hard" current-pagetype="hard">
       <page-404></page-404>
     </restamp-page>
     
     <restamp-page route-type="page" current-routetype="[[routeType]]" slug="soft" current-slug="soft" page-type="soft" current-pagetype="[[pageType]]">
-      <page-soft currentSlug="[[page]]"></page-soft>
+      <page-soft page="[[softPage]]"></page-soft>
     </restamp-page>
     
     <restamp-page route-type="post" current-routetype="[[routeType]]" slug="post" current-slug="post" page-type="na" current-pagetype="na">
-      <page-post slug="[[post]]"></page-post>
+      <page-post post="[[post]]"></page-post>
     </restamp-page>
     
   </template>
@@ -48,11 +44,11 @@
         is: 'service-routing',
         
         properties: {
-          page: {
+          pageSlug: {
             type: String,
             observer: '_slugChanged'
           },
-          post: {
+          postSlug: {
             type: String,
             observer: '_slugChanged'
           }
@@ -63,8 +59,8 @@
         },
         
         _homeRouteActivated: function() {
-          this.set('routeType', 'home');
-          this.set('page', 'home');
+          this.set('routeType', 'page');
+          this.set('pageSlug', 'home');
           this.initializePage();
         },
         
@@ -87,11 +83,12 @@
               validPage = true;
             } else if (this.routeType === 'page') { // Page route
               for (var i = 0; i < app.pages.length; i++) {
-                if (this.page === app.pages[i].slug) {
+                if (this.pageSlug === app.pages[i].slug) {
                   if (app.pages[i].type === 'hard') { // Hard page
                     this.set('pageType', 'hard');
                   } else { // Soft page
                     this.set('pageType', 'soft');
+                    this.set('softPage', app.pages[i]);
                   }
                   validPage = true;
                   break;

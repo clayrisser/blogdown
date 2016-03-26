@@ -2,7 +2,30 @@
 
 <dom-module id="page-soft">
   <template>
-    <span>this is a soft page</span>
+    
+    <paper-card heading="[[page.title]]">
+      <div class="card-content">
+        <template is="dom-if" if="[[isMD]]">
+          <juicy-markdown value="[[pageResponseData]]"></juicy-markdown>
+        </template>
+        <template is="dom-if" if="[[isHTML]]">
+          <template is="juicy-html" content$="[[pageResponseData]]"></template>
+        </template>
+        <template is="dom-if" if="[[isPDF]]">
+          <div>This is a pdf</div>
+        </template>
+      </div>
+    </paper-card>
+    
+    <!-- Load soft page -->
+    <iron-ajax id="page"
+      url="[[pageUrl]]"
+      handle-as="text"
+      on-response="pageResponse"
+      on-error="pageError"
+      last-response="{{pageResponseData}}"
+    ></iron-ajax>
+    
   </template>
 
   <script>
@@ -10,9 +33,47 @@
       'use strict';
       Polymer({
         is: 'page-soft',
-
-        ready: function() {
-
+        
+        properties: {
+          pageResponseData: {
+            type: String
+          },
+          page: {
+            type: Object,
+            observer: '_pageChanged'
+          }
+        },
+        
+        _pageChanged: function() {
+          this.pageUrl = '../../pages/' + this.page.slug + '.' + this.page.format;
+          this.$.page.generateRequest();
+        },
+        
+        pageResponse: function() {
+          switch (this.page.format) {
+            case 'md':
+              this.isMD = true;
+              this.isHTML = false;
+              this.isPDF = false;
+              break;
+            case 'html':
+              this.isMD = false;
+              this.isHTML = true;
+              this.isPDF = false;
+              break;
+            case 'pdf':
+              this.isMD = false;
+              this.isHTML = false;
+              this.isPDF = true;
+              break;
+          }
+          app.debug(this.page.slug + '.' + this.page.format + ' loaded');
+        },
+        
+        pageError: function() {
+          var error = 'Error 2: ' + this.page.slug + '.' + this.page.format + ' failed to load';
+          app.debug(error, 'warn');
+          app.toast(error, 'http://blogdown.info/error/2', '_blank');
         }
       });
     })();

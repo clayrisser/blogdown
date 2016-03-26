@@ -14,18 +14,24 @@
     {
       "title": "Chinchilla",
       "addToMenu": true
+    }, {
+      "title": "Subscribe",
+      "format": "html",
+      "addToMenu": true
+    }, {
+      "title": "Coolness",
+      "format": "pdf",
+      "addToMenu": true
     }
   ],
   "hardPages": [
     {
       "title": "Home",
       "addToMenu": true
-    },
-    {
+    }, {
       "title": "Posts",
       "addToMenu": true
-    },
-    {
+    }, {
       "title": "Contact",
       "addToMenu": true
     }

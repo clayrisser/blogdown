@@ -48,11 +48,16 @@
           for (var i = 0; i < softPages.length; i++) { // Add soft pages
             var slug = softPages[i].title.toLowerCase().replace(/[^\s\w+\-_#.]/g, '').replace(/\s+/g, '-');
             var route = '/' + slug;
+            var format ="md"
+            if (softPages[i].format) {
+              format = softPages[i].format;
+            }
             page = {
               title: softPages[i].title,
               route: route,
               slug: slug,
               type: "soft",
+              format: format,
               addToMenu: hardPages[i].addToMenu
             };
             this.push('pages', page);

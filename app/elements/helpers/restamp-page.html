@@ -3,7 +3,7 @@
 <dom-module id="restamp-page">
   <template>
 
-    <template is="dom-if" if="[[_display]]" restamp>
+    <template is="dom-if" if="[[display]]" restamp>
       <content></content>
     </template>
 
@@ -34,7 +34,7 @@
           currentPagetype: {
             type: String
           },
-          _display: {
+          display: {
             type: Boolean,
             value: false
           }
@@ -45,7 +45,7 @@
         },
         
         restamp: function() {
-          this._display = false;
+          this.display = false;
           if (this.routeType === this.currentRoutetype &&
             this.slug === this.currentSlug &&
             this.pageType === this.currentPagetype) {
@@ -63,7 +63,7 @@
         
         _loadElement: function(name) {
           this.importHref('../elements/pages/page-' + name + '.html', function() {
-            this._display = true;
+            this.display = true;
             app.debug('page-' + name + '.html was imported.');
           }.bind(this), function() {
               window.history.back();
