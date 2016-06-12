@@ -102,7 +102,7 @@ var optimizeHtmlTask = function(src, dest) {
 
 // Compile and automatically prefix stylesheets
 gulp.task('styles', function() {
-  return styleTask('assets/styles', ['**/*.css']);
+  return styleTask('core/styles', ['**/*.css']);
 });
 
 // Ensure that we are not missing required files for the project
@@ -119,25 +119,25 @@ gulp.task('ensureFiles', function(cb) {
 // Optimize scripts
 gulp.task('scripts', function() {
   gulp.src([
-    'app/assets/scripts/*',
-    '!app/assets/scripts/app.js'
+    'app/core/scripts/*',
+    '!app/core/scripts/app.js'
   ])
   .pipe($.uglify({
     preserveComments: 'some'
   }))
-  .pipe(gulp.dest(dist('assets/scripts')));
+  .pipe(gulp.dest(dist('core/scripts')));
 });
 
 // Optimize images
 gulp.task('images', function() {
-  return imageOptimizeTask('app/assets/images/**/*', dist('assets/images'));
+  return imageOptimizeTask('app/core/images/**/*', dist('core/images'));
 });
 
 // Copy all files at the root level (app)
 gulp.task('copy', function() {
   var app = gulp.src([
     'app/*',
-    '!app/assets',
+    '!app/core',
     '!app/content',
     '!app/cache-config.json',
     '!**/.DS_Store'
@@ -148,8 +148,8 @@ gulp.task('copy', function() {
   // Copy over only the bower_components we need
   // These are things which cannot be vulcanized
   var bower = gulp.src([
-    'app/assets/bower_components/{webcomponentsjs,platinum-sw,sw-toolbox,promise-polyfill}/**/*'
-  ]).pipe(gulp.dest(dist('assets/bower_components')));
+    'app/core/bower_components/{webcomponentsjs,platinum-sw,sw-toolbox,promise-polyfill}/**/*'
+  ]).pipe(gulp.dest(dist('core/bower_components')));
   
   // Copy content
   var content = gulp.src([
@@ -178,23 +178,23 @@ gulp.task('copy', function() {
   
   // Copy error pages
   var errors = gulp.src([
-    'app/assets/errors/*'
-  ]).pipe(gulp.dest(dist('assets/errors')));
+    'app/core/errors/*'
+  ]).pipe(gulp.dest(dist('core/errors')));
   
   // Copy page elements
   var pageElements = gulp.src([
-    'app/assets/elements/pages/*.dyn.html'
-  ]).pipe(gulp.dest(dist('assets/elements/pages')));
+    'app/core/elements/pages/*.dyn.html'
+  ]).pipe(gulp.dest(dist('core/elements/pages')));
   
   // Copy service elements
   var serviceElements = gulp.src([
-    'app/assets/elements/services/*.dyn.html'
-  ]).pipe(gulp.dest(dist('assets/elements/services')));
+    'app/core/elements/services/*.dyn.html'
+  ]).pipe(gulp.dest(dist('core/elements/services')));
   
   // Copy theme elements
   var themeElements = gulp.src([
-    'app/assets/elements/themes/*.dyn.html'
-  ]).pipe(gulp.dest(dist('assets/elements/themes')));
+    'app/core/elements/themes/*.dyn.html'
+  ]).pipe(gulp.dest(dist('core/elements/themes')));
 
   return merge(app, bower, content, pages, posts, modules, errors, images,
     pageElements, serviceElements, themeElements)
@@ -205,8 +205,8 @@ gulp.task('copy', function() {
 
 // Copy web fonts to dist
 gulp.task('fonts', function() {
-  return gulp.src(['app/assets/fonts/**'])
-    .pipe(gulp.dest(dist('assets/fonts')))
+  return gulp.src(['app/core/fonts/**'])
+    .pipe(gulp.dest(dist('core/fonts')))
     .pipe($.size({
       title: 'fonts'
     }));
@@ -216,20 +216,20 @@ gulp.task('fonts', function() {
 gulp.task('html', function() {
   return optimizeHtmlTask([
     'app/**/*.html',
-    '!app/assets/{elements,test,bower_components}/**/*.html',
+    '!app/core/{elements,test,bower_components}/**/*.html',
     '!app/content/{pages,posts}/**/*.html'
   ], dist());
 });
 
 // Vulcanize granular configuration
 gulp.task('vulcanize', function() {
-  return gulp.src('app/assets/elements/elements.html')
+  return gulp.src('app/core/elements/elements.html')
     .pipe($.vulcanize({
       stripComments: true,
       inlineCss: true,
       inlineScripts: true
     }))
-    .pipe(gulp.dest(dist('assets/elements')))
+    .pipe(gulp.dest(dist('core/elements')))
     .pipe($.size({title: 'vulcanize'}));
 });
 
@@ -250,8 +250,8 @@ gulp.task('cache-config', function(callback) {
   glob([
     'index.html',
     './',
-    'assets/bower_components/webcomponentsjs/webcomponents-lite.min.js',
-    'assets/{elements,scripts,styles}/**/*.*'],
+    'core/bower_components/webcomponentsjs/webcomponents-lite.min.js',
+    'core/{elements,scripts,styles}/**/*.*'],
     {cwd: dir}, function(error, files) {
     if (error) {
       callback(error);
@@ -297,7 +297,7 @@ gulp.task('serve', ['styles'], function() {
     }
   });
 
-  gulp.watch(['app/**/*.html', '!app/assets/bower_components/**/*.html'], reload);
+  gulp.watch(['app/**/*.html', '!app/core/bower_components/**/*.html'], reload);
   gulp.watch(['app/styles/**/*.css'], ['styles', reload]);
   gulp.watch(['app/scripts/**/*.js'], reload);
   gulp.watch(['app/images/**/*'], reload);

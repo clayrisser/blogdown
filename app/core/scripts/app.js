@@ -45,7 +45,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     if (localStorage.style) {
       style = localStorage.style;
     }
-    this.importHref('../assets/styles/style-' + style + '.html', function() {
+    this.importHref('../../../../../../../../core/styles/style-' + style + '.html', function() {
       app.debug('style-' + style + ' loaded');
     }.bind(this), function() {
         app.debug('WARNING: style-' + style + 'failed to load');

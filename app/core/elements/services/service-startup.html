@@ -148,7 +148,7 @@
         },
         
         _loadElement: function(name) {
-          this.importHref('../assets/elements/themes/theme-' + name + '.dyn.html', function() {
+          this.importHref('../../../../../../../../core/elements/themes/theme-' + name + '.dyn.html', function() {
             app.debug('theme-' + name + ' loaded');
             this._loaded();
           }.bind(this), function() {

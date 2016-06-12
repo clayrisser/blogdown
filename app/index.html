@@ -24,7 +24,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <meta name="theme-color" content="#2E3AA1">
 
   <!-- Web Application Manifest -->
-  <link rel="manifest" href="assets/manifest.json">
+  <link rel="manifest" href="core/manifest.json">
 
   <!-- Tile color for Win8 -->
   <meta name="msapplication-TileColor" content="#3372DF">
@@ -32,25 +32,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <!-- Add to homescreen for Chrome on Android -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="application-name" content="PSK">
-  <link rel="icon" sizes="192x192" href="assets/images/touch/chrome-touch-icon-192x192.png">
+  <link rel="icon" sizes="192x192" href="core/images/touch/chrome-touch-icon-192x192.png">
 
   <!-- Add to homescreen for Safari on iOS -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="Polymer Starter Kit">
-  <link rel="apple-touch-icon" href="assets/images/touch/apple-touch-icon.png">
+  <link rel="apple-touch-icon" href="core/images/touch/apple-touch-icon.png">
 
   <!-- Tile icon for Win8 (144x144) -->
-  <meta name="msapplication-TileImage" content="assets/images/touch/ms-touch-icon-144x144-precomposed.png">
+  <meta name="msapplication-TileImage" content="core/images/touch/ms-touch-icon-144x144-precomposed.png">
 
-  <!-- build:css assets/styles/main.css -->
-  <link rel="stylesheet" href="assets/styles/main.css">
+  <!-- build:css core/styles/main.css -->
+  <link rel="stylesheet" href="core/styles/main.css">
   <!-- endbuild-->
   
   <!-- force hashbang -->
   <script>
     if (window.location.protocol === 'file:') { // Prevents errors when not running on server
-      window.location.href = './assets/errors/no-server.html';
+      window.location.href = './core/errors/no-server.html';
     } else {
       var url = window.location.href;
       var slashes = 0;
@@ -68,13 +68,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
   </script>
 
-  <!-- build:js assets/bower_components/webcomponentsjs/webcomponents-lite.min.js -->
-  <script src="assets/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <!-- build:js core/bower_components/webcomponentsjs/webcomponents-lite.min.js -->
+  <script src="core/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
   <!-- endbuild -->
 
   <!-- Because this project uses vulcanize this should be your only html import
        in this file. All other imports should go in elements.html -->
-  <link rel="import" href="assets/elements/elements.html">
+  <link rel="import" href="core/elements/elements.html">
 
   <!-- For shared styles, shared-styles.html import in elements.html -->
   <style is="custom-style" include="shared-styles"></style>
@@ -131,8 +131,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   </template>
 
-  <!-- build:js assets/scripts/app.js -->
-  <script src="assets/scripts/app.js"></script>
+  <!-- build:js core/scripts/app.js -->
+  <script src="core/scripts/app.js"></script>
   <!-- endbuild-->
 </body>
 
