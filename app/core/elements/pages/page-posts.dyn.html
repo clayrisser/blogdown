@@ -13,7 +13,7 @@
         width: 100%;
         height: 100%;
         background-color: black;
-        opacity: .5;
+        opacity: .2;
       }
       .post-image {
         position: absolute;
@@ -40,10 +40,11 @@
           <div class="post-content">
             <div class="card-content">
               <div class="post-header">[[post.title]]</div>
-              <div class="post-name">[[post.summary]]</div>
+              <div class="post-name">[[post.description]]</div>
             </div>
             <div class="card-actions">
               <paper-button on-click="_goToPost">Read More</paper-button>
+              <paper-button on-click="_goToProject" hidden="[[!post.viewProject]]">View Project</paper-button>
             </div>
           </div>
           <div class="post-background">      
@@ -57,10 +58,13 @@
           <div class="post-content">
             <div class="card-content">
               <div class="post-header">[[post.title]]</div>
-              <div class="post-name">[[post.summary]]</div>
+              <div class="post-name">[[post.description]]</div>
             </div>
             <div class="card-actions">
               <paper-button on-click="_goToPost">Read More</paper-button>
+              <template is="dom-if" if="[[post.viewProject]]" restamp>
+                <paper-button on-click="_goToProject">View Project</paper-button>
+              </template>
             </div>
           </div>
         </paper-card>
@@ -85,6 +89,13 @@
         _goToPost: function(e) {
           var post = e.model.post;
           app.goTo('/post/' + post.slug);
+        },
+        
+        _goToProject: function(e) {
+          console.log(e.model);
+          var post = e.model.post;
+          console.log(post);
+          window.open(post.viewProject, '_blank');
         },
         
         _determineFeaturedImage: function(featuredImage, i) {

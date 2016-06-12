@@ -127,14 +127,24 @@
                 if (posts[i].featuredImage === false) { // Finding featured image location happens in page-post.dyn.html
                   featuredImage = posts[i].featuredImage;
                 }
+                // Description
+                var description = '';
+                if (posts[i].description) {
+                  description = posts[i].description;
+                }
                 var post = {
                   title: title,
                   datestamp: datestamp,
                   author: author,
                   slug: slug,
                   format: format,
-                  featuredImage: featuredImage
+                  featuredImage: featuredImage,
+                  description: description
                 };
+                // View Project
+                if (posts[i].viewProject) {
+                  post.viewProject = posts[i].viewProject;
+                }
                 if (pushPost) {
                   this.push('posts', post);
                 }

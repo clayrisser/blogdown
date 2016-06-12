@@ -4,7 +4,9 @@
     "date": 1457993374,
     "author": "jamrizzi",
     "status": "published",
-    "featuredImage": true
+    "featuredImage": true,
+    "description": "yo this is an awsome description.",
+    "viewProject": "http://google.com"
   },
   {
     "title": "2ndpost",
