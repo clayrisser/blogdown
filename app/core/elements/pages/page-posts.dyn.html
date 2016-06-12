@@ -62,9 +62,7 @@
             </div>
             <div class="card-actions">
               <paper-button on-click="_goToPost">Read More</paper-button>
-              <template is="dom-if" if="[[post.viewProject]]" restamp>
-                <paper-button on-click="_goToProject">View Project</paper-button>
-              </template>
+              <paper-button on-click="_goToProject" hidden="[[!post.viewProject]]">View Project</paper-button>
             </div>
           </div>
         </paper-card>
