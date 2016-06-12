@@ -176,11 +176,6 @@ gulp.task('copy', function() {
     'app/content/modules/*'
   ]).pipe(gulp.dest(dist('content/modules')));
   
-  // Copy error pages
-  var errors = gulp.src([
-    'app/core/errors/*'
-  ]).pipe(gulp.dest(dist('core/errors')));
-  
   // Copy page elements
   var pageElements = gulp.src([
     'app/core/elements/pages/*.dyn.html'
@@ -196,7 +191,7 @@ gulp.task('copy', function() {
     'app/core/elements/themes/*.dyn.html'
   ]).pipe(gulp.dest(dist('core/elements/themes')));
 
-  return merge(app, bower, content, pages, posts, modules, errors, images,
+  return merge(app, bower, content, pages, posts, modules, images,
     pageElements, serviceElements, themeElements)
     .pipe($.size({
       title: 'copy'

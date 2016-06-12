@@ -30,12 +30,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
       }
     }
+    app._init();
     app._loadStyle();
     app._loadTheApp();
   };
   app.settingsError = function() {
     console.warn('App failed to load settings');
   };
+  
+  app._init = function() { // first code to run after settings have loaded
+    document.title = app.settings.title;
+  },
   
   app._loadStyle = function() { // Load style
     var style = 'default';

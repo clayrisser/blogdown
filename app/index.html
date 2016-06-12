@@ -46,27 +46,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <!-- build:css core/styles/main.css -->
   <link rel="stylesheet" href="core/styles/main.css">
   <!-- endbuild-->
-  
-  <!-- force hashbang -->
-  <script>
-    if (window.location.protocol === 'file:') { // Prevents errors when not running on server
-      window.location.href = './core/errors/no-server.html';
-    } else {
-      var url = window.location.href;
-      var slashes = 0;
-      for (var i = 0; i < url.length; i++) {
-        if (url[i] === '/') {
-          slashes++;
-          if (slashes === 3) {
-            if (url[i + 1] && url[i + 1] !== '#' && url[i + 2] !== '!') { // HashBang not found
-              window.location.href = '/#!' + url.substring(i, url.length);
-            }
-            break;
-          }
-        }
-      }
-    }
-  </script>
 
   <!-- build:js core/bower_components/webcomponentsjs/webcomponents-lite.min.js -->
   <script src="core/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
