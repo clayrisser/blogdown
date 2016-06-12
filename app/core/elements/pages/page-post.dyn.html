@@ -2,10 +2,26 @@
 
 <dom-module id="page-post">
   <template>
+    <style>
+      .featured-image {
+        --paper-card-header-text: {
+          color: white;
+          font-size: 30px;
+          font-weight: bold;
+        }
+        --paper-card-header-image: {
+          opacity: .5;
+          max-height: 300px;
+        }
+        --paper-card-header: {
+          background-color: black;
+        }
+      }
+    </style>
     
     <!-- Has featured image -->
     <template is="dom-if" if="[[featuredImage]]" restamp>
-      <paper-card heading="[[post.title]]" image="[[featuredImage]]">
+      <paper-card class="featured-image" heading="[[post.title]]" image="[[featuredImage]]">
         <template is="dom-if" if="[[isMD]]" restamp>
           <div class="card-content">
             <juicy-markdown value="[[postResponseData]]"></juicy-markdown>
