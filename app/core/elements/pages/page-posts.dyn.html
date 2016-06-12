@@ -100,20 +100,20 @@
           if (featuredImage) {
             if (featuredImage === true) { // Featured image assumed
               if (app.settings.permlinkMode === 'date') { // date mode
-                featuredImage = '../../../../../../../../content/images/' + this.posts[i].slug + '.jpg';
+                featuredImage = app.rootURL + 'content/images/' + this.posts[i].slug + '.jpg';
                 this._checkImage(featuredImage, function() { // Image exists
                   this.set('posts.' + i + '.featuredImage', featuredImage);
                 }.bind(featuredImage, i), function() { // Image doesn't exist
-                  featuredImage = '../../../../../../../../content/images/' + this.posts[i].slug + '.png';
+                  featuredImage = app.rootURL + 'content/images/' + this.posts[i].slug + '.png';
                   this._checkImage(featuredImage, function() { // Image exists
                     this.set('posts.' + i + '.featuredImage', featuredImage);
                   }.bind(featuredImage, i), function() { // Image doesn't exist
                     var title = this.post.title.toString().toLowerCase().replace(/[^\s\w+\-_#.]/g, '').replace(/\s+/g, '-');
-                    featuredImage = '../../../../../../../../content/images/' + this._title + '.jpg';
+                    featuredImage = app.rootURL + 'content/images/' + this._title + '.jpg';
                     this._checkImage(featuredImage, function() { // Image exists
                       this.set('posts.' + i + '.featuredImage', featuredImage);
                     }.bind(featuredImage, i), function() { // Image doesn't exist
-                      featuredImage = '../../../../../../../../content/images/' + this._title + '.png';
+                      featuredImage = app.rootURL + 'content/images/' + this._title + '.png';
                       this._checkImage(featuredImage, function() { // Image exists
                         this.set('posts.' + i + '.featuredImage', featuredImage);
                       }.bind(featuredImage, i), function() { // Image doesn't exist
@@ -123,19 +123,19 @@
                   }.bind(featuredImage, i));
                 }.bind(featuredImage, i));
               } else { // title mode
-                featuredImage = '../../../../../../../../content/images/' + this.posts[i].slug + '.jpg';
+                featuredImage = app.rootURL + 'content/images/' + this.posts[i].slug + '.jpg';
                 this._checkImage(featuredImage, function() { // Image exists
                   this.set('posts.' + i + '.featuredImage', featuredImage);
                 }.bind(this, featuredImage, i), function() { // Image doesn't exist
-                  featuredImage = '../../../../../../../../content/images/' + this.posts[i].slug + '.png';
+                  featuredImage = app.rootURL + 'content/images/' + this.posts[i].slug + '.png';
                   this._checkImage(featuredImage, function() { // Image exists
                     this.set('posts.' + i + '.featuredImage', featuredImage);
                   }.bind(this, featuredImage, i), function() { // Image doesn't exist
-                    featuredImage = '../../../../../../../../content/images/' + this.posts[i].datestamp + '.jpg';
+                    featuredImage = app.rootURL + 'content/images/' + this.posts[i].datestamp + '.jpg';
                     this._checkImage(featuredImage, function() { // Image exists
                       this.set('posts.' + i + '.featuredImage', featuredImage);
                     }.bind(this, featuredImage, i), function() { // Image doesn't exist
-                      featuredImage = '../../../../../../../../content/images/' + this.posts[i].datestamp + '.png';
+                      featuredImage = app.rootURL + 'content/images/' + this.posts[i].datestamp + '.png';
                       this._checkImage(featuredImage, function() { // Image exists
                         this.set('posts.' + i + '.featuredImage', featuredImage);
                       }.bind(this, featuredImage, i), function() { // Image doesn't exist
@@ -147,7 +147,7 @@
               }
             } else {
               if (this._isRelativeUrl(this.posts[i].featuredImage)) { // Relative featured image
-                this.set('posts.' + i + '.featuredImage', '../../../../../../../../content/images/' + this.posts[i].featuredImage);
+                this.set('posts.' + i + '.featuredImage', app.rootURL + 'content/images/' + this.posts[i].featuredImage);
               } // else absolute featured image
               this._checkImage(featuredImage, function() { // Image exists
               }.bind(this, featuredImage, i), function() { // Image doesn't exist

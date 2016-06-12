@@ -60,18 +60,18 @@
               this.push('_formats', formats[i]);
             }
           }
-          this._pageUrl = '../../../../../../../../content/pages/' + this.page.slug + '.' + this.page.format;
+          this._pageUrl = app.rootURL + 'content/pages/' + this.page.slug + '.' + this.page.format;
           this._checkFile(this._pageUrl, function() { // file exists
             this.pageUrl = this._pageUrl;
             this._initPage();
           }.bind(this), function() { // file doesn't exist
-            this._pageUrl = '../../../../../../../../content/pages/' + this.page.slug + '.' + this._formats[0];
+            this._pageUrl = app.rootURL + 'content/pages/' + this.page.slug + '.' + this._formats[0];
             this._checkFile(this._pageUrl, function() { // file exists
               this.pageUrl = this._pageUrl;
               this.page.format = this._formats[0];
               this._initPage();
             }.bind(this), function() { // file doesn't exist
-              this._pageUrl = '../../../../../../../../content/pages/' + this.page.slug + '.' + this._formats[1];
+              this._pageUrl = app.rootURL + 'content/pages/' + this.page.slug + '.' + this._formats[1];
               this._checkFile(this._pageUrl, function() { // file exists
                 this.pageUrl = this._pageUrl;
                 this.page.format = this._formats[1];

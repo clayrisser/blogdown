@@ -23,7 +23,7 @@
         },
         
         _loadElement: function(name) {
-          this.importHref('../../../../../../../../content/modules/' + name + '.mod', function() {
+          this.importHref(app.rootURL + 'content/modules/' + name + '.mod', function() {
             app.debug(name + '.mod was imported.');
           }.bind(this), function() {
               window.history.back();

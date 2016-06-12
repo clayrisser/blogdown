@@ -39,7 +39,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   };
   
   app._init = function() { // first code to run after settings have loaded
-    document.title = app.settings.title;
+    document.title = app.settings.title; // update page title
   },
   
   app._loadStyle = function() { // Load style
@@ -50,7 +50,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     if (localStorage.style) {
       style = localStorage.style;
     }
-    this.importHref('../../../../../../../../core/styles/style-' + style + '.html', function() {
+    console.log(app.rootURL);
+    this.importHref(app.rootURL + 'core/styles/style-' + style + '.html', function() {
       app.debug('style-' + style + ' loaded');
     }.bind(this), function() {
         app.debug('WARNING: style-' + style + 'failed to load');
@@ -107,12 +108,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   };
   
   // Sets app default base URL
-  app.baseUrl = '/';
-  if (window.location.port === '') {  // if production
-    // Uncomment app.baseURL below and
-    // set app.baseURL to '/your-pathname/' if running from folder in production
-    // app.baseUrl = '/polymer-starter-kit/';
+  var scriptElements = document.getElementsByTagName('script'); // find root url
+  for (var i = 0; i < scriptElements.length; i++) {
+    var source = scriptElements[i].src;
+    if (source.indexOf('/core/scripts/app.js') > -1) {
+      app.rootURL = source.substring(0, source.indexOf('core/scripts/app.js'));
+    }
   }
+  app.baseUrl = app.rootURL.substring(window.location.origin.length, app.rootURL.length);
 
   app.displayInstalledToast = function() {
     // Check to make sure caching is actually enabled—it won't be in the dev environment.

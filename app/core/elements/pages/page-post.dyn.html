@@ -120,36 +120,36 @@
             }
           }
           if (app.settings.permlinkMode === 'date') { // date mode
-            this._postUrl = '../../../../../../../../content/posts/' + this.post.slug + '.' + this.post.format;
+            this._postUrl = app.rootURL + 'content/posts/' + this.post.slug + '.' + this.post.format;
             this._checkFile(this._postUrl, function() { // file exists
               this.postUrl = this._postUrl;
               this._initPost();
             }.bind(this), function() { // file doesn't exist
-              this._postUrl = '../../../../../../../../content/posts/' + this.post.slug + '.' + this._formats[0];
+              this._postUrl = app.rootURL + 'content/posts/' + this.post.slug + '.' + this._formats[0];
               this._checkFile(this._postUrl, function() { // file exists
                 this.postUrl = this._postUrl;
                 this.post.format = this._formats[0];
                 this._initPost();
               }.bind(this), function() { // file doesn't exist
-                this._postUrl = '../../../../../../../../content/posts/' + this.post.slug + '.' + this._formats[1];
+                this._postUrl = app.rootURL + 'content/posts/' + this.post.slug + '.' + this._formats[1];
                 this._checkFile(this._postUrl, function() { // file exists
                   this.postUrl = this._postUrl;
                   this.post.format = this._formats[1];
                   this._initPost();
                 }.bind(this), function() { // file doesn't exist
                   this._title = this.post.title.toString().toLowerCase().replace(/[^\s\w+\-_#.]/g, '').replace(/\s+/g, '-');
-                  this._postUrl = '../../../../../../../../content/posts/' + this._title + '.' + this.post.format;
+                  this._postUrl = app.rootURL + 'content/posts/' + this._title + '.' + this.post.format;
                   this._checkFile(this._postUrl, function() { // file exists
                     this.postUrl = this._postUrl;
                     this._initPost();
                   }.bind(this), function() { // file doesn't exist
-                    this._postUrl = '../../../../../../../../content/posts/' + this._title + '.' + this._formats[0];
+                    this._postUrl = app.rootURL + 'content/posts/' + this._title + '.' + this._formats[0];
                     this._checkFile(this._postUrl, function() { // file exists
                       this.postUrl = this._postUrl;
                       this.post.format = this._formats[0];
                       this._initPost();
                     }.bind(this), function() { // file doesn't exist
-                    this._postUrl = '../../../../../../../../content/posts/' + this._title + '.' + this._formats[1];
+                    this._postUrl = app.rootURL + 'content/posts/' + this._title + '.' + this._formats[1];
                       this._checkFile(this._postUrl, function() { // file exists
                         this.postUrl = this._postUrl;
                         this.post.format = this._formats[1];
@@ -163,35 +163,35 @@
               }.bind(this));
             }.bind(this));
           } else { // title mode
-            this._postUrl = '../../../../../../../../content/posts/' + this.post.slug + '.' + this.post.format;
+            this._postUrl = app.rootURL + 'content/posts/' + this.post.slug + '.' + this.post.format;
             this._checkFile(this._postUrl, function() { // file exists
               this.postUrl = this._postUrl;
               this._initPost();
             }.bind(this), function() { // file doesn't exist
-              this._postUrl = '../../../../../../../../content/posts/' + this.post.slug + '.' + this._formats[0];
+              this._postUrl = app.rootURL + 'content/posts/' + this.post.slug + '.' + this._formats[0];
               this._checkFile(this._postUrl, function() { // file exists
                 this.postUrl = this._postUrl;
                 this.post.format = this._formats[0];
                 this._initPost();
               }.bind(this), function() { // file doesn't exist
-                this._postUrl = '../../../../../../../../content/posts/' + this.post.slug + '.' + this._formats[1];
+                this._postUrl = app.rootURL + 'content/posts/' + this.post.slug + '.' + this._formats[1];
                 this._checkFile(this._postUrl, function() { // file exists
                   this.postUrl = this._postUrl;
                   this.post.format = this._formats[1];
                   this._initPost();
                 }.bind(this), function() { // file doesn't exist
-                  this._postUrl = '../../../../../../../../content/posts/' + this.post.datestamp + '.' + this.post.format;
+                  this._postUrl = app.rootURL + 'content/posts/' + this.post.datestamp + '.' + this.post.format;
                   this._checkFile(this._postUrl, function() { // file exists
                     this.postUrl = this._postUrl;
                     this._initPost();
                   }.bind(this), function() { // file doesn't exist
-                    this._postUrl = '../../../../../../../../content/posts/' + this.post.datestamp + '.' + this._formats[0];
+                    this._postUrl = app.rootURL + 'content/posts/' + this.post.datestamp + '.' + this._formats[0];
                     this._checkFile(this._postUrl, function() { // file exists
                       this.postUrl = this._postUrl;
                       this.post.format = this._formats[0];
                       this._initPost();
                     }.bind(this), function() { // file doesn't exist
-                    this._postUrl = '../../../../../../../../content/posts/' + this.post.datestamp + '.' + this._formats[1];
+                    this._postUrl = app.rootURL + 'content/posts/' + this.post.datestamp + '.' + this._formats[1];
                       this._checkFile(this._postUrl, function() { // file exists
                         this.postUrl = this._postUrl;
                         this.post.format = this._formats[1];
@@ -268,20 +268,20 @@
             this._featuredImage = false;
             if (this.post.featuredImage === true) { // Featured image assumed
               if (app.settings.permlinkMode === 'date') { // date mode
-                this._featuredImage = '../../../../../../../../content/images/' + this.post.slug + '.jpg';
+                this._featuredImage = app.rootURL + 'content/images/' + this.post.slug + '.jpg';
                 this._checkImage(this._featuredImage, function() { // Image exists
                   this.featuredImage = this._featuredImage;
                 }.bind(this), function() { // Image doesn't exist
-                  this._featuredImage = '../../../../../../../../content/images/' + this.post.slug + '.png';
+                  this._featuredImage = app.rootURL + 'content/images/' + this.post.slug + '.png';
                   this._checkImage(this._featuredImage, function() { // Image exists
                     this.featuredImage = this._featuredImage;
                   }.bind(this), function() { // Image doesn't exist
                     this._title = this.post.title.toString().toLowerCase().replace(/[^\s\w+\-_#.]/g, '').replace(/\s+/g, '-');
-                    this._featuredImage = '../../../../../../../../content/images/' + this._title + '.jpg';
+                    this._featuredImage = app.rootURL + 'content/images/' + this._title + '.jpg';
                     this._checkImage(this._featuredImage, function() { // Image exists
                       this.featuredImage = this._featuredImage;
                     }.bind(this), function() { // Image doesn't exist
-                      this._featuredImage = '../../../../../../../../content/images/' + this._title + '.png';
+                      this._featuredImage = app.rootURL + 'content/images/' + this._title + '.png';
                       this._checkImage(this._featuredImage, function() { // Image exists
                         this.featuredImage = this._featuredImage;
                       }.bind(this), function() { // Image doesn't exist
@@ -291,19 +291,19 @@
                   }.bind(this));
                 }.bind(this));
               } else { // title mode
-                this._featuredImage = '../../../../../../../../content/images/' + this.post.slug + '.jpg';
+                this._featuredImage = app.rootURL + 'content/images/' + this.post.slug + '.jpg';
                 this._checkImage(this._featuredImage, function() { // Image exists
                   this.featuredImage = this._featuredImage;
                 }.bind(this), function() { // Image doesn't exist
-                  this._featuredImage = '../../../../../../../../content/images/' + this.post.slug + '.png';
+                  this._featuredImage = app.rootURL + 'content/images/' + this.post.slug + '.png';
                   this._checkImage(this._featuredImage, function() { // Image exists
                     this.featuredImage = this._featuredImage;
                   }.bind(this), function() { // Image doesn't exist
-                    this._featuredImage = '../../../../../../../../content/images/' + this.post.datestamp + '.jpg';
+                    this._featuredImage = app.rootURL + 'content/images/' + this.post.datestamp + '.jpg';
                     this._checkImage(this._featuredImage, function() { // Image exists
                       this.featuredImage = this._featuredImage;
                     }.bind(this), function() { // Image doesn't exist
-                      this._featuredImage = '../../../../../../../../content/images/' + this.post.datestamp + '.png';
+                      this._featuredImage = app.rootURL + 'content/images/' + this.post.datestamp + '.png';
                       this._checkImage(this._featuredImage, function() { // Image exists
                         this.featuredImage = this._featuredImage;
                       }.bind(this), function() { // Image doesn't exist
@@ -315,7 +315,7 @@
               }
             } else {
               if (this._isRelativeUrl(this.post.featuredImage)) { // Relative featured image
-                this._featuredImage = '../../../../../../../../content/images/' + this.post.featuredImage;
+                this._featuredImage = app.rootURL + 'content/images/' + this.post.featuredImage;
               } else { // Absolute featured image
                 this._featuredImage = this.post.featuredImage;
               }
