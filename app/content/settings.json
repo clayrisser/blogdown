@@ -34,7 +34,8 @@
     },
     {
       "title": "Posts",
-      "addToMenu": true
+      "addToMenu": true,
+      "rename": "Projects"
     },
     {
       "title": "Search",

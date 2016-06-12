@@ -36,6 +36,13 @@
             } else {
               route = '/' + slug;
             }
+            // Determin hard page title
+            var title = app.title;
+            if (hardPages[i].rename) {
+              title = hardPages[i].rename;
+            } else {
+              title = hardPages[i].title;
+            }
             // Determine hard page type
             var type = 'custom-hard';
             var permanentHardPages = ['home', 'search', 'posts'];
@@ -46,7 +53,7 @@
               }
             }
             var page = {
-              title: hardPages[i].title,
+              title: title,
               route: route,
               slug: slug,
               type: type,
