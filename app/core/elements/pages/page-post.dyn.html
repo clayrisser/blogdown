@@ -1,4 +1,4 @@
-<link rel="import" href="../services/service-disqus.dyn.html">
+<link rel="import" href="../custom/service-disqus.dyn.html">
 
 <dom-module id="page-post">
   <template>
@@ -18,7 +18,7 @@
         }
       }
     </style>
-    
+
     <!-- Has featured image -->
     <template is="dom-if" if="[[featuredImage]]" restamp>
       <paper-card class="featured-image" heading="[[post.title]]" image="[[featuredImage]]">
@@ -42,7 +42,7 @@
         </template>
       </paper-card>
     </template>
-    
+
     <!-- No featured image -->
     <template is="dom-if" if="[[!featuredImage]]" restamp>
       <paper-card heading="[[post.title]]">
@@ -82,7 +82,7 @@
         </div>
       </paper-card>
     </template>
-    
+
     <iron-ajax id="post"
       url="[[postUrl]]"
       handle-as="text"
@@ -90,7 +90,7 @@
       on-error="postError"
       last-response="{{postResponseData}}"
     ></iron-ajax>
-    
+
   </template>
 
   <script>
@@ -98,19 +98,19 @@
       'use strict';
       Polymer({
         is: 'page-post',
-        
+
         properties: {
           post: {
             type: Object,
             observer: '_postChanged'
           }
         },
-        
+
         _postChanged: function() {
           this.set('enableDisqus', false);
           this._determinePost();
         },
-        
+
         _determinePost: function() {
           var formats = ['md', 'html', 'pdf'];
           this._formats = [];
@@ -206,7 +206,7 @@
             }.bind(this));
           }
         },
-        
+
         _initPost: function() {
           if (this.post.format === 'md' || this.post.format === 'html') {
             this.$.post.generateRequest();
@@ -215,17 +215,17 @@
           }
           this._determineFeaturedImage();
         },
-        
+
         postResponse: function() {
           this._loadPost();
         },
-        
+
         postError: function() {
           var error = 'Error 2: ' + this.post.slug + '.' + this.post.format + ' failed to load';
           app.debug(error, 'warn');
           app.toast(error, 'http://blogdown.info/error/2', '_blank');
         },
-        
+
         _loadPost: function() {
           switch (this.post.format) {
             case 'md':
@@ -241,28 +241,28 @@
               app.debug('invalid post case', 'warn');
           }
         },
-        
+
         _isMD: function() {
           this.isMD = true;
           this.isHTML = false;
           this.isPDF = false;
           this._contentLoaded();
         },
-        
+
         _isHTML: function() {
           this.isMD = false;
           this.isHTML = true;
           this.isPDF = false;
           this._contentLoaded();
         },
-        
+
         _isPDF: function() {
           this.isMD = false;
           this.isHTML = false;
           this.isPDF = true;
           this._contentLoaded();
         },
-        
+
         _determineFeaturedImage: function() {
           if (this.post.featuredImage) {
             this._featuredImage = false;
@@ -329,11 +329,11 @@
             this.featuredImage = false;
           }
         },
-        
+
         _contentLoaded: function() {
           this._loadDisqus();
         },
-        
+
         _loadDisqus: function() {
           if (app.settings.disqusShortname) {
             this.set('disqusShortname', app.settings.disqusShortname);
@@ -345,15 +345,15 @@
           }
           this._postLoaded();
         },
-        
+
         _postLoaded: function() {
           app.debug(this.post.slug + '.' + this.post.format + ' loaded');
         },
-        
+
         _download: function() {
           window.open(this.postUrl);
         },
-        
+
         _isRelativeUrl: function(url) {
           var regex = new RegExp('^(?:[a-z]+:)?//', 'i');
           if (regex.test(url)) { // absolute url
@@ -362,7 +362,7 @@
             return true;
           }
         },
-        
+
         _checkFile: function(url, success, error) {
           var xmlHttpReq = false;
           var self = this;
@@ -384,7 +384,7 @@
           }
           self.xmlHttpReq.send();
         },
-        
+
         _checkImage: function(image, success, error) {
           var img = new Image();
           img.onload = success;
