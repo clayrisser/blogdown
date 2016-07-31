@@ -8,8 +8,6 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
-<link rel="import" href="../bower_components/polymer/polymer.html">
-
 <!-- Iron elements -->
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
@@ -35,7 +33,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-styles/typography.html">
 <link rel="import" href="../bower_components/paper-styles/color.html">
 
-<!-- Custom elements -->
+<!-- 3rd party elements -->
 <link rel="import" href="../bower_components/fa-awesome/fa-awesome.html">
 <link rel="import" href="../bower_components/juicy-markdown/juicy-markdown.html">
 <link rel="import" href="../bower_components/juicy-html/juicy-html.html">
@@ -44,26 +42,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <!-- JavaScript libraries -->
 <script src="../bower_components/moment/moment.js"></script>
 
+<!-- Page elements -->
+<link rel="import" href="pages/page-loading.html">
+<link rel="import" href="pages/page-404.html">
+
+<!-- Custom elements -->
+<link rel="import" href="custom/service-startup.html">
+<link rel="import" href="custom/service-content.html">
+<link rel="import" href="custom/load-module.html">
+<link rel="import" href="custom/initialize-theme.html">
+
+<!-- Shared styles -->
+<link rel="import" href="../styles/shared-styles.html">
+
+<!-- Routing -->
+<link rel="import" href="routing.html">
+
 <!-- Uncomment next block to enable Service Worker Support (2/2) -->
 <!--
 <link rel="import" href="../bower_components/platinum-sw/platinum-sw-cache.html">
 <link rel="import" href="../bower_components/platinum-sw/platinum-sw-register.html">
 -->
-
-<!-- Configure your routes here -->
-<link rel="import" href="routing.html">
-
-<!-- Page elements -->
-<link rel="import" href="pages/page-loading.html">
-<link rel="import" href="pages/page-404.html">
-
-<!-- Service elements -->
-<link rel="import" href="services/service-startup.html">
-<link rel="import" href="services/service-content.html">
-<link rel="import" href="services/load-module.html">
-
-<!-- Theme elements -->
-<link rel="import" href="themes/initialize-theme.html">
-
-<!-- Style elements -->
-<link rel="import" href="../styles/shared-styles.html">

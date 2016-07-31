@@ -1,5 +1,4 @@
 /*
-@license
 Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
 The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
@@ -119,8 +118,7 @@ gulp.task('ensureFiles', function(cb) {
 // Optimize scripts
 gulp.task('scripts', function() {
   gulp.src([
-    'app/core/scripts/*',
-    '!app/core/scripts/app.js'
+    'app/core/scripts/*.js'
   ])
   .pipe($.uglify({
     preserveComments: 'some'
@@ -130,7 +128,7 @@ gulp.task('scripts', function() {
 
 // Optimize images
 gulp.task('images', function() {
-  return imageOptimizeTask('app/core/images/**/*', dist('core/images'));
+  return imageOptimizeTask('app/content/images/**/*', dist('content/images'));
 });
 
 // Copy all files at the root level (app)
@@ -139,7 +137,6 @@ gulp.task('copy', function() {
     'app/*',
     '!app/core',
     '!app/content',
-    '!app/cache-config.json',
     '!**/.DS_Store'
   ], {
     dot: true
@@ -150,49 +147,53 @@ gulp.task('copy', function() {
   var bower = gulp.src([
     'app/core/bower_components/{webcomponentsjs,platinum-sw,sw-toolbox,promise-polyfill}/**/*'
   ]).pipe(gulp.dest(dist('core/bower_components')));
-  
+
   // Copy content
   var content = gulp.src([
     'app/content/*'
   ]).pipe(gulp.dest(dist('content')));
-  
+
   // Copy pages
   var pages = gulp.src([
     'app/content/pages/*'
   ]).pipe(gulp.dest(dist('content/pages')));
-  
+
   // Copy posts
   var posts = gulp.src([
     'app/content/posts/*'
   ]).pipe(gulp.dest(dist('content/posts')));
-  
+
   // Copy images
   var images = gulp.src([
     'app/content/images/*'
   ]).pipe(gulp.dest(dist('content/images')));
-  
+
   // Copy modules
   var modules = gulp.src([
     'app/content/modules/*'
   ]).pipe(gulp.dest(dist('content/modules')));
-  
+
+  // Copy themes
+  var themes = gulp.src([
+    'app/content/themes/*'
+  ]).pipe(gulp.dest(dist('content/themes')));
+
+  // Copy styles
+  var styles = gulp.src([
+    'app/content/styles/*'
+  ]).pipe(gulp.dest(dist('content/styles')));
+
   // Copy page elements
   var pageElements = gulp.src([
     'app/core/elements/pages/*.dyn.html'
   ]).pipe(gulp.dest(dist('core/elements/pages')));
-  
-  // Copy service elements
-  var serviceElements = gulp.src([
-    'app/core/elements/services/*.dyn.html'
-  ]).pipe(gulp.dest(dist('core/elements/services')));
-  
-  // Copy theme elements
-  var themeElements = gulp.src([
-    'app/core/elements/themes/*.dyn.html'
-  ]).pipe(gulp.dest(dist('core/elements/themes')));
 
-  return merge(app, bower, content, pages, posts, modules, images,
-    pageElements, serviceElements, themeElements)
+  // Copy custom elements
+  var customElements = gulp.src([
+    'app/core/elements/custom/*.dyn.html'
+  ]).pipe(gulp.dest(dist('core/elements/custom')));
+
+  return merge(app, bower, content, pages, posts, images, modules, themes, styles, pageElements, customElements)
     .pipe($.size({
       title: 'copy'
     }));
@@ -200,8 +201,8 @@ gulp.task('copy', function() {
 
 // Copy web fonts to dist
 gulp.task('fonts', function() {
-  return gulp.src(['app/core/fonts/**'])
-    .pipe(gulp.dest(dist('core/fonts')))
+  return gulp.src(['app/content/fonts/**'])
+    .pipe(gulp.dest(dist('content/fonts')))
     .pipe($.size({
       title: 'fonts'
     }));
@@ -209,11 +210,9 @@ gulp.task('fonts', function() {
 
 // Scan your HTML for assets & optimize them
 gulp.task('html', function() {
-  return optimizeHtmlTask([
-    'app/**/*.html',
-    '!app/core/{elements,test,bower_components}/**/*.html',
-    '!app/content/{pages,posts}/**/*.html'
-  ], dist());
+  return optimizeHtmlTask(
+    ['app/core/**/*.html', '!app/core/{elements,test,bower_components}/**/*.html'],
+    dist('core'));
 });
 
 // Vulcanize granular configuration
@@ -292,10 +291,15 @@ gulp.task('serve', ['styles'], function() {
     }
   });
 
-  gulp.watch(['app/**/*.html', '!app/core/bower_components/**/*.html'], reload);
-  gulp.watch(['app/styles/**/*.css'], ['styles', reload]);
-  gulp.watch(['app/scripts/**/*.js'], reload);
-  gulp.watch(['app/images/**/*'], reload);
+  gulp.watch(['app/core/**/*.html', '!app/core/bower_components/**/*.html'], reload);
+  gulp.watch(['app/core/styles/**/*.css'], ['styles', reload]);
+  gulp.watch(['app/core/scripts/**/*.js'], reload);
+  gulp.watch(['app/content/pages/**/*'], reload);
+  gulp.watch(['app/content/posts/**/*'], reload);
+  gulp.watch(['app/content/images/**/*'], reload);
+  gulp.watch(['app/content/styles/**/*.css'], ['styles', reload]);
+  gulp.watch(['app/content/modules/**/*.html'], reload);
+  gulp.watch(['app/content/themes/**/*.html'], reload);
 });
 
 // Build and serve the output from the dist build
@@ -345,7 +349,7 @@ gulp.task('deploy-gh-pages', function() {
     // Check if running task from Travis CI, if so run using GH_TOKEN
     // otherwise run using ghPages defaults.
     .pipe($.if(process.env.TRAVIS === 'true', $.ghPages({
-      remoteUrl: 'https://$GH_TOKEN@github.com/PolymerElements/polymer-starter-kit.git',
+      remoteUrl: 'https://$GH_TOKEN@github.com/polymerelements/polymer-starter-kit.git',
       silent: true,
       branch: 'gh-pages'
     }), $.ghPages()));

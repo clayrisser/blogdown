@@ -6,7 +6,7 @@
         --paper-progress-height: 100px;
         --paper-progress-container-color: rgba(255, 255, 255, 0);
       }
-      
+
       .title {
         z-index: 0;
       }
@@ -56,7 +56,6 @@
       'use strict';
       Polymer({
         is: 'theme-drawer',
-
         properties: {
           mobile: {
             type: Boolean,
@@ -80,19 +79,18 @@
             observer: 'routeChanged'
           }
         },
-
         ready: function() {
           this._loadMenuItems();
           this._loadSocialAccounts();
         },
-        
+
         attached: function() {
           this.set('_attached', true);
           this.routeChanged();
         },
-        
+
         /*!!! this needs encapsulated !!!*/
-        routeChanged: function() { 
+        routeChanged: function() {
           if (this._attached) {
             for (var i = 0; i < this.menuItems.length; i++) { // Automatically select menuItem
               var route = '/' + this.routeData.slugs.page;
@@ -107,17 +105,14 @@
           }
         },
         /*!!!*/
-
         _goToPage: function(e) {
           var model = e.model;
           app.goTo(model.menuItem.route);
         },
-
         _goToSocialPage: function(e) {
           var model = e.model;
           window.open(model.socialAccount.url);
         },
-
         _setIndeterminateLoading: function() {
           if (this.progress >= 0) {
             this._indeterminateLoading = false;
@@ -125,7 +120,7 @@
             this._indeterminateLoading = true;
           }
         },
-        
+
         _loadMenuItems: function() {
           this.menuItems = [];
           for (var i = 0; i < app.pages.length; i++) {
@@ -138,7 +133,6 @@
             }
           }
         },
-
         _loadSocialAccounts: function() {
           this._socialAccountsArray = [];
           if (app.settings.socialAccounts) {

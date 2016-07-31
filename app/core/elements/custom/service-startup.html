@@ -23,7 +23,7 @@
         ready: function() {
           this._buildPageArray();
         },
-        
+
         _buildPageArray: function() {
           this.pages = [];
           var hardPages = app.settings.hardPages;
@@ -163,9 +163,9 @@
           app.debug('Posts failed to load', 'warn');
           this._loadElement(app.settings.theme);
         },
-        
+
         _loadElement: function(name) {
-          this.importHref(app.rootURL + 'core/elements/themes/theme-' + name + '.dyn.html', function() {
+          this.importHref(app.rootURL + 'content/themes/theme-' + name + '.html', function() {
             app.debug('theme-' + name + ' loaded');
             this._loaded();
           }.bind(this), function() {

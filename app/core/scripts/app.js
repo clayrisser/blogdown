@@ -15,6 +15,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   // Learn more about auto-binding templates at http://goo.gl/Dx1u2g
   var app = document.querySelector('#app');
 
+  // Sets app default base URL
+  var scriptElements = document.getElementsByTagName('script'); // find root url
+  for (var i = 0; i < scriptElements.length; i++) {
+    var source = scriptElements[i].src;
+    if (source.indexOf('/core/scripts/app.js') > -1) {
+      app.rootURL = source.substring(0, source.indexOf('core/scripts/app.js'));
+    }
+  }
+  app.baseUrl = app.rootURL.substring(window.location.origin.length, app.rootURL.length);
+
   // Load settings (runs before app._loadTheApp)
   app.settingsResponse = function() {
     var isObjectArray = function(a) {
@@ -37,11 +47,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   app.settingsError = function() {
     console.warn('App failed to load settings');
   };
-  
+
   app._init = function() { // first code to run after settings have loaded
     document.title = app.settings.title; // update page title
   },
-  
+
   app._loadStyle = function() { // Load style
     var style = 'default';
     if (app.settings.style) {
@@ -50,20 +60,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     if (localStorage.style) {
       style = localStorage.style;
     }
-    console.log(app.rootURL);
-    this.importHref(app.rootURL + 'core/styles/style-' + style + '.html', function() {
+    this.importHref(app.rootURL + 'content/styles/style-' + style + '.html', function() {
       app.debug('style-' + style + ' loaded');
     }.bind(this), function() {
         app.debug('WARNING: style-' + style + 'failed to load');
     }.bind(this));
   }
-  
+
   app._loadTheApp = function() { // Load the app
     var pageLoading = document.createElement('page-loading');
     app.$.loading.appendChild(pageLoading);
     app.pageTitle = app.settings.title;
   }
-  
+
   // Writes to the console if debugging is enabled
   app.debug = function(message, type) {
     if (app.settings.debugging) {
@@ -84,7 +93,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
     app.$.toast.show();
   };
-  
+
   // Toast clicked
   app.toastClicked = function() {
     if (!app.toastTarget) {
@@ -97,25 +106,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   app.goTo = function(route) {
     page.redirect(route);
   };
-  
+
   // Scroll page to top and expand header
-  app.scrollPageToTop = function() {
+  app.scrollToTop = function() {
   //  app.$.headerPanelMain.scrollToTop(true);
   };
 
   app.closeDrawer = function() {
  //   app.$.paperDrawerPanel.closeDrawer();
   };
-  
-  // Sets app default base URL
-  var scriptElements = document.getElementsByTagName('script'); // find root url
-  for (var i = 0; i < scriptElements.length; i++) {
-    var source = scriptElements[i].src;
-    if (source.indexOf('/core/scripts/app.js') > -1) {
-      app.rootURL = source.substring(0, source.indexOf('core/scripts/app.js'));
-    }
-  }
-  app.baseUrl = app.rootURL.substring(window.location.origin.length, app.rootURL.length);
 
   app.displayInstalledToast = function() {
     // Check to make sure caching is actually enabled—it won't be in the dev environment.
@@ -129,38 +128,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   app.addEventListener('dom-change', function() {
     console.log('Our app is ready to rock!');
   });
-  
+
   // See https://github.com/Polymer/polymer/issues/1381
   window.addEventListener('WebComponentsReady', function() {
     // imports are loaded and elements have been registered
   });
 
-  // Main area's paper-scroll-header-panel custom condensing transformation of
-  // the appName in the middle-container and the bottom title in the bottom-container.
-  // The appName is moved to top and shrunk on condensing. The bottom sub title
-  // is shrunk to nothing on condensing.
-  window.addEventListener('paper-header-transform', function(e) {
-    var appName = Polymer.dom(document).querySelector('#mainToolbar .app-name');
-    var middleContainer = Polymer.dom(document).querySelector('#mainToolbar .middle-container');
-    var bottomContainer = Polymer.dom(document).querySelector('#mainToolbar .bottom-container');
-    var detail = e.detail;
-    var heightDiff = detail.height - detail.condensedHeight;
-    var yRatio = Math.min(1, detail.y / heightDiff);
-    // appName max size when condensed. The smaller the number the smaller the condensed size.
-    var maxMiddleScale = 0.50;
-    var auxHeight = heightDiff - detail.y;
-    var auxScale = heightDiff / (1 - maxMiddleScale);
-    var scaleMiddle = Math.max(maxMiddleScale, auxHeight / auxScale + maxMiddleScale);
-    var scaleBottom = 1 - yRatio;
+  // Scroll page to top and expand header
+  app.scrollPageToTop = function() {
+    app.$.headerPanelMain.scrollToTop(true);
+  };
 
-    // Move/translate middleContainer
-    Polymer.Base.transform('translate3d(0,' + yRatio * 100 + '%,0)', middleContainer);
-
-    // Scale bottomContainer and bottom sub title to nothing and back
-    Polymer.Base.transform('scale(' + scaleBottom + ') translateZ(0)', bottomContainer);
-
-    // Scale middleContainer appName
-    Polymer.Base.transform('scale(' + scaleMiddle + ') translateZ(0)', appName);
-  });
+  app.closeDrawer = function() {
+    app.$.paperDrawerPanel.closeDrawer();
+  };
 
 })(document);
