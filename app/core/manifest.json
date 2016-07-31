@@ -1,6 +1,6 @@
 {
-  "name": "Polymer Starter Kit",
-  "short_name": "Polymer Starter Kit",
+  "name": "BlogDown",
+  "short_name": "BlogDown",
   "icons": [{
         "src": "images/touch/icon-72x72.png",
         "sizes": "72x72",

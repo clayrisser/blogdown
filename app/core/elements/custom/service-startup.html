@@ -168,10 +168,13 @@
         },
 
         _loaded: function() {
-          var event = new Event('application-loaded');
-          window.dispatchEvent(event);
-          app.loaded = true;
-          app.debug(app.settings.title + ' loaded');
+          window.setTimeout(function() {
+            var event = new Event('app-loaded');
+            app.appLoaded();
+            window.dispatchEvent(event);
+            app.loaded = true;
+            app.debug(app.settings.title + ' loaded');
+          }.bind(this), 1000);
         }
       });
     })();

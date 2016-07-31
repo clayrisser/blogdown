@@ -2,8 +2,17 @@
 
 <dom-module id="page-loading">
   <template>
+    <style include="iron-flex iron-flex-alignment"></style>
+    <style>
+      spinkit-element {
+        margin-top: 30vh;
+        --spinkit-element-color: var(--primary-color);
+      }
+    </style>
 
-    <span>Loading . . .</span>
+    <div class="layout horizontal center-center">
+      <spinkit-element name="[[spinner]]" size="160" active></spinkit-element>
+    </div>
     <service-startup></service-startup>
 
   </template>
@@ -13,9 +22,16 @@
       'use strict';
       Polymer({
         is: 'page-loading',
-        
-        ready: function() {
 
+        ready: function() {
+          this.title = 'BlogDown';
+          if (app.settings.title) {
+            this.title = app.settings.title;
+          }
+          this.spinner = 'wandering-cubes';
+          if (app.settings.spinner) {
+            this.spinner = app.settings.spinner;
+          }
         }
       });
     })();

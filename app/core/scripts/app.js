@@ -73,6 +73,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     app.pageTitle = app.settings.title;
   }
 
+  app.appLoaded = function() { // The app has loaded
+    app.$.loading.innerHTML = '';
+  }
+
   // Writes to the console if debugging is enabled
   app.debug = function(message, type) {
     if (app.settings.debugging) {

@@ -24,7 +24,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <meta name="theme-color" content="#2E3AA1">
 
   <!-- Web Application Manifest -->
-  <link rel="manifest" href="manifest.json">
+  <link rel="manifest" href="core/manifest.json">
 
   <!-- Tile color for Win8 -->
   <meta name="msapplication-TileColor" content="#3372DF">
@@ -57,9 +57,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <!-- For shared styles, shared-styles.html import in elements.html -->
   <style is="custom-style" include="shared-styles"></style>
+  <style is="custom-style" include="iron-positioning"></style>
 </head>
 
-<body unresolved>
+<body style="fullbleed" unresolved>
   <!-- build:remove -->
   <span id="browser-sync-binding"></span>
   <!-- endbuild -->
@@ -67,7 +68,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template is="dom-bind" id="app">
 
     <!-- Load the app -->
-    <span id="loading"></span>
+    <div style="height:100%" id="loading"></div>
     <iron-ajax id="settings" auto
       url="content/settings.json"
       handle-as="json"

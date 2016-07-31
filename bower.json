@@ -12,7 +12,8 @@
     "juicy-markdown": "^1.0.0",
     "juicy-html": "^1.1.0",
     "pdf-object": "^1.0.0",
-    "moment": "^2.14.1"
+    "moment": "^2.14.1",
+    "spinkit-element": "^1.0.0"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
