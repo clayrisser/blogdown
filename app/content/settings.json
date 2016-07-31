@@ -11,21 +11,6 @@
     "twitter": "https://twitter.com",
     "google-plus": "https://google.com"
   },
-  "softPages": [
-    {
-      "title": "Chinchilla",
-      "addToMenu": true
-    },
-    {
-      "title": "Subscribe",
-      "format": "html",
-      "addToMenu": true
-    },
-    {
-      "title": "Resume",
-      "addToMenu": true
-    }
-  ],
   "hardPages": [
     {
       "title": "Home",
@@ -40,9 +25,25 @@
     {
       "title": "Search",
       "addToMenu": true
+    }
+  ],
+  "softPages": [
+    {
+      "title": "Chinchilla",
+      "addToMenu": true
+    },
+    {
+      "title": "Subscribe",
+      "format": "html",
+      "addToMenu": true
+    },
+    {
+      "title": "Resume",
+      "addToMenu": true
     },
     {
       "title": "Contact",
+      "format": "dyn.html",
       "addToMenu": true
     }
   ],

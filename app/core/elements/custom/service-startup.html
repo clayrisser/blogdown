@@ -36,27 +36,18 @@
             } else {
               route = '/' + slug;
             }
-            // Determin hard page title
+            // Determine hard page title
             var title = app.title;
             if (hardPages[i].rename) {
               title = hardPages[i].rename;
             } else {
               title = hardPages[i].title;
             }
-            // Determine hard page type
-            var type = 'custom-hard';
-            var permanentHardPages = ['home', 'search', 'posts'];
-            for (var j = 0; j < permanentHardPages.length; j++) {
-              if (slug === permanentHardPages[j]) {
-                type = 'permanent-hard';
-                break;
-              }
-            }
             var page = {
               title: title,
               route: route,
               slug: slug,
-              type: type,
+              type: 'hard',
               addToMenu: hardPages[i].addToMenu
             };
             this.push('pages', page);
@@ -64,7 +55,7 @@
           for (var i = 0; i < softPages.length; i++) { // Add soft pages
             var slug = softPages[i].title.toLowerCase().replace(/[^\s\w+\-_#.]/g, '').replace(/\s+/g, '-');
             var route = '/' + slug;
-            var format ="md"
+            var format = 'md';
             if (softPages[i].format) {
               format = softPages[i].format;
             }
@@ -72,7 +63,7 @@
               title: softPages[i].title,
               route: route,
               slug: slug,
-              type: "soft",
+              type: 'soft',
               format: format,
               addToMenu: softPages[i].addToMenu
             };

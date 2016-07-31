@@ -1,14 +1,14 @@
-<dom-module id="page-customhard">
+<dom-module id="page-dynsoft">
   <template>
-    
+
   </template>
 
   <script>
     (function() {
       'use strict';
       Polymer({
-        is: 'page-customhard',
-        
+        is: 'page-dynsoft',
+
         properties: {
           pageResponseData: {
             type: String
@@ -18,19 +18,19 @@
             observer: '_pageChanged'
           }
         },
-        
+
         _pageChanged: function() {
-          Polymer.dom(this.root).innerHTML = '<hard-' + this.page.slug + '>';
+          Polymer.dom(this.root).innerHTML = '<dyn-' + this.page.slug + '>';
           this._loadElement(this.page.slug);
         },
-        
+
         _loadElement: function(name) {
-          this.importHref('../content/pages/' + name + '.hard', function() {
-            app.debug(name + '.hard was imported.');
+          this.importHref('../content/pages/' + name + '.dyn.html', function() {
+            app.debug(name + '.dyn.html was imported.');
           }.bind(this), function() {
               window.history.back();
-              app.debug('WARNING: ' + name + '.hard import failed to load');
-              app.toast('WARNING: ' + name + '.hard import failed to load');
+              app.debug('WARNING: ' + name + '.dyn.html import failed to load');
+              app.toast('WARNING: ' + name + '.dyn.html import failed to load');
           }.bind(this));
         }
       });

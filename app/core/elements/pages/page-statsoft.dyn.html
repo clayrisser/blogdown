@@ -1,6 +1,6 @@
-<dom-module id="page-soft">
+<dom-module id="page-statsoft">
   <template>
-    
+
     <paper-card heading="[[page.title]]">
       <template is="dom-if" if="[[isMD]]" restamp>
         <div class="card-content">
@@ -21,7 +21,7 @@
         </div>
       </template>
     </paper-card>
-    
+
     <iron-ajax id="page"
       url="[[pageUrl]]"
       handle-as="text"
@@ -29,15 +29,15 @@
       on-error="pageError"
       last-response="{{pageResponseData}}"
     ></iron-ajax>
-    
+
   </template>
 
   <script>
     (function() {
       'use strict';
       Polymer({
-        is: 'page-soft',
-        
+        is: 'page-statsoft',
+
         properties: {
           pageResponseData: {
             type: String
@@ -47,11 +47,11 @@
             observer: '_pageChanged'
           }
         },
-        
+
         _pageChanged: function() {
           this._determinePage();
         },
-        
+
         _determinePage: function() {
           var formats = ['md', 'html', 'pdf'];
           this._formats = [];
@@ -82,7 +82,7 @@
             }.bind(this));
           }.bind(this));
         },
-        
+
         _initPage: function() {
           if (this.page.format === 'md' || this.page.format === 'html') {
             this.$.page.generateRequest();
@@ -90,17 +90,17 @@
             this._loadPage();
           }
         },
-        
+
         pageResponse: function() {
           this._loadPage();
         },
-        
+
         pageError: function() {
           var error = 'Error 2: ' + this.page.slug + '.' + this.page.format + ' failed to load';
           app.debug(error, 'warn');
           app.toast(error, 'http://blogdown.info/error/2', '_blank');
         },
-        
+
         _loadPage: function() {
           switch (this.page.format) {
             case 'md':
@@ -121,11 +121,11 @@
           }
           app.debug(this.page.slug + '.' + this.page.format + ' loaded');
         },
-        
+
         _download: function() {
           window.open(this.pageUrl);
         },
-        
+
         _checkFile: function(url, success, error) {
           var xmlHttpReq = false;
           var self = this;

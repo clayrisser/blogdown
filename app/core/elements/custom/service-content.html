@@ -2,39 +2,39 @@
 
 <dom-module id="service-content">
   <template>
-    
+
     <template is="dom-if" if="[[_isEqual(route, 'home')]]" restamp>
       <page-home></page-home>
     </template>
-    
+
     <template is="dom-if" if="[[_isEqual(route, 'posts')]]" restamp>
       <page-posts></page-posts>
     </template>
-    
+
     <template is="dom-if" if="[[_isEqual(route, 'search')]]" restamp>
         <page-search></page-search>
     </template>
-    
+
     <template is="dom-if" if="[[_isEqual(route, 'contact')]]" restamp>
         <page-contact></page-contact>
     </template>
-    
+
     <template is="dom-if" if="[[_isEqual(route, '404')]]" restamp>
         <page-404></page-404>
     </template>
-    
-    <template is="dom-if" if="[[_isEqual(route, 'soft')]]" restamp>
-        <page-soft page="[[softPage]]"></page-soft>
+
+    <template is="dom-if" if="[[_isEqual(route, 'statsoft')]]" restamp>
+        <page-statsoft page="[[statSoftPage]]"></page-soft>
     </template>
-    
-    <template is="dom-if" if="[[_isEqual(route, 'customhard')]]" restamp>
-        <page-customhard page="[[customhardPage]]"></page-customhard>
+
+    <template is="dom-if" if="[[_isEqual(route, 'dynsoft')]]" restamp>
+        <page-dynsoft page="[[dynSoftPage]]"></page-dynsoft>
     </template>
-    
+
     <template is="dom-if" if="[[_isEqual(route, 'post')]]" restamp>
        <page-post post="[[post]]"></page-post>
     </template>
-    
+
   </template>
 
   <script>
@@ -42,7 +42,7 @@
       'use strict';
       Polymer({
         is: 'service-content',
-        
+
         properties: {
           routeData: {
             type: Object,
@@ -56,7 +56,7 @@
             ]
           }
         },
-        
+
         routeChanged: function() {
           var hashId = this._checkForHashId();
           if (hashId !== '') { // strips hashId from route
@@ -103,7 +103,7 @@
           }
           return hashId;
         },
-        
+
         _checkForParameters: function() {
           var parameters = [];
           var url = window.location.href;
@@ -150,27 +150,29 @@
           }
           return parameters;
         },
-        
+
         _homeRoute: function() {
           this.set('route', 'home');
           this._loadElement('home');
         },
-        
+
         _pageRoute: function() {
           var validPage = false;
           for (var i = 0; i < app.pages.length; i++) {
             if (this.routeData.slugs.page === app.pages[i].slug) {
-              if (app.pages[i].type === 'permanent-hard') { // Permanant hard page
+              if (app.pages[i].type === 'hard') { // Hard page
                 this.set('route', this.routeData.slugs.page);
                 this._loadElement(this.routeData.slugs.page);
-              } else if (app.pages[i].type === 'custom-hard') { // Custom hard page
-                this.set('customhardPage', app.pages[i]);
-                this.set('route', 'customhard');
-                this._loadElement('customhard');
               } else { // Soft page
-                this.set('softPage', app.pages[i]);
-                this.set('route', 'soft');
-                this._loadElement('soft');
+                if (app.pages[i].format === 'dyn' || app.pages[i].format === 'dyn.html') { // Dynamic
+                  this.set('dynSoftPage', app.pages[i]);
+                  this.set('route', 'dynsoft');
+                  this._loadElement('dynsoft');
+                } else { // Static
+                  this.set('statSoftPage', app.pages[i]);
+                  this.set('route', 'statsoft');
+                  this._loadElement('statsoft');
+                }
               }
               validPage = true;
               break;
@@ -180,7 +182,7 @@
             this.set('route', '404');
           }
         },
-        
+
         _childRoute: function() {
           var validPage = false;
           if (this.routeData.slugs.page === 'post') { // Posts route
@@ -197,11 +199,11 @@
             this.set('route', '404');
           }
         },
-        
+
         _404Route: function() {
           this.set('route', '404');
         },
-        
+
         _loadElement: function(name) {
           var dynamic = true;
           for (var i = 0; i < this.staticPages.length; i++) {
@@ -221,7 +223,7 @@
               app.toast('WARNING: page-' + name + '.html import failed to load');
           }.bind(this));
         },
-        
+
         _isEqual: function(a, b) {
           return a === b;
         }
