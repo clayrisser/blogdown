@@ -6,7 +6,6 @@
   "toastDuration": "5000",
   "theme": "drawer",
   "permlinkMode": "title",
-  "spinner": "wandering-cubes",
   "style": "technology",
   "socialAccounts": {
     "facebook": "https://facebook.com",

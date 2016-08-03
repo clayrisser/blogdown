@@ -1,6 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<dom-module id="service-startup">
+<dom-module id="load-app">
   <template>
 
     <!-- Load posts -->
@@ -18,7 +18,7 @@
     (function() {
       'use strict';
       Polymer({
-        is: 'service-startup',
+        is: 'load-app',
 
         ready: function() {
           this._buildPageArray();
@@ -169,12 +169,9 @@
 
         _loaded: function() {
           window.setTimeout(function() {
-            var event = new Event('app-loaded');
             app.appLoaded();
-            window.dispatchEvent(event);
-            app.loaded = true;
             app.debug(app.settings.title + ' loaded');
-          }.bind(this), 1000);
+          }, 1000);
         }
       });
     })();

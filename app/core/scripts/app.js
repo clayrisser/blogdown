@@ -68,13 +68,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   app._loadTheApp = function() { // Load the app
-    var pageLoading = document.createElement('page-loading');
-    app.$.loading.appendChild(pageLoading);
+    app.loaded = false;
+    var loadApp = document.createElement('load-app');
+    app.$.load.appendChild(loadApp);
     app.pageTitle = app.settings.title;
   }
 
   app.appLoaded = function() { // The app has loaded
-    app.$.loading.innerHTML = '';
+    app.loaded = true;
+    app.$.load.innerHTML = '';
+    document.getElementById('loading').innerHTML = '';
   }
 
   // Writes to the console if debugging is enabled
