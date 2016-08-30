@@ -103,6 +103,10 @@
           post: {
             type: Object,
             observer: '_postChanged'
+          },
+          fileKnown: {
+            type: Boolean,
+            value: false
           }
         },
 
@@ -113,97 +117,44 @@
 
         _determinePost: function() {
           var formats = ['md', 'html', 'pdf'];
-          this._formats = [];
+          this._formats = [this.post.format];
           for (var i = 0; i < formats.length; i++) {
             if (formats[i] != this.post.format) {
               this.push('_formats', formats[i]);
             }
           }
           if (app.settings.permlinkMode === 'date') { // date mode
-            this._postUrl = app.rootURL + 'content/posts/' + this.post.slug + '.' + this.post.format;
-            this._checkFile(this._postUrl, function() { // file exists
-              this.postUrl = this._postUrl;
-              this._initPost();
-            }.bind(this), function() { // file doesn't exist
-              this._postUrl = app.rootURL + 'content/posts/' + this.post.slug + '.' + this._formats[0];
-              this._checkFile(this._postUrl, function() { // file exists
-                this.postUrl = this._postUrl;
-                this.post.format = this._formats[0];
-                this._initPost();
-              }.bind(this), function() { // file doesn't exist
-                this._postUrl = app.rootURL + 'content/posts/' + this.post.slug + '.' + this._formats[1];
-                this._checkFile(this._postUrl, function() { // file exists
-                  this.postUrl = this._postUrl;
-                  this.post.format = this._formats[1];
-                  this._initPost();
-                }.bind(this), function() { // file doesn't exist
-                  this._title = this.post.title.toString().toLowerCase().replace(/[^\s\w+\-_#.]/g, '').replace(/\s+/g, '-');
-                  this._postUrl = app.rootURL + 'content/posts/' + this._title + '.' + this.post.format;
-                  this._checkFile(this._postUrl, function() { // file exists
-                    this.postUrl = this._postUrl;
-                    this._initPost();
-                  }.bind(this), function() { // file doesn't exist
-                    this._postUrl = app.rootURL + 'content/posts/' + this._title + '.' + this._formats[0];
-                    this._checkFile(this._postUrl, function() { // file exists
-                      this.postUrl = this._postUrl;
-                      this.post.format = this._formats[0];
-                      this._initPost();
-                    }.bind(this), function() { // file doesn't exist
-                    this._postUrl = app.rootURL + 'content/posts/' + this._title + '.' + this._formats[1];
-                      this._checkFile(this._postUrl, function() { // file exists
-                        this.postUrl = this._postUrl;
-                        this.post.format = this._formats[1];
-                        this._initPost();
-                      }.bind(this), function() { // file doesn't exist
-                        this.postUrl = null;
-                      }.bind(this));
-                    }.bind(this));
-                  }.bind(this));
-                }.bind(this));
-              }.bind(this));
+            var checkFileArray = [];
+            _.each(this._formats, function(format) {
+              var url = app.rootURL + 'content/posts/' + this.post.slug + '.' + format;
+              checkFileArray.push(this._checkFile.bind(this, url, format));
             }.bind(this));
+            this._title = this.post.title.toString().toLowerCase().replace(/[^\s\w+\-_#.]/g, '').replace(/\s+/g, '-');
+            _.each(this._formats, function(format) {
+              var url = app.rootURL + 'content/posts/' + this._title + '.' + this._formats[0];
+              checkFileArray.push(this._checkFile.bind(this, url, format));
+            }.bind(this));
+            var promiseChain = Promise.resolve();
+            for (var checkFile of checkFileArray) {
+              promiseChain = promiseChain.then(checkFile);
+            }
           } else { // title mode
-            this._postUrl = app.rootURL + 'content/posts/' + this.post.slug + '.' + this.post.format;
-            this._checkFile(this._postUrl, function() { // file exists
-              this.postUrl = this._postUrl;
-              this._initPost();
-            }.bind(this), function() { // file doesn't exist
-              this._postUrl = app.rootURL + 'content/posts/' + this.post.slug + '.' + this._formats[0];
-              this._checkFile(this._postUrl, function() { // file exists
-                this.postUrl = this._postUrl;
-                this.post.format = this._formats[0];
-                this._initPost();
-              }.bind(this), function() { // file doesn't exist
-                this._postUrl = app.rootURL + 'content/posts/' + this.post.slug + '.' + this._formats[1];
-                this._checkFile(this._postUrl, function() { // file exists
-                  this.postUrl = this._postUrl;
-                  this.post.format = this._formats[1];
-                  this._initPost();
-                }.bind(this), function() { // file doesn't exist
-                  this._postUrl = app.rootURL + 'content/posts/' + this.post.datestamp + '.' + this.post.format;
-                  this._checkFile(this._postUrl, function() { // file exists
-                    this.postUrl = this._postUrl;
-                    this._initPost();
-                  }.bind(this), function() { // file doesn't exist
-                    this._postUrl = app.rootURL + 'content/posts/' + this.post.datestamp + '.' + this._formats[0];
-                    this._checkFile(this._postUrl, function() { // file exists
-                      this.postUrl = this._postUrl;
-                      this.post.format = this._formats[0];
-                      this._initPost();
-                    }.bind(this), function() { // file doesn't exist
-                    this._postUrl = app.rootURL + 'content/posts/' + this.post.datestamp + '.' + this._formats[1];
-                      this._checkFile(this._postUrl, function() { // file exists
-                        this.postUrl = this._postUrl;
-                        this.post.format = this._formats[1];
-                        this._initPost();
-                      }.bind(this), function() { // file doesn't exist
-                        this.postUrl = null;
-                      }.bind(this));
-                    }.bind(this));
-                  }.bind(this));
-                }.bind(this));
-              }.bind(this));
+            var checkFileArray = [];
+            _.each(this._formats, function(format) {
+              var url = app.rootURL + 'content/posts/' + this.post.slug + '.' + format;
+              checkFileArray.push(this._checkFile.bind(this, url, format));
             }.bind(this));
+            _.each(this._formats, function(format) {
+              var url = app.rootURL + 'content/posts/' + this.post.datestamp + '.' + format;
+              checkFileArray.push(this._checkFile.bind(this, url, format));
+            }.bind(this));
+            var promiseChain = Promise.resolve();
+            for (var checkFile of checkFileArray) {
+              promiseChain = promiseChain.then(checkFile);
+            }
+            promiseChain.catch(function(err) {
+              console.warn(err);
+            });
           }
         },
 
@@ -363,26 +314,26 @@
           }
         },
 
-        _checkFile: function(url, success, error) {
-          var xmlHttpReq = false;
-          var self = this;
-          if (window.XMLHttpRequest) { // Mozilla/Safari
-            self.xmlHttpReq = new XMLHttpRequest();
-          }
-          else if (window.ActiveXObject) { // IE
-            self.xmlHttpReq = new ActiveXObject("Microsoft.XMLHTTP");
-          }
-          self.xmlHttpReq.open('HEAD', url, true);
-          self.xmlHttpReq.onreadystatechange = function() {
-            if (self.xmlHttpReq.readyState == 4) {
-              if (self.xmlHttpReq.status == 200) {
-                success();
-              } else if (self.xmlHttpReq.status == 404) {
-                error();
-              }
+        _checkFile: function(url, format) {
+          return new Promise(function(resolve, reject) {
+            if (this.fileKnown) {
+              resolve();
+            } else {
+              var xhr = document.createElement('iron-request');
+              xhr.send({url: url}).then(function(response) {
+                if (response.succeeded) {
+                    console.log(response.xhr);
+                    this.fileKnown = true;
+                    this.postUrl = url;
+                    this.post.format = format;
+                    this._initPost();
+                }
+                resolve();
+              }.bind(this)).catch(function(err) {
+                resolve();
+              });
             }
-          }
-          self.xmlHttpReq.send();
+          }.bind(this));
         },
 
         _checkImage: function(image, success, error) {
