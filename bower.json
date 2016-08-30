@@ -13,7 +13,8 @@
     "juicy-html": "^1.1.0",
     "pdf-object": "^1.0.0",
     "moment": "^2.14.1",
-    "spinkit-element": "^1.0.0"
+    "spinkit-element": "^1.0.0",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
