@@ -1,5 +1,4 @@
-[
-  {
+[{
     "title": "Hello, world!",
     "date": 1457993374,
     "author": "jamrizzi",
@@ -7,16 +6,14 @@
     "featuredImage": true,
     "description": "yo this is an awsome description.",
     "viewProject": "http://google.com"
-  },
-  {
+}, {
     "title": "2ndpost",
     "date": 1457993401,
-    "author": "jamrizzi"
-  },
-  {
+    "author": "jamrizzi",
+    "featuredImage": "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
+}, {
     "title": "3ndpost",
     "date": 1459321181,
     "author": "jamrizzi",
     "format": "pdf"
-  }
-]
+}]

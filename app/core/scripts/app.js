@@ -81,13 +81,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   // Writes to the console if debugging is enabled
-  app.debug = function(message, type) {
+  app.debug = function(message, type = 'log') {
     if (app.settings.debugging) {
-      if (type === 'warn') {
-        console.warn(message);
-      } else {
-        console.log(message);
-      }
+        console[type](message); 
     }
   };
 

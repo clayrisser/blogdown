@@ -115,7 +115,7 @@
                 }
                 // Featured image
                 var featuredImage = true;
-                if (posts[i].featuredImage === false) { // Finding featured image location happens in page-post.dyn.html
+                if (posts[i].featuredImage || posts[i].featuredImage === false) { // Finding featured image location happens in page-post.dyn.html
                   featuredImage = posts[i].featuredImage;
                 }
                 // Description

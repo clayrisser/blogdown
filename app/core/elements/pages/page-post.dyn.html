@@ -107,6 +107,9 @@
           fileKnown: {
             type: Boolean,
             value: false
+          },
+          imageKnown: {
+            value: false
           }
         },
 
@@ -129,15 +132,11 @@
               var url = app.rootURL + 'content/posts/' + this.post.slug + '.' + format;
               checkFileArray.push(this._checkFile.bind(this, url, format));
             }.bind(this));
-            this._title = this.post.title.toString().toLowerCase().replace(/[^\s\w+\-_#.]/g, '').replace(/\s+/g, '-');
+            var title = this.post.title.toString().toLowerCase().replace(/[^\s\w+\-_#.]/g, '').replace(/\s+/g, '-');
             _.each(this._formats, function(format) {
-              var url = app.rootURL + 'content/posts/' + this._title + '.' + this._formats[0];
+              var url = app.rootURL + 'content/posts/' + title + '.' + this._formats[0];
               checkFileArray.push(this._checkFile.bind(this, url, format));
             }.bind(this));
-            var promiseChain = Promise.resolve();
-            for (var checkFile of checkFileArray) {
-              promiseChain = promiseChain.then(checkFile);
-            }
           } else { // title mode
             var checkFileArray = [];
             _.each(this._formats, function(format) {
@@ -148,14 +147,14 @@
               var url = app.rootURL + 'content/posts/' + this.post.datestamp + '.' + format;
               checkFileArray.push(this._checkFile.bind(this, url, format));
             }.bind(this));
-            var promiseChain = Promise.resolve();
-            for (var checkFile of checkFileArray) {
-              promiseChain = promiseChain.then(checkFile);
-            }
-            promiseChain.catch(function(err) {
-              console.warn(err);
-            });
           }
+          var promiseChain = Promise.resolve();
+          for (var checkFile of checkFileArray) {
+            promiseChain = promiseChain.then(checkFile);
+          }
+          promiseChain.catch(function(err) {
+            console.warn(err);
+          });
         },
 
         _initPost: function() {
@@ -218,52 +217,35 @@
           if (this.post.featuredImage) {
             this._featuredImage = false;
             if (this.post.featuredImage === true) { // Featured image assumed
+              var imageFormats = ['jpg', 'png'];
+              var checkImageArray = [];
               if (app.settings.permlinkMode === 'date') { // date mode
-                this._featuredImage = app.rootURL + 'content/images/' + this.post.slug + '.jpg';
-                this._checkImage(this._featuredImage, function() { // Image exists
-                  this.featuredImage = this._featuredImage;
-                }.bind(this), function() { // Image doesn't exist
-                  this._featuredImage = app.rootURL + 'content/images/' + this.post.slug + '.png';
-                  this._checkImage(this._featuredImage, function() { // Image exists
-                    this.featuredImage = this._featuredImage;
-                  }.bind(this), function() { // Image doesn't exist
-                    this._title = this.post.title.toString().toLowerCase().replace(/[^\s\w+\-_#.]/g, '').replace(/\s+/g, '-');
-                    this._featuredImage = app.rootURL + 'content/images/' + this._title + '.jpg';
-                    this._checkImage(this._featuredImage, function() { // Image exists
-                      this.featuredImage = this._featuredImage;
-                    }.bind(this), function() { // Image doesn't exist
-                      this._featuredImage = app.rootURL + 'content/images/' + this._title + '.png';
-                      this._checkImage(this._featuredImage, function() { // Image exists
-                        this.featuredImage = this._featuredImage;
-                      }.bind(this), function() { // Image doesn't exist
-                        this.featuredImage = false;
-                      }.bind(this));
-                    }.bind(this));
-                  }.bind(this));
+                _.each(imageFormats, function(imageFormat) {
+                  var image = app.rootURL + 'content/images/' + this.post.slug + '.' + imageFormat;
+                  checkImageArray.push(this._checkImage.bind(this, image));
+                }.bind(this));
+                var title = this.post.title.toString().toLowerCase().replace(/[^\s\w+\-_#.]/g, '').replace(/\s+/g, '-');
+                _.each(imageFormats, function(imageFormat) {
+                  var image = app.rootURL + 'content/images/' + this._title + '.' + imageFormat;
+                  checkImageArray.push(this._checkImage.bind(this, image));
                 }.bind(this));
               } else { // title mode
-                this._featuredImage = app.rootURL + 'content/images/' + this.post.slug + '.jpg';
-                this._checkImage(this._featuredImage, function() { // Image exists
-                  this.featuredImage = this._featuredImage;
-                }.bind(this), function() { // Image doesn't exist
-                  this._featuredImage = app.rootURL + 'content/images/' + this.post.slug + '.png';
-                  this._checkImage(this._featuredImage, function() { // Image exists
-                    this.featuredImage = this._featuredImage;
-                  }.bind(this), function() { // Image doesn't exist
-                    this._featuredImage = app.rootURL + 'content/images/' + this.post.datestamp + '.jpg';
-                    this._checkImage(this._featuredImage, function() { // Image exists
-                      this.featuredImage = this._featuredImage;
-                    }.bind(this), function() { // Image doesn't exist
-                      this._featuredImage = app.rootURL + 'content/images/' + this.post.datestamp + '.png';
-                      this._checkImage(this._featuredImage, function() { // Image exists
-                        this.featuredImage = this._featuredImage;
-                      }.bind(this), function() { // Image doesn't exist
-                        this.featuredImage = false;
-                      }.bind(this));
-                    }.bind(this));
-                  }.bind(this));
+                _.each(imageFormats, function(imageFormat) {
+                  var image = app.rootURL + 'content/images/' + this.post.slug + '.' + imageFormat;
+                  checkImageArray.push(this._checkImage.bind(this, image));
+                }.bind(this));
+                _.each(imageFormats, function(imageFormat) {
+                  var image = app.rootURL + 'content/images/' + this.post.datestamp + '.' + imageFormat;
+                  checkImageArray.push(this._checkImage.bind(this, image));
                 }.bind(this));
               }
+              var promiseChain = Promise.resolve();
+              for (var checkImage of checkImageArray) {
+                promiseChain = promiseChain.then(checkImage);
+              }
+              promiseChain.catch(function(err) {
+                app.debug(err, 'warn'); 
+              });
             } else {
               if (this._isRelativeUrl(this.post.featuredImage)) { // Relative featured image
                 this._featuredImage = app.rootURL + 'content/images/' + this.post.featuredImage;
@@ -322,7 +304,6 @@
               var xhr = document.createElement('iron-request');
               xhr.send({url: url}).then(function(response) {
                 if (response.succeeded) {
-                    console.log(response.xhr);
                     this.fileKnown = true;
                     this.postUrl = url;
                     this.post.format = format;
@@ -336,11 +317,20 @@
           }.bind(this));
         },
 
-        _checkImage: function(image, success, error) {
-          var img = new Image();
-          img.onload = success;
-          img.onerror = error;
-          img.src = image;
+        _checkImage: function(image) {
+          return new Promise(function(resolve, reject) {
+            if (this.imageKnown) {
+              resolve();
+            } else {
+              var img = new Image();
+              img.onload = function() {
+                this.imageKnown = true;
+                this.featuredImage = image;
+              }.bind(this);
+              img.onerror = resolve;
+              img.src = image;
+            }
+          }.bind(this));
         }
       });
     })();
