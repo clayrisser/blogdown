@@ -1,0 +1,74 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="load-app">
+  <template>
+
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'load-app',
+
+        properties: {
+          jobs: {
+            type: Array,
+            value: ['_loadSettings', '_loadPages', '_loadTaxonomies', '_loadTheme', '_loadStyle']
+          }
+        },
+
+        ready: function() {
+          this.runJobs();
+        },
+
+        runJobs: function() {
+          var jobsArray = [];
+          _.each(this.jobs, function(job) {
+            jobsArray.push(this[job].bind(this));
+          });
+          var promiseChain = Promise.resolve();
+          for (var job of jobsArray) {
+            promiseChain = promiseChain.then(job);
+          }
+          promiseChain.catch(function(err) {
+            app.debug(err, 'warn');
+          }.bind(this));
+        },
+
+        _loadSettings: function(resolve) {
+            
+          resolve();
+        },
+
+        _loadPages: function(resolve) {
+            
+          resolve();
+        },
+
+        _loadTaxonomies: function(resolve) {
+            
+          resolve();
+        },
+
+        _loadTheme: function(resolve) {
+            
+          resolve();
+        },
+
+        _loadStyle: function(resolve) {
+            
+          resolve();
+        },
+
+        loaded: function() {
+          window.setTimeout(function() {
+            app.appLoaded();
+            app.debug(app.settings.title + ' loaded');
+          }, 1000);
+        }
+      });
+    })();
+  </script>
+
+</dom-module>

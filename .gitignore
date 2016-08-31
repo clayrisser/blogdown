@@ -3,3 +3,8 @@ dist/
 app/core/bower_components/
 .tmp/
 .publish/
+
+# Emacs
+\#*\#
+.\#*
+*~
