@@ -1,74 +1,96 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <dom-module id="load-app">
-  <template>
+    <template>
 
-  </template>
+    </template>
 
-  <script>
-    (function() {
-      'use strict';
-      Polymer({
-        is: 'load-app',
+    <script>
+     (function() {
+         'use strict';
+         Polymer({
+             is: 'load-app',
 
-        properties: {
-          jobs: {
-            type: Array,
-            value: ['_loadSettings', '_loadPages', '_loadTaxonomies', '_loadTheme', '_loadStyle']
-          }
-        },
+             properties: {
+                 jobs: {
+                     type: Array,
+                     value: ['_loadSettings', '_loadPages', '_loadTaxonomies', '_loadTheme', '_loadStyle']
+                 }
+             },
 
-        ready: function() {
-          this.runJobs();
-        },
+             ready: function() {
+                 this.runJobs();
+             },
 
-        runJobs: function() {
-          var jobsArray = [];
-          _.each(this.jobs, function(job) {
-            jobsArray.push(this[job].bind(this));
-          });
-          var promiseChain = Promise.resolve();
-          for (var job of jobsArray) {
-            promiseChain = promiseChain.then(job);
-          }
-          promiseChain.catch(function(err) {
-            app.debug(err, 'warn');
-          }.bind(this));
-        },
+             runJobs: function() {
+                 var jobsArray = [];
+                 _.each(this.jobs, function(job) {
+                     jobsArray.push(this[job].bind(this));
+                 });
+                 var promiseChain = Promise.resolve();
+                 for (var job of jobsArray) {
+                     promiseChain = promiseChain.then(job);
+                 }
+                 promiseChain.then(function() {
+                     this.loaded();
+                 }.bind(this)).catch(function(err) {
+                     app.debug(err, 'warn');
+                 }.bind(this));
+             },
 
-        _loadSettings: function(resolve) {
-            
-          resolve();
-        },
+             _loadSettings: function(resolve) {
+                 var loadSettings = document.createElement('load-settings');
+                 return loadSettings.load().then(function(settings) {
+                     resolve();
+                 }).catch(function(err) {
+                     reject(err);
+                 });
+             },
 
-        _loadPages: function(resolve) {
-            
-          resolve();
-        },
+             _loadPages: function(resolve) {
+                 var loadPages = document.createElement('load-pages');
+                 return loadPages.load().then(function(pages) {
+                     resolve();
+                 }).catch(function(err) {
+                     reject(err);
+                 });
+             },
 
-        _loadTaxonomies: function(resolve) {
-            
-          resolve();
-        },
+             _loadTaxonomies: function(resolve) {
+                 var loadTaxonomies = document.createElement('load-taxonomies');
+                 loadTaxonomies.load().then(function(taxonomies) {
+                     resolve();
+                 }).catch(function(err) {
+                     reject(err);
+                 });
+             },
 
-        _loadTheme: function(resolve) {
-            
-          resolve();
-        },
+             _loadTheme: function(resolve) {
+                 var loadTheme = document.createElement('load-theme');
+                 loadTheme.load().then(function() {
+                     resolve();
+                 }).catch(err) {
+                     reject(err);
+                 }
+             },
 
-        _loadStyle: function(resolve) {
-            
-          resolve();
-        },
+             _loadStyle: function(resolve) {
+                 var loadStyle = document.createElement('loadStyle');
+                 loadStyle.load().then(function() {
+                     resolve();
+                 }).catch(err) {
+                     reject(err);
+                 }
+             },
 
-        loaded: function() {
-          window.setTimeout(function() {
-            app.appLoaded();
-            app.debug(app.settings.title + ' loaded');
-          }, 1000);
-        }
-      });
-    })();
-  </script>
+             loaded: function() {
+                 window.setTimeout(function() {
+                     app.appLoaded();
+                     app.debug(app.settings.title + ' loaded');
+                 }, 1000);
+             }
+         });
+     })();
+    </script>
 
 </dom-module>
