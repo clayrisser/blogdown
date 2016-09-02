@@ -1,0 +1,66 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="load-pages">
+    <template>
+
+        <iron-ajax
+            id="pages"
+            url="content/pages.json"
+            handle-as="json"
+            on-response="pagesResponse"
+            on-error="pagesError"
+            last-response="{{pages}}"i
+            last-error="{{pagesErrorResponse}}">
+        </iron-ajax>
+
+    </template>
+
+    <script>
+     (function() {
+         'use strict';
+         Polymer({
+             is: 'load-pages',
+
+             properties: {
+                 resolveRequest: {
+                     type: 'Object'
+                 },
+                 rejectRequest: {
+                     type: 'Object'
+                 }
+             },
+
+             load: function() {
+                 return new Promise(function(resolve, reject) {
+                     this.resolveRequest = resolve;
+                     this.rejectRequest = reject;
+                     this.$.pages.generateRequest();
+                 });
+             },
+
+             pagesResponse: function() {
+                 this.storePages(this.pages);
+                 this.resolveRequest(this.pages);
+             },
+
+             pagesError: function() {
+                 this.rejectRequest(this.pagesErrorResponse);
+             },
+
+             storePages: function(pages) {
+                 app.pages = [];
+                 _.each(pages, function(page) {
+                     var title = page.title ? page.title : page;
+                     app.pages.push({
+                         title: title,
+                         slug: page.slug ? page.slug : title,
+                         addToMenu: page.addToMenu ? page.addToMenu : true,
+                         format: page.format ? page.format : 'md'
+                     });
+                 });
+             }
+         });
+     })();
+    </script>
+
+</dom-module>

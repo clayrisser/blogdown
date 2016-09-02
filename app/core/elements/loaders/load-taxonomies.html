@@ -1,0 +1,46 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="load-taxonomies">
+    <template>
+    </template>
+
+    <script>
+     (function() {
+         'use strict';
+         Polymer({
+             is: 'load-taxonomies',
+
+             load: function() {
+                 app.taxonomies = [];
+                 // dynamically load taxonomies
+             },
+
+             loadTaxonomy: function(taxonomy) {
+                 return new Promise(function(resolve, reject) {
+                     var xhr = document.createElement('iron-request');
+                     xhr.send({url: 'content/' + taxonomy + '.json'}).then(function(request) {
+                         if (request.succeeded && request.status === 200) {
+                             this.storeTaxonomyPosts(taxonomy, request.response);
+                             resolve(request.response);
+                         } else {
+                             reject(request.response);
+                         }
+                     }.bind(this)).catch(function(err) {
+                         reject(err);
+                     });
+                 }.bind(this));
+             },
+
+             storeTaxonomyPosts: function(taxonomy, taxonomyPosts) {
+                 app.taxonomies[taxonomy] = [];
+                 _.each(taxonomyPosts, function(taxonomyPost) {
+                     app.taxonomies[taxonomy].push({
+                        // load taxonomy
+                     });
+                 });
+             }
+         });
+     })();
+    </script>
+
+</dom-module>
