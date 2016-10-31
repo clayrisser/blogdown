@@ -1,71 +1,45 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <dom-module id="load-settings">
-    <template>
+  <template>
 
-        <iron-ajax
-            id="settings"
-            url="content/settings.json"
-            handle-as="json"
-            on-response="settingsResponse"
-            on-error="settingsError"
-            last-response="{{settings}}"i
-            last-error="{{settingsErrorResponse}}">
-        </iron-ajax>
+    <iron-ajax id="settings"
+      url="../../../content/settings.json"
+      handle-as="json"
+      on-response="settingsResponse"
+      on-error="settingsError"
+      last-response="{{settings}}"i
+      last-error="{{settingsErrorResponse}}">
+    </iron-ajax>
 
-    </template>
+  </template>
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'load-settings',
 
-    <script>
-     (function() {
-         'use strict';
-         Polymer({
-             is: 'load-settings',
+        load: function() {
+          return new Promise(function(resolve, reject) {
+            this.resolveRequest = resolve;
+            this.rejectRequest = reject;
+            this.$.settings.generateRequest();
+          }.bind(this));
+        },
 
-             properties: {
-                 resolveRequest: {
-                     type: 'Object'
-                 },
-                 rejectRequest: {
-                     type: 'Object'
-                 }
-             },
+        settingsResponse: function() {
+          this.storeSettings(this.settings);
+          this.resolveRequest(app.settings);
+        },
 
-             load: function() {
-                 return new Promise(function(resolve, reject) {
-                     this.resolveRequest = resolve;
-                     this.rejectRequest = reject;
-                     this.$.settings.generateRequest();
-                 });
-             },
+        settingsError: function() {
+          this.rejectRequest(this.settingsErrorResponse);
+        },
 
-             settingsResponse: function() {
-                 this.storeSettings(this.settings);
-                 this.resolveRequest(this.settings);
-             },
-
-             settingsError: function() {
-                 this.rejectRequest(this.settingsErrorResponse);
-             },
-
-             storeSettings: function(settings) {
-                 app.settings = settings;
-                 for (var setting in app.settings) {
-                     if (app.settings.hasOwnProperty(setting)) {
-                         if (this._isObjectArray(app.settings[setting])) {
-                             app.debug('app.settings.' + setting + ' =');
-                             app.debug(app.settings[setting]);
-                         } else {
-                             app.debug('app.settings.' + setting + ' = ' + app.settings[setting]);
-                         }
-                     }
-                 }
-             },
-
-             _isObjectArray(a) {
-                 return (!!a) && ((a.constructor === Array) || (a.constructor === Object));
-             }
-         });
-     })();
-    </script>
-
+        storeSettings: function(settings) {
+          app.settings = settings;
+        }
+      });
+    })();
+  </script>
 </dom-module>

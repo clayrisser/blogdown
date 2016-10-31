@@ -1,66 +1,54 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <dom-module id="load-pages">
-    <template>
+  <template>
 
-        <iron-ajax
-            id="pages"
-            url="content/pages.json"
-            handle-as="json"
-            on-response="pagesResponse"
-            on-error="pagesError"
-            last-response="{{pages}}"i
-            last-error="{{pagesErrorResponse}}">
-        </iron-ajax>
+    <iron-ajax id="pages"
+      url="../../../content/pages.json"
+      handle-as="json"
+      on-response="pagesResponse"
+      on-error="pagesError"
+      last-response="{{pages}}"
+      last-error="{{pagesErrorResponse}}">
+    </iron-ajax>
 
-    </template>
+  </template>
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'load-pages',
 
-    <script>
-     (function() {
-         'use strict';
-         Polymer({
-             is: 'load-pages',
+        load: function() {
+          return new Promise(function(resolve, reject) {
+            this.resolveRequest = resolve;
+            this.rejectRequest = reject;
+            this.$.pages.generateRequest();
+          }.bind(this));
+        },
 
-             properties: {
-                 resolveRequest: {
-                     type: 'Object'
-                 },
-                 rejectRequest: {
-                     type: 'Object'
-                 }
-             },
+        pagesResponse: function() {
+          this.storePages(this.pages);
+          this.resolveRequest(app.pages);
+        },
 
-             load: function() {
-                 return new Promise(function(resolve, reject) {
-                     this.resolveRequest = resolve;
-                     this.rejectRequest = reject;
-                     this.$.pages.generateRequest();
-                 });
-             },
+        pagesError: function() {
+          this.rejectRequest(this.pagesErrorResponse);
+        },
 
-             pagesResponse: function() {
-                 this.storePages(this.pages);
-                 this.resolveRequest(this.pages);
-             },
-
-             pagesError: function() {
-                 this.rejectRequest(this.pagesErrorResponse);
-             },
-
-             storePages: function(pages) {
-                 app.pages = [];
-                 _.each(pages, function(page) {
-                     var title = page.title ? page.title : page;
-                     app.pages.push({
-                         title: title,
-                         slug: page.slug ? page.slug : title,
-                         addToMenu: page.addToMenu ? page.addToMenu : true,
-                         format: page.format ? page.format : 'md'
-                     });
-                 });
-             }
-         });
-     })();
-    </script>
-
+        storePages: function(pages) {
+          app.pages = [];
+          _.each(pages, function(page) {
+            var title = page.title ? page.title : page;
+            app.pages.push({
+              title: title,
+              slug: page.slug ? page.slug : title,
+              addToMenu: page.addToMenu ? page.addToMenu : true,
+              format: page.format ? page.format : 'md'
+            });
+          });
+        }
+      });
+    })();
+  </script>
 </dom-module>

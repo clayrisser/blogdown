@@ -14,7 +14,8 @@
     "pdf-object": "^1.0.0",
     "moment": "^2.14.1",
     "spinkit-element": "^1.0.0",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "app-layout": "PolymerElements/app-layout#^0.10.0"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

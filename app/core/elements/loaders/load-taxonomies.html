@@ -1,46 +1,50 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <dom-module id="load-taxonomies">
-    <template>
-    </template>
+  <template>
 
-    <script>
-     (function() {
-         'use strict';
-         Polymer({
-             is: 'load-taxonomies',
+  </template>
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'load-taxonomies',
 
-             load: function() {
-                 app.taxonomies = [];
-                 // dynamically load taxonomies
-             },
+        load: function() {
+          app.taxonomies = {};
+          var promise = _.map(app.settings.taxonomies, function(taxonomy) {
+            return this.loadTaxonomy(taxonomy);
+          }.bind(this));
+          return Promise.all(promise).then(function(taxonomies) {
+            return app.taxonomies;
+          }).catch(function(err) {
+            throw err;
+          })
+        },
 
-             loadTaxonomy: function(taxonomy) {
-                 return new Promise(function(resolve, reject) {
-                     var xhr = document.createElement('iron-request');
-                     xhr.send({url: 'content/' + taxonomy + '.json'}).then(function(request) {
-                         if (request.succeeded && request.status === 200) {
-                             this.storeTaxonomyPosts(taxonomy, request.response);
-                             resolve(request.response);
-                         } else {
-                             reject(request.response);
-                         }
-                     }.bind(this)).catch(function(err) {
-                         reject(err);
-                     });
-                 }.bind(this));
-             },
+        loadTaxonomy: function(taxonomy) {
+          return new Promise(function(resolve, reject) {
+            var xhr = document.createElement('iron-request');
+            xhr.send({
+              url: '../../../content/' + taxonomy + '.json'
+            }).then(function(res) {
+              if (res.status === 200) {
+                this.storeTaxonomyPosts(taxonomy, JSON.parse(res.response));
+                resolve(res.response);
+              } else {
+                reject(res.response);
+              }
+            }.bind(this)).catch(function(err) {
+              reject(err);
+            });
+          }.bind(this));
+        },
 
-             storeTaxonomyPosts: function(taxonomy, taxonomyPosts) {
-                 app.taxonomies[taxonomy] = [];
-                 _.each(taxonomyPosts, function(taxonomyPost) {
-                     app.taxonomies[taxonomy].push({
-                        // load taxonomy
-                     });
-                 });
-             }
-         });
-     })();
-    </script>
-
+        storeTaxonomyPosts: function(taxonomy, taxonomyPosts) {
+          app.taxonomies[taxonomy] = taxonomyPosts;
+          return app.taxonomies;
+        }
+      });
+    })();
+  </script>
 </dom-module>

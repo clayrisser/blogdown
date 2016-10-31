@@ -10,7 +10,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta name="description" content="">
@@ -79,24 +78,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <template is="dom-bind" id="app">
 
-    <!-- Load the app -->
-    <div style="height:100%" id="load"></div>
-    <iron-ajax id="settings" auto
-      url="content/settings.json"
-      handle-as="json"
-      on-response="settingsResponse"
-      on-error="settingsError"
-      last-response="{{settings}}">
-    </iron-ajax>
+    <load-app id="load"></load-app>
 
     <template is="dom-if" if="[[loaded]]" restamp>
-      <initialize-theme id="rootPage"
+      <load-theme id="rootPage"
         mobile="{{mobile}}"
         loading="[[loading]]"
         progress="[[progress]]"
         page-title="[[pageTitle]]"
         route-data="[[routeData]]">
-      </initialize-theme>
+      </load-theme>
     </template>
 
     <paper-toast id="toast" text="[[message]]" duration="[[settings.toastDuration]]">
@@ -106,17 +97,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <!-- Uncomment next block to enable Service Worker support (1/2) -->
     <!--
     <paper-toast id="caching-complete"
-                 duration="6000"
-                 text="Caching complete! This app will work offline.">
+      duration="6000"
+      text="Caching complete! This app will work offline.">
     </paper-toast>
 
     <platinum-sw-register auto-register
-                          clients-claim
-                          skip-waiting
-                          base-uri="bower_components/platinum-sw/bootstrap"
-                          on-service-worker-installed="displayInstalledToast">
+      clients-claim
+      skip-waiting
+      base-uri="bower_components/platinum-sw/bootstrap"
+      on-service-worker-installed="displayInstalledToast">
       <platinum-sw-cache default-cache-strategy="fastest"
-                         cache-config-file="cache-config.json">
+        cache-config-file="cache-config.json">
       </platinum-sw-cache>
     </platinum-sw-register>
     -->
@@ -127,5 +118,4 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script src="core/scripts/app.js"></script>
   <!-- endbuild-->
 </body>
-
 </html>

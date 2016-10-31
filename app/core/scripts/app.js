@@ -65,25 +65,42 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }.bind(this), function() {
         app.debug('WARNING: style-' + style + 'failed to load');
     }.bind(this));
-  }
+  };
 
   app._loadTheApp = function() { // Load the app
     app.loaded = false;
     var loadApp = document.createElement('load-app');
     app.$.load.appendChild(loadApp);
     app.pageTitle = app.settings.title;
-  }
+  };
+
+  app.getLocal = function(property) { // gets localStorage.app as an object
+    if (localStorage.app) {
+      var localApp = JSON.parse(localStorage.app);
+      if (property) {
+        try {
+          return eval('localApp.' + property);
+        } catch(err) {
+          return false;
+        }
+      } else {
+        return localApp;
+      }
+    } else {
+      return false;
+    }
+  };
 
   app.appLoaded = function() { // The app has loaded
     app.loaded = true;
     app.$.load.innerHTML = '';
     document.getElementById('loading').innerHTML = '';
-  }
+  };
 
   // Writes to the console if debugging is enabled
   app.debug = function(message, type = 'log') {
     if (app.settings.debugging) {
-        console[type](message); 
+        console[type](message);
     }
   };
 

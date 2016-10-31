@@ -1,0 +1,52 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="load-theme">
+  <template>
+
+  </template>
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'load-theme',
+
+        ready: function() {
+          this.resolveRequest = app.temporaryResolveRequest;
+          this.rejectRequest = app.temporaryRejectRequest;
+        },
+
+        attached: function() {
+          this.stampTheme();
+        },
+
+        load: function() {
+          return new Promise(function(resolve, reject) {
+            app.temporaryResolveRequest = resolve; // very hacky solution
+            app.temporaryRejectRequest = reject; // very hacky solution
+          }.bind(this));
+        },
+
+        stampTheme: function() {
+          var themeName = app.getLocal('settings.theme') || app.settings.theme;
+          this.loadElement(themeName).then(function() {
+            var theme = document.createElement('theme-' + themeName);
+            Polymer.dom(this.root).appendChild(theme);
+            this.resolveRequest();
+          }.bind(this)).catch(function() {
+            this.rejectRequest();
+          }.bind(this));
+        },
+
+        loadElement: function(theme) {
+          return new Promise(function(resolve, reject) {
+            this.importHref('../../../content/themes/theme-' + theme + '.html', function() {
+              resolve();
+            }.bind(this), function(err) {
+              reject(err);
+            }.bind(this));
+          }.bind(this));
+        }
+      });
+    })();
+  </script>
+</dom-module>

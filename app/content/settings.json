@@ -41,7 +41,6 @@
     }],
     "disqusShortname": "jamrizzi",
     "taxonomies": [
-        "posts",
-        "portfolio"
+        "posts"
     ]
 }
