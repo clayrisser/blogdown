@@ -2,23 +2,30 @@
   "name": "blogdown",
   "private": true,
   "dependencies": {
-    "iron-elements": "PolymerElements/iron-elements#^1.0.0",
-    "neon-elements": "PolymerElements/neon-elements#^1.0.0",
-    "page": "visionmedia/page.js#~1.6.4",
-    "paper-elements": "PolymerElements/paper-elements#^1.0.1",
-    "platinum-elements": "PolymerElements/platinum-elements#^1.1.0",
-    "polymer": "Polymer/polymer#^1.2.0",
+    "iron-elements": "^1.0.10",
+    "neon-elements": "^1.0.0",
+    "page": "^1.7.1",
+    "paper-elements": "^1.0.7",
+    "platinum-elements": "^2.0.0",
+    "polymer": "^1.7.0",
     "fa-awesome": "^2.0.2",
     "juicy-markdown": "^1.0.0",
     "juicy-html": "^1.1.0",
     "pdf-object": "^1.0.0",
-    "moment": "^2.14.1",
+    "moment": "^2.15.2",
     "spinkit-element": "^1.0.0",
     "underscore": "^1.8.3",
-    "app-layout": "PolymerElements/app-layout#^0.10.0"
+    "app-layout": "^0.10.5"
   },
   "devDependencies": {
-    "web-component-tester": "^4.0.0"
+    "web-component-tester": "^5.0.0"
   },
-  "ignore": []
+  "ignore": [],
+  "resolutions": {
+    "page": "^1.7.1",
+    "platinum-elements": "^2.0.0",
+    "platinum-bluetooth": "^2.0.0",
+    "web-component-tester": "^5.0.0",
+    "mocha": "^3.1.2"
+  }
 }

@@ -1,0 +1,42 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="load-style">
+  <template>
+
+  </template>
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'load-style',
+
+        load: function() {
+          return new Promise(function(resolve, reject) {
+            this.resolveRequest = resolve;
+            this.rejectRequest = reject;
+            this.loadStyle();
+          }.bind(this));
+        },
+
+        loadStyle: function() {
+          var styleName = app.getLocal('settings.style') || app.settings.style;
+          this.loadElement(styleName).then(function() {
+            this.resolveRequest();
+          }.bind(this)).catch(function() {
+            this.rejectRequest();
+          }.bind(this));
+        },
+
+        loadElement: function(style) {
+          return new Promise(function(resolve, reject) {
+            this.importHref('../../../content/styles/style-' + style + '.html', function() {
+              resolve();
+            }.bind(this), function(err) {
+              reject(err);
+            }.bind(this));
+          }.bind(this));
+        }
+      });
+    })();
+  </script>
+</dom-module>

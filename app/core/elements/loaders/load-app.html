@@ -17,13 +17,13 @@
               'loadSettings',
               'loadPages',
               'loadTaxonomies',
-              'loadTheme'
+              'loadTheme',
+              'loadStyle'
             ]
           }
         },
 
         ready: function() {
-          console.log('ready');
           this.runJobs();
         },
 
@@ -78,18 +78,15 @@
             throw err;
           });
         },
-/*
-        loadStyle: function(resolve) {
-          console.log('loading styel');
-          var loadStyle = document.createElement('loadStyle');
-          loadStyle.load().then(function() {
-            resolve();
-          }).catch(err) {
-            reject(err);
-          }
-        },
 
-        */
+        loadStyle: function(resolve) {
+          var loadStyle = document.createElement('load-style');
+          loadStyle.load().then(function() {
+            return;
+          }).catch(function(err) {
+            throw err;
+          });
+        },
 
         loaded: function() {
           console.log('app.settings =>');
@@ -106,5 +103,4 @@
       });
     })();
   </script>
-
 </dom-module>
