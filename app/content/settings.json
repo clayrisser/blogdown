@@ -6,39 +6,12 @@
     "toastDuration": "5000",
     "theme": "drawer",
     "permlinkMode": "title",
-    "style": "candy",
+    "style": "technology",
     "socialAccounts": {
         "facebook": "https://facebook.com",
         "twitter": "https://twitter.com",
         "google-plus": "https://google.com"
     },
-    "hardPages": [{
-        "title": "Home",
-        "addToMenu": true,
-        "redirect": false
-    }, {
-        "title": "Posts",
-        "addToMenu": true,
-        "rename": "Projects"
-    }, {
-        "title": "Search",
-        "addToMenu": true
-    }],
-    "softPages": [{
-        "title": "Chinchilla",
-        "addToMenu": true
-    }, {
-        "title": "Subscribe",
-        "format": "html",
-        "addToMenu": true
-    }, {
-        "title": "Resume",
-        "addToMenu": true
-    }, {
-        "title": "Contact",
-        "format": "dyn.html",
-        "addToMenu": true
-    }],
     "disqusShortname": "jamrizzi",
     "taxonomies": [
         "posts"

@@ -1,0 +1,149 @@
+<dom-module id="the-theme">
+  <template>
+    <style>
+      app-toolbar {
+        background-color: var(--default-primary-color);
+        color: #fff;
+      }
+      #content {
+        padding: 20px;
+      }
+      #loadingBar {
+        width: 100%;
+        --paper-progress-height: 64px;
+        --paper-progress-container-color: rgba(255, 255, 255, 0);
+      }
+      paper-menu {
+        height: 100%;
+      }
+      .above-loading-bar {
+        z-index: 0;
+      }
+      .social-account {
+        color: var(--text-primary-color);
+        text-decoration: none;
+      }
+      .social-account:hover {
+        color: var(--text-primary-color);
+        text-decoration: none;
+      }
+      .menu-item {
+        color: var(--primary-text-color);
+        text-decoration: none;
+      }
+      .menu-item:hover {
+        color: var(--primary-text-color);
+        text-decoration: none;
+      }
+    </style>
+    <style include="iron-positioning"></style>
+
+    <app-drawer-layout fullbleed narrow="{{narrow}}">
+      <app-drawer id="drawer" swipeOpen>
+        <app-toolbar></app-toolbar>
+        <paper-menu>
+          <template is="dom-repeat" items="[[menuItems]]" as="menuItem">
+            <a class="menu-item" href="/[[menuItem.slug]]">
+              <paper-item id="[[menuItem.slug]]">[[menuItem.title]]</paper-item>
+            </a>
+          </template>
+        </paper-menu>
+      </app-drawer>
+
+      <app-header-layout has-scrolling-region>
+        <app-header id="mainHeader" condenses reveals effects="waterfall">
+          <app-toolbar></app-toolbar>
+        </app-header>
+
+        <div id="content">
+          this is the main content
+        </div>
+      </app-header-layout>
+    </app-drawer-layout>
+
+    <app-toolbar class="fixed-top">
+      <div class="fixed-top">
+        <paper-progress id="loadingBar" class="desktop" value="[[progress]]" indeterminate="[[indeterminateLoading]]" hidden="[[!loading]]"></paper-progress>
+      </div>
+      <paper-icon-button class="above-loading-bar" icon="menu" on-click="openDrawer" hidden=[[!narrow]]></paper-icon-button>
+      <div id="title" class="above-loading-bar" main-title>[[title]]</div>
+      <template is="dom-repeat" items=[[socialAccounts]] as="socialAccount">
+        <a class="social-account" href="[[socialAccount.url]]" target="_blank">
+          <paper-icon-button class="above-loading-bar" icon="fa:[[socialAccount.type]]"></paper-icon-button>
+        </a>
+      </template>
+    </app-toolbar>
+
+  </template>
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'the-theme',
+
+        properties: {
+          progress: {
+            type: Number,
+            value: -1,
+            observer: 'setIndeterminateLoading'
+          },
+          indeterminateLoading: {
+            type: Boolean,
+            value: true
+          },
+          loading: {
+            type: Boolean,
+            value: false
+          },
+          narrow: {
+            type: Boolean,
+            notify: true
+          }
+        },
+
+        ready: function() {
+          this.title = app.settings.title;
+          this.loadMenuItems();
+          this.loadSocialAccounts();
+        },
+
+        setIndeterminateLoading: function() {
+          if (this.progress >= 0) {
+            this.indeterminateLoading = false;
+          } else {
+            this.indeterminateLoading = true;
+          }
+        },
+
+        openDrawer: function() {
+          this.$.drawer.open();
+        },
+
+        loadMenuItems: function() {
+          this.menuItems = [];
+          _.each(app.pages, function(page) {
+            if (page.addToMenu) {
+              this.push('menuItems', {
+                title: page.title,
+                slug: page.slug
+              });
+            }
+          }.bind(this));
+        },
+
+        loadSocialAccounts: function() {
+          this.socialAccounts = [];
+          var socialAccounts = app.settings.socialAccounts;
+          if (socialAccounts) {
+            _.each(_.keys(socialAccounts), function(socialAccount) {
+              this.push('socialAccounts', {
+                type: socialAccount,
+                url: socialAccounts[socialAccount]
+              });
+            }.bind(this));
+          }
+        }
+      });
+    })();
+  </script>
+</dom-module>

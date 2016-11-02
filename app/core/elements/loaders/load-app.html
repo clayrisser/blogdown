@@ -15,6 +15,7 @@
             type: Array,
             value: [
               'loadSettings',
+              'loadAuthors',
               'loadPages',
               'loadTaxonomies',
               'loadTheme',
@@ -41,6 +42,15 @@
           }.bind(this)).catch(function(err) {
             console.error(err);
           }.bind(this));
+        },
+
+        loadAuthors: function() {
+          var loadAuthors = document.createElement('load-authors');
+          return loadAuthors.load().then(function(authors) {
+            return;
+          }).catch(function(err) {
+            throw err;
+          });
         },
 
         loadSettings: function() {
@@ -91,6 +101,8 @@
         loaded: function() {
           console.log('app.settings =>');
           console.log(app.settings);
+          console.log('app.authors =>');
+          console.log(app.authors);
           console.log('app.pages =>');
           console.log(app.pages);
           console.log('app.taxonomies =>');

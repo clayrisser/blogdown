@@ -3,12 +3,33 @@
 <dom-module id="load-theme">
   <template>
 
+    <template id="theme" is="dom-if" if="[[themeLoaded]]" restamp>
+      <the-theme
+        narrow="{{narrow}}"
+        loading="[[loading]]"
+        progress="[[progress]]"
+        page-title="[[pageTitle]]"
+        route-data="[[routeData]]">
+      </the-theme>
+    </template>
+
   </template>
   <script>
     (function() {
       'use strict';
       Polymer({
         is: 'load-theme',
+
+        properties: {
+          themeLoaded: {
+            type: Boolean,
+            value: false
+          },
+          narrow: {
+            type: Boolean,
+            notify: true
+          }
+        },
 
         ready: function() {
           this.resolveRequest = app.temporaryResolveRequest;
@@ -29,8 +50,7 @@
         stampTheme: function() {
           var themeName = app.getLocal('settings.theme') || app.settings.theme;
           this.loadElement(themeName).then(function() {
-            var theme = document.createElement('theme-' + themeName);
-            Polymer.dom(this.root).appendChild(theme);
+            this.themeLoaded = true;
             this.resolveRequest();
           }.bind(this)).catch(function() {
             this.rejectRequest();
@@ -39,7 +59,7 @@
 
         loadElement: function(theme) {
           return new Promise(function(resolve, reject) {
-            this.importHref('../../../content/themes/theme-' + theme + '.html', function() {
+            this.importHref('../../../content/themes/' + theme + '/the-theme.html', function() {
               resolve();
             }.bind(this), function(err) {
               reject(err);

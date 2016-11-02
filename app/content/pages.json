@@ -4,5 +4,11 @@
         "slug": "resume",
         "addToMenu": true,
         "format": "md"
+    },
+    {
+        "title": "Resumes",
+        "slug": "resumes",
+        "addToMenu": true,
+        "format": "md"
     }
 ]
