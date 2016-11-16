@@ -91,6 +91,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
   };
 
+  app.properties = {
+    route: {
+      type: Object,
+      observer: 'routeChanged'
+    }
+  };
+
+  app.routeChanged = function() {
+    app.dispatchEvent(new Event('route-changed'));
+  };
+
   app.appLoaded = function() { // The app has loaded
     app.loaded = true;
     app.$.load.innerHTML = '';
@@ -125,6 +136,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   // Redirects app to another page
   app.goTo = function(route) {
     page.redirect(route);
+  };
+
+  app.go = {
+    to: function(route) {
+      page.redirect(route);
+    },
+    back: function() {
+      window.history.back();
+    }
   };
 
   // Scroll page to top and expand header

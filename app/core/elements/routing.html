@@ -22,40 +22,38 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
 
     // Middleware
-    function routeChanged(ctx, next) {
-      var event = new Event('routeChanged');
-      app.dispatchEvent(event);
+    function middleware(ctx, next) {
       next();
     }
 
     // Routes
-    page('*', routeChanged, function(ctx, next) {
+    page('*', middleware, function(ctx, next) {
       next();
     });
 
     page('/', function(data) {
-      app.routeData = {
+      app.route = {
         type: 'home',
         slugs: data.params
       };
     });
 
     page(app.baseUrl, function(data) {
-      app.routeData = {
+      app.route = {
         type: 'home',
         slugs: data.params
       };
     });
 
-    page('/:page', function(data) {
-      app.routeData = {
-        type: 'page',
+    page('/:parent', function(data) {
+      app.route = {
+        type: 'parent',
         slugs: data.params
       };
     });
 
-    page('/:page/:child', function(data) {
-      app.routeData = {
+    page('/:parent/:child', function(data) {
+      app.route = {
         type: 'child',
         slugs: data.params
       };
@@ -63,7 +61,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     // 404
     page('*', function(data) {
-      app.routeData = {
+      app.route = {
         type: '404',
         slugs: data.params
       };

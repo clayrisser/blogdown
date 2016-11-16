@@ -1,0 +1,70 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="handle-content">
+  <template>
+
+    <template is="dom-if" if="[[isHome]]" restamp>
+      home
+    </template>
+
+    <template is="dom-if" if="[[isParent]]" restamp>
+      parent
+    </template>
+
+    <template is="dom-if" if="[[isChild]]" restamp>
+      child
+    </template>
+
+  </template>
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'handle-content',
+
+        properties: {
+          isHome: {
+            type: Boolean,
+            value: true
+          },
+          isParent: {
+            type: Boolean,
+            value: true
+          },
+          isChild: {
+            type: Boolean,
+            value: true
+          }
+        },
+
+        ready: function() {
+          app.addEventListener('route-changed', function() {
+            this.routeChanged();
+          }.bind(this));
+          this.routeChanged();
+        },
+
+        routeChanged: function() {
+          switch(app.route.type) {
+            default:
+              this.set('isHome', true);
+              this.set('isParent', false);
+              this.set('isChild', false);
+              break;
+            case 'parent':
+              this.set('isHome', false);
+              this.set('isParent', true);
+              this.set('isChild', false);
+              break;
+            case 'child':
+              this.set('isHome', false);
+              this.set('isParent', false);
+              this.set('isChild', true);
+              break;
+          }
+          console.log(app.route);
+        }
+      });
+    })();
+  </script>
+</dom-module>

@@ -35,6 +35,17 @@
         color: var(--primary-text-color);
         text-decoration: none;
       }
+      #title {
+        color: var(--text-primary-color);
+        text-decoration: none;
+      }
+      #title:hover {
+        color: var(--text-primary-color);
+        text-decoration: none;
+      }
+      #social-accounts {
+        margin-left: auto;
+      }
     </style>
     <style include="iron-positioning"></style>
 
@@ -56,7 +67,7 @@
         </app-header>
 
         <div id="content">
-          this is the main content
+          <handle-content></handle-content>
         </div>
       </app-header-layout>
     </app-drawer-layout>
@@ -66,12 +77,14 @@
         <paper-progress id="loadingBar" class="desktop" value="[[progress]]" indeterminate="[[indeterminateLoading]]" hidden="[[!loading]]"></paper-progress>
       </div>
       <paper-icon-button class="above-loading-bar" icon="menu" on-click="openDrawer" hidden=[[!narrow]]></paper-icon-button>
-      <div id="title" class="above-loading-bar" main-title>[[title]]</div>
-      <template is="dom-repeat" items=[[socialAccounts]] as="socialAccount">
-        <a class="social-account" href="[[socialAccount.url]]" target="_blank">
-          <paper-icon-button class="above-loading-bar" icon="fa:[[socialAccount.type]]"></paper-icon-button>
-        </a>
-      </template>
+      <a id="title" class="above-loading-bar" href="/">[[title]]</a>
+      <div id="social-accounts">
+        <template is="dom-repeat" items=[[socialAccounts]] as="socialAccount">
+          <a class="social-account" href="[[socialAccount.url]]" target="_blank">
+            <paper-icon-button class="above-loading-bar" icon="fa:[[socialAccount.type]]"></paper-icon-button>
+          </a>
+        </template>
+      </div>
     </app-toolbar>
 
   </template>

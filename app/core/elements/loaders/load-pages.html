@@ -37,6 +37,7 @@
         },
 
         storePages: function(pages) {
+          console.log(changeCase.dot);
           app.pages = [];
           _.each(pages, function(page) {
             var title = page.title ? page.title : page;
