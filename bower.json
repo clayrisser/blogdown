@@ -16,7 +16,7 @@
     "spinkit-element": "^1.0.0",
     "underscore": "^1.8.3",
     "app-layout": "^0.10.5",
-    "changecase": "*"
+    "changecase": "^1.0.0"
   },
   "devDependencies": {
     "web-component-tester": "^5.0.0"
