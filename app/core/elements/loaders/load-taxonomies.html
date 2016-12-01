@@ -40,9 +40,36 @@
           }.bind(this));
         },
 
-        storeTaxonomyPosts: function(taxonomy, taxonomyPosts) {
-          app.taxonomies[taxonomy] = taxonomyPosts;
-          return app.taxonomies;
+        storeTaxonomyPosts: function(taxonomy, posts) {
+          app.taxonomies[taxonomy] = [];
+          _.each(posts, function(post) {
+            console.log('***********');
+            var date = false;
+            if (post.date) {
+              if (typeof post.date === 'number') {
+                date = moment.unix(post.date);
+              } else {
+                var date = moment(new Date(post.date));
+              }
+            }
+            var title = false;
+            if (post.title) {
+              title = post.title;
+            } else if (post.author) {
+              title = changeCase.titleCase(taxonomy) + ' by ' + post.author;
+            } else if (date) {
+              title = changeCase.titleCase(taxonomy) + ' on ' + date.format(app.settings.dateFormat);
+            }
+            app.taxonomies[taxonomy].push({
+              title: title,
+              slug: post.slug ? post.slug : (title ? changeCase.paramCase(title) : false),
+              date: date,
+              author: post.author ? post.author : false,
+              featuredImage: post.featuredImage ? post.featuredImage : false,
+              description: post.description ? post.description : false
+            });
+          });
+          return app.taxonomies[taxonomy];
         }
       });
     })();

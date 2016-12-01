@@ -28,6 +28,9 @@
         },
 
         pagesResponse: function() {
+          if (!this.pages) {
+            app.log.error('Syntax error in pages.json');
+          }
           this.storePages(this.pages);
           this.resolveRequest(app.pages);
         },
@@ -37,13 +40,11 @@
         },
 
         storePages: function(pages) {
-          console.log(changeCase.dot);
           app.pages = [];
           _.each(pages, function(page) {
-            var title = page.title ? page.title : page;
             app.pages.push({
-              title: title,
-              slug: page.slug ? page.slug : title,
+              title: page.title ? page.title : changeCase.titleCase(page.slug),
+              slug: page.slug ? page.slug : changeCase.paramCase(page.title),
               addToMenu: page.addToMenu ? page.addToMenu : true,
               format: page.format ? page.format : 'md'
             });

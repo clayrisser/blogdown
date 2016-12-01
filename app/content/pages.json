@@ -1,9 +1,17 @@
 [
     {
-        "title": "Resume",
-        "slug": "resume",
+        "slug": "yo-dude",
         "addToMenu": true,
         "format": "md"
+    },
+    {
+        "title": "Hi, Awsome",
+        "format": "md"
+    },
+    {
+        "title": "Booo Yup",
+        "slug": "resume",
+        "addToMenu": true
     },
     {
         "title": "Resumes",

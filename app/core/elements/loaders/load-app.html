@@ -15,6 +15,7 @@
             type: Array,
             value: [
               'loadSettings',
+              'loadGlobals',
               'loadAuthors',
               'loadPages',
               'loadTaxonomies',
@@ -44,18 +45,27 @@
           }.bind(this));
         },
 
-        loadAuthors: function() {
-          var loadAuthors = document.createElement('load-authors');
-          return loadAuthors.load().then(function(authors) {
+        loadSettings: function() {
+          var loadSettings = document.createElement('load-settings');
+          return loadSettings.load().then(function(settings) {
             return;
           }).catch(function(err) {
             throw err;
           });
         },
 
-        loadSettings: function() {
-          var loadSettings = document.createElement('load-settings');
-          return loadSettings.load().then(function(settings) {
+        loadGlobals: function() {
+          var loadGlobals = document.createElement('load-globals');
+          return loadGlobals.load().then(function(globals) {
+            return globals;
+          }).catch(function(err) {
+            throw err;
+          });
+        },
+
+        loadAuthors: function() {
+          var loadAuthors = document.createElement('load-authors');
+          return loadAuthors.load().then(function(authors) {
             return;
           }).catch(function(err) {
             throw err;

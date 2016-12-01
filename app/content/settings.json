@@ -1,19 +1,20 @@
 {
-    "title": "BlogDown",
-    "debugging": "true",
-    "easterEggs": "true",
-    "ajaxTimeout": "10000",
-    "toastDuration": "5000",
-    "theme": "drawer",
-    "permlinkMode": "title",
-    "style": "technology",
-    "socialAccounts": {
-        "facebook": "https://facebook.com",
-        "twitter": "https://twitter.com",
-        "google-plus": "https://google.com"
-    },
-    "disqusShortname": "jamrizzi",
-    "taxonomies": [
-        "posts"
-    ]
+  "title": "BlogDown",
+  "dateFormat": "MMMM D, YYYY",
+  "debug": true,
+  "easterEggs": "true",
+  "ajaxTimeout": "10000",
+  "toastDuration": "5000",
+  "theme": "drawer",
+  "permlinkMode": "title",
+  "style": "technology",
+  "socialAccounts": {
+    "facebook": "https://facebook.com",
+    "twitter": "https://twitter.com",
+    "google-plus": "https://google.com"
+  },
+  "disqusShortname": "jamrizzi",
+  "taxonomies": [
+    "posts"
+  ]
 }

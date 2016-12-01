@@ -1,0 +1,44 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="load-globals">
+  <template>
+
+  </template>
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'load-globals',
+
+        properties: {
+          globals: {
+            type: Object,
+            value: {
+              log: {
+                error: function(message) {
+                  if (app.settings.debug) {
+                    console.error(message);
+                  }
+                }
+              }
+            }
+          }
+        },
+
+        load: function() {
+          return new Promise(function(resolve, reject) {
+            var globals = this.loadGlobals();
+            resolve(globals);
+          }.bind(this));
+        },
+
+        loadGlobals: function() {
+          _.each(this.globals, function(global, key) {
+            app[key] = global;
+          });
+          return this.globals;
+        }
+      });
+    })();
+  </script>
+</dom-module>
