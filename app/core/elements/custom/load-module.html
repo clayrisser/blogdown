@@ -2,26 +2,25 @@
 
 <dom-module id="load-module">
   <template>
-    
-  </template>
 
+  </template>
   <script>
     (function() {
       'use strict';
       Polymer({
         is: 'load-module',
-        
+
         properties: {
           name: {
             type: String
           }
         },
-        
+
         ready: function() {
           Polymer.dom(this.root).innerHTML = '<content><mod-' + this.name + '></content>';
           this._loadElement(this.name);
         },
-        
+
         _loadElement: function(name) {
           this.importHref(app.rootURL + 'content/modules/' + name + '.mod', function() {
             app.debug(name + '.mod was imported.');

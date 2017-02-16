@@ -1,22 +1,25 @@
 [
-    {
-        "slug": "yo-dude",
-        "addToMenu": true,
-        "format": "md"
-    },
-    {
-        "title": "Hi, Awsome",
-        "format": "md"
-    },
-    {
-        "title": "Booo Yup",
-        "slug": "resume",
-        "addToMenu": true
-    },
-    {
-        "title": "Resumes",
-        "slug": "resumes",
-        "addToMenu": true,
-        "format": "md"
-    }
+  {
+    "slug": "yo-dude",
+    "addToMenu": true,
+    "format": "md"
+  },
+  {
+    "title": "Hi, Awsome",
+    "format": "md"
+  },
+  {
+    "title": "Booo Yup",
+    "slug": "resume",
+    "addToMenu": true
+  },
+  {
+    "title": "Resumes",
+    "slug": "resumes",
+    "addToMenu": true,
+    "format": "md"
+  },
+  {
+    "title": "Chinchilla"
+  }
 ]

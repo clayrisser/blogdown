@@ -1,0 +1,35 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="handle-parent">
+  <template>
+
+    <load-page page="[[page]]"></load-page>
+
+  </template>
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'handle-parent',
+
+        properties: {
+          page: {
+            type: Object,
+            value: {}
+          }
+        },
+
+        ready: function() {
+          app.addEventListener('route-changed', function() {
+            this.routeChanged();
+          }.bind(this));
+          this.routeChanged();
+        },
+
+        routeChanged: function() {
+
+        }
+      });
+    })();
+  </script>
+</dom-module>

@@ -3,15 +3,15 @@
 <dom-module id="handle-content">
   <template>
 
-    <template is="dom-if" if="[[isHome]]" restamp>
+    <template is="dom-if" if="[[isHome]]">
       home
     </template>
 
-    <template is="dom-if" if="[[isParent]]" restamp>
-      parent
+    <template is="dom-if" if="[[isParent]]">
+      <handle-parent page="[[page]]"></handle-parent>
     </template>
 
-    <template is="dom-if" if="[[isChild]]" restamp>
+    <template is="dom-if" if="[[isChild]]">
       child
     </template>
 
@@ -41,28 +41,34 @@
           app.addEventListener('route-changed', function() {
             this.routeChanged();
           }.bind(this));
-          this.routeChanged();
         },
 
         routeChanged: function() {
-          switch(app.route.type) {
-            default:
-              this.set('isHome', true);
-              this.set('isParent', false);
-              this.set('isChild', false);
-              break;
-            case 'parent':
-              this.set('isHome', false);
-              this.set('isParent', true);
-              this.set('isChild', false);
-              break;
-            case 'child':
-              this.set('isHome', false);
-              this.set('isParent', false);
-              this.set('isChild', true);
-              break;
+          var page = _.filter(app.pages, function(page) {
+            return page.slug === app.route.slugs.parent;
+          })[0];
+          if (page) {
+            this.set('page', page);
+            switch(app.route.type) {
+              default:
+                this.set('isHome', true);
+                this.set('isParent', false);
+                this.set('isChild', false);
+                break;
+              case 'parent':
+                this.set('isHome', false);
+                this.set('isParent', true);
+                this.set('isChild', false);
+                break;
+              case 'child':
+                this.set('isHome', false);
+                this.set('isParent', false);
+                this.set('isChild', true);
+                break;
+            }
+          } else {
+            app.toast('Does not exist');
           }
-          console.log(app.route);
         }
       });
     })();

@@ -43,7 +43,6 @@
         storeTaxonomyPosts: function(taxonomy, posts) {
           app.taxonomies[taxonomy] = [];
           _.each(posts, function(post) {
-            console.log('***********');
             var date = false;
             if (post.date) {
               if (typeof post.date === 'number') {

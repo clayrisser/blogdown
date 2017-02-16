@@ -1,0 +1,102 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="load-page">
+  <template>
+
+    <template is="dom-if" if="[[format.md]]" restamp>
+      <marked-element markdown="[[body]]">
+        <div class="markdown-html"></div>
+      </marked-element>
+    </template>
+
+    <template is="dom-if" if="[[format.html]]" restamp>
+      <div>
+        [[body]]
+      </div>
+    </template>
+
+  </template>
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'load-page',
+
+        properties: {
+          page: {
+            type: Object,
+            value: {},
+            observer: 'pageChanged'
+          },
+          format: {
+            type: Object,
+            value: {}
+          },
+          body: {
+            type: String,
+            value: ''
+          }
+        },
+
+        ready: function() {
+          /* app.addEventListener('route-changed', function() {
+           *   this.routeChanged();
+           * }.bind(this));
+           * this.routeChanged();*/
+        },
+
+        pageChanged: function() {
+          this._reset();
+          if (this.page.slug) this._loadPage(this.page.slug, this.page.format);
+        },
+
+        _reset: function() {
+          this.set('format', {});
+          this.set('body', '');
+        },
+
+        _loadPage: function(name, format) {
+          if (true) {
+            this._getRawData(name, format).then((body) => {
+              this.body = body;
+              this._setFormat(format);
+            }).catch((err) => {
+              console.err('oopers');
+            });
+          } else {
+            this.importHref(app.rootURL + 'content/pages/' + name + '.' + format, function() {
+              /* app.debug(name + '.html was imported.');*/
+            }.bind(this), function() {
+              /* window.history.back();*/
+              /* app.debug('WARNING: ' + name + '.dyn.html import failed to load');*/
+              app.toast('WARNING: ' + name + '.dyn.html import failed to load');
+            }.bind(this));
+          }
+        },
+
+        _setFormat: function(format) {
+          var temp = {};
+          temp[format] = true;
+          this.set('format', temp);
+        },
+
+        _getRawData: function(name, format) {
+          return new Promise((resolve, reject) => {
+            var xhr = document.createElement('iron-request');
+            xhr.send({
+              url: app.rootURL + 'content/pages/' + name + '.' + format
+            }).then((res) => {
+              if (res.status === 200) {
+                resolve(res.response);
+              } else {
+                reject(res.response);
+              }
+            }).catch((err) => {
+              reject(err);
+            });
+          });
+        }
+      });
+    })();
+  </script>
+</dom-module>
