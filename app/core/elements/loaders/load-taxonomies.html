@@ -1,9 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <dom-module id="load-taxonomies">
-  <template>
-
-  </template>
   <script>
     (function() {
       'use strict';
@@ -11,37 +8,33 @@
         is: 'load-taxonomies',
 
         load: function() {
-          app.taxonomies = {};
-          var promise = _.map(app.settings.taxonomies, function(taxonomy) {
-            return this.loadTaxonomy(taxonomy);
-          }.bind(this));
-          return Promise.all(promise).then(function(taxonomies) {
-            return app.taxonomies;
-          }).catch(function(err) {
-            throw err;
-          })
-        },
-
-        loadTaxonomy: function(taxonomy) {
-          return new Promise(function(resolve, reject) {
-            var xhr = document.createElement('iron-request');
-            xhr.send({
-              url: '../../../content/' + taxonomy + '.json'
-            }).then(function(res) {
-              if (res.status === 200) {
-                this.storeTaxonomyPosts(taxonomy, JSON.parse(res.response));
-                resolve(res.response);
-              } else {
-                reject(res.response);
-              }
-            }.bind(this)).catch(function(err) {
-              reject(err);
+          app.log.debug('loading taxonomies . . .');
+          var promises = _.map(app.settings.taxonomies, (taxonomy) => {
+            return this._loadTaxonomy(taxonomy);
+          });
+          return Promise.all(promises).then((taxonomiesMeta) => {
+            var taxonomies = {};
+            _.each(taxonomiesMeta, (taxonomy) => {
+              taxonomies[taxonomy.name] = taxonomy.posts;
             });
-          }.bind(this));
+            app.set('taxonomies', taxonomies);
+            app.log.info('app.taxonomies =>');
+            app.log.info(app.taxonomies);
+            return taxonomies;
+          });
         },
 
-        storeTaxonomyPosts: function(taxonomy, posts) {
-          app.taxonomies[taxonomy] = [];
+        _loadTaxonomy: function(taxonomy) {
+          return fetch('../../../content/' + taxonomy + '.json')
+            .then((res) => {
+              return res.json();
+            }).then((body) => {
+              return this._getTaxonomyMeta(taxonomy, body);
+            });
+        },
+
+        _getTaxonomyMeta: function(taxonomy, posts) {
+          var taxonomyPosts = [];
           _.each(posts, function(post) {
             var date = false;
             if (post.date) {
@@ -59,7 +52,7 @@
             } else if (date) {
               title = changeCase.titleCase(taxonomy) + ' on ' + date.format(app.settings.dateFormat);
             }
-            app.taxonomies[taxonomy].push({
+            taxonomyPosts.push({
               title: title,
               slug: post.slug ? post.slug : (title ? changeCase.paramCase(title) : false),
               date: date,
@@ -68,7 +61,10 @@
               description: post.description ? post.description : false
             });
           });
-          return app.taxonomies[taxonomy];
+          return {
+            name: taxonomy,
+            posts: taxonomyPosts
+          }
         }
       });
     })();

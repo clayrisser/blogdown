@@ -1,13 +1,3 @@
-<!--
-@license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
 <!-- Iron elements -->
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
@@ -36,8 +26,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <!-- 3rd party elements -->
 <link rel="import" href="../bower_components/fa-awesome/fa-awesome.html">
 
+<!-- Component elements -->
+<link rel="import" href="components/app-theme.html">
+
 <!-- Loader elements -->
-<link rel="import" href="loaders/load-app.html">
 <link rel="import" href="loaders/load-globals.html">
 <link rel="import" href="loaders/load-settings.html">
 <link rel="import" href="loaders/load-authors.html">
@@ -53,8 +45,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <!-- JavaScript libraries -->
 <script src="../bower_components/moment/moment.js"></script>
-<script src="../bower_components/underscore/underscore.js"></script>
+<script src="../bower_components/lodash/lodash.js"></script>
 <script src="../bower_components/changecase/changecase.js"></script>
+
+<!-- Polyfills -->
+<script src="../bower_components/fetch/fetch.js"></script>
+<link rel="import" href="../bower_components/promise-polyfill/promise-polyfill-lite.html">
 
 <!-- Page elements -->
 

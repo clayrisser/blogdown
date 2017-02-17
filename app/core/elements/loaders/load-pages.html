@@ -1,18 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <dom-module id="load-pages">
-  <template>
-
-    <iron-ajax id="pages"
-      url="../../../content/pages.json"
-      handle-as="json"
-      on-response="pagesResponse"
-      on-error="pagesError"
-      last-response="{{pages}}"
-      last-error="{{pagesErrorResponse}}">
-    </iron-ajax>
-
-  </template>
   <script>
     (function() {
       'use strict';
@@ -20,35 +8,29 @@
         is: 'load-pages',
 
         load: function() {
-          return new Promise(function(resolve, reject) {
-            this.resolveRequest = resolve;
-            this.rejectRequest = reject;
-            this.$.pages.generateRequest();
-          }.bind(this));
+          app.log.debug('loading pages . . .');
+          return fetch('../../../content/pages.json')
+            .then((res) => {
+              return res.json();
+            }).then((pages) => {
+              app.set('pages', this._getPagesMeta(pages));
+              app.log.info('app.pages =>');
+              app.log.info(app.pages);
+              return pages;
+            });
         },
 
-        pagesResponse: function() {
-          if (!this.pages) {
-            app.log.error('Syntax error in pages.json');
-          }
-          this.storePages(this.pages);
-          this.resolveRequest(app.pages);
-        },
-
-        pagesError: function() {
-          this.rejectRequest(this.pagesErrorResponse);
-        },
-
-        storePages: function(pages) {
-          app.pages = [];
+        _getPagesMeta: function(pages) {
+          var pagesMeta = [];
           _.each(pages, function(page) {
-            app.pages.push({
+            pagesMeta.push({
               title: page.title ? page.title : changeCase.titleCase(page.slug),
               slug: page.slug ? page.slug : changeCase.paramCase(page.title),
               addToMenu: page.addToMenu ? page.addToMenu : true,
               format: page.format ? page.format : 'md'
             });
           });
+          return pagesMeta;
         }
       });
     })();

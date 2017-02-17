@@ -2,31 +2,36 @@
   "name": "blogdown",
   "private": true,
   "dependencies": {
+    "app-elements": "^0.10.1",
+    "changecase": "^1.0.0",
+    "fa-awesome": "^2.0.2",
+    "fetch": "^2.0.2",
+    "gold-elements": "^1.0.1",
+    "google-web-components": "^1.1.1",
     "iron-elements": "^1.0.10",
+    "lodash": "^4.17.4",
+    "molecules": "^1.0.0",
+    "moment": "^2.17.1",
     "neon-elements": "^1.0.0",
     "page": "^1.7.1",
     "paper-elements": "^1.0.7",
-    "platinum-elements": "^2.0.0",
-    "polymer": "^1.7.0",
-    "fa-awesome": "^2.0.2",
-    "juicy-markdown": "^1.0.0",
-    "juicy-html": "^1.1.0",
     "pdf-object": "^1.0.0",
-    "moment": "^2.15.2",
-    "spinkit-element": "^1.0.0",
-    "underscore": "^1.8.3",
-    "app-layout": "^0.10.5",
-    "changecase": "^1.0.0"
+    "platinum-elements": "^2.0.0",
+    "polymer": "^1.8.0",
+    "promise-polyfill": "^6.0.2"
   },
   "devDependencies": {
     "web-component-tester": "^5.0.0"
   },
   "ignore": [],
   "resolutions": {
+    "firebase": "^3.0",
+    "lodash": "^4.17.4",
+    "mocha": "^3.1.2",
     "page": "^1.7.1",
-    "platinum-elements": "^2.0.0",
     "platinum-bluetooth": "^2.0.0",
+    "platinum-elements": "^2.0.0",
     "web-component-tester": "^5.0.0",
-    "mocha": "^3.1.2"
+    "promise-polyfill": "^1.0.0"
   }
 }

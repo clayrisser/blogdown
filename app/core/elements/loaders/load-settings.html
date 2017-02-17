@@ -1,18 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <dom-module id="load-settings">
-  <template>
-
-    <iron-ajax id="settings"
-      url="../../../content/settings.json"
-      handle-as="json"
-      on-response="settingsResponse"
-      on-error="settingsError"
-      last-response="{{settings}}"
-      last-error="{{settingsErrorResponse}}">
-    </iron-ajax>
-
-  </template>
   <script>
     (function() {
       'use strict';
@@ -20,24 +8,44 @@
         is: 'load-settings',
 
         load: function() {
-          return new Promise(function(resolve, reject) {
-            this.resolveRequest = resolve;
-            this.rejectRequest = reject;
-            this.$.settings.generateRequest();
-          }.bind(this));
+          console.log('loading settings . . .');
+          return fetch('../../../content/settings.json')
+            .then((res) => {
+              return res.json();
+            }).then((body) => {
+              var settings = {};
+              _.each(body, (setting, key) => {
+                if (key === 'logLevel') return settings[key] = {
+                  name: setting,
+                  value: this._getLogLevel(setting)
+                };
+                return settings[key] = setting;
+              });
+              app.set('settings', settings);
+              console.log('app.settings =>');
+              console.log(app.settings);
+              return settings;
+            });
         },
 
-        settingsResponse: function() {
-          this.storeSettings(this.settings);
-          this.resolveRequest(app.settings);
-        },
-
-        settingsError: function() {
-          this.rejectRequest(this.settingsErrorResponse);
-        },
-
-        storeSettings: function(settings) {
-          app.settings = settings;
+        _getLogLevel: function(debug) {
+          if (typeof debug === 'number') return debug;
+          switch(debug) {
+            case 'silent':
+              return 0;
+            case 'error':
+              return 1;
+            case 'warn':
+              return 2;
+            case 'info':
+              return 3;
+            case 'debug':
+              return 4;
+            case 'silly':
+              return 5;
+            default:
+              return 3;
+          }
         }
       });
     })();

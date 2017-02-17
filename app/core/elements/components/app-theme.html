@@ -1,0 +1,47 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="app-theme">
+  <template>
+
+    <template id="theme" is="dom-if" if="[[themeLoaded]]" restamp>
+      <div hidden="[[!appLoaded]]">
+        <the-theme
+          narrow="{{narrow}}"
+          loading="[[loading]]"
+          progress="[[progress]]"
+          page-title="[[pageTitle]]"
+          route-data="[[routeData]]">
+        </the-theme>
+      </div>
+    </template>
+
+  </template>
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'app-theme',
+
+        properties: {
+          themeLoaded: {
+            type: Boolean,
+            value: false
+          },
+          appLoaded: {
+            type: Boolean,
+            value: false
+          }
+        },
+
+        ready: function() {
+          app.addEventListener('theme-loaded', () => {
+            this.set('themeLoaded', true);
+          });
+          app.addEventListener('app-loaded', () => {
+            this.set('appLoaded', true);
+          });
+        }
+      });
+    })();
+  </script>
+</dom-module>

@@ -1,95 +1,29 @@
-/*
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
-*/
-
-(function(document) {
+((document) => {
   'use strict';
+  var app = document.getElementById('app');
 
-  // Grab a reference to our auto-binding template
-  // and give it some initial binding values
-  // Learn more about auto-binding templates at http://goo.gl/Dx1u2g
-  var app = document.querySelector('#app');
-
-  // Sets app default base URL
-  var scriptElements = document.getElementsByTagName('script'); // find root url
-  for (var i = 0; i < scriptElements.length; i++) {
-    var source = scriptElements[i].src;
+  var scriptElements = document.getElementsByTagName('script');
+  _.each(scriptElements, (scriptElement) => {
+    var source = scriptElement.src;
     if (source.indexOf('/core/scripts/app.js') > -1) {
       app.rootURL = source.substring(0, source.indexOf('core/scripts/app.js'));
     }
-  }
+  });
   app.baseUrl = app.rootURL.substring(window.location.origin.length, app.rootURL.length);
 
-  // Load settings (runs before app._loadTheApp)
-  app.settingsResponse = function() {
-    var isObjectArray = function(a) {
-        return (!!a) && ((a.constructor === Array) || (a.constructor === Object));
-    };
-    for (var setting in app.settings) {
-      if (app.settings.hasOwnProperty(setting)) {
-        if (isObjectArray(app.settings[setting])) {
-          app.debug('app.settings.' + setting + ' =');
-          app.debug(app.settings[setting]);
-        } else {
-          app.debug('app.settings.' + setting + ' = ' + app.settings[setting]);
-        }
-      }
-    }
-    app._init();
-    app._loadStyle();
-    app._loadTheApp();
-  };
-  app.settingsError = function() {
-    console.warn('App failed to load settings');
-  };
-
-  app._init = function() { // first code to run after settings have loaded
-    document.title = app.settings.title; // update page title
-  },
-
-  app._loadStyle = function() { // Load style
-    var style = 'default';
-    if (app.settings.style) {
-      style = app.settings.style;
-    }
-    if (localStorage.style) {
-      style = localStorage.style;
-    }
-    this.importHref(app.rootURL + 'content/styles/style-' + style + '.html', function() {
-      app.debug('style-' + style + ' loaded');
-    }.bind(this), function() {
-        app.debug('WARNING: style-' + style + 'failed to load');
-    }.bind(this));
-  };
-
-  app._loadTheApp = function() { // Load the app
-    app.loaded = false;
-    var loadApp = document.createElement('load-app');
-    app.$.load.appendChild(loadApp);
-    app.pageTitle = app.settings.title;
-  };
-
-  app.getLocal = function(property) { // gets localStorage.app as an object
-    if (localStorage.app) {
-      var localApp = JSON.parse(localStorage.app);
-      if (property) {
-        try {
-          return eval('localApp.' + property);
-        } catch(err) {
-          return false;
-        }
-      } else {
-        return localApp;
-      }
-    } else {
-      return false;
-    }
-  };
+  _loadApp([
+    'settings',
+    'globals',
+    'authors',
+    'pages',
+    'taxonomies',
+    'style',
+    'theme'
+  ]).then((message) => {
+    window.setTimeout(function() {
+      _appLoaded();
+    }, 1000);
+  });
 
   app.properties = {
     route: {
@@ -102,30 +36,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     app.dispatchEvent(new Event('route-changed'));
   };
 
-  app.appLoaded = function() { // The app has loaded
-    app.loaded = true;
-    app.$.load.innerHTML = '';
-    document.getElementById('loading').innerHTML = '';
-  };
-
-  // Writes to the console if debugging is enabled
-  app.debug = function(message, type = 'log') {
-    if (app.settings.debugging) {
-        console[type](message);
-    }
-  };
-
-  // App toast
-  app.toast = function(message, link, target) {
-    app.$.toast.text = message;
-    if (link) {
-      app.toastLink = link;
-      app.toastTarget = target;
-    }
-    app.$.toast.show();
-  };
-
-  // Toast clicked
   app.toastClicked = function() {
     if (!app.toastTarget) {
       app.toastTarget = '_self';
@@ -133,33 +43,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     window.open(app.toastLink, app.toastTarget);
   };
 
-  // Redirects app to another page
-  app.goTo = function(route) {
-    page.redirect(route);
-  };
-
-  app.go = {
-    to: function(route) {
-      page.redirect(route);
-    },
-    back: function() {
-      window.history.back();
-    }
-  };
-
-  // Scroll page to top and expand header
-  app.scrollToTop = function() {
-  //  app.$.headerPanelMain.scrollToTop(true);
-  };
-
-  app.closeDrawer = function() {
- //   app.$.paperDrawerPanel.closeDrawer();
-  };
-
   app.displayInstalledToast = function() {
-    // Check to make sure caching is actually enabled—it won't be in the dev environment.
     if (!Polymer.dom(document).querySelector('platinum-sw-cache').disabled) {
-      Polymer.dom(document).querySelector('#caching-complete').show();
+      console.log('caching disabled');
+    } else {
+      console.log('caching enabled');
     }
   };
 
@@ -169,18 +57,37 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     console.log('Our app is ready to rock!');
   });
 
-  // See https://github.com/Polymer/polymer/issues/1381
   window.addEventListener('WebComponentsReady', function() {
-    // imports are loaded and elements have been registered
+    console.log('web components are ready');
   });
-
-  // Scroll page to top and expand header
-  app.scrollPageToTop = function() {
-    app.$.headerPanelMain.scrollToTop(true);
-  };
-
-  app.closeDrawer = function() {
-    app.$.paperDrawerPanel.closeDrawer();
-  };
-
 })(document);
+
+function _appLoaded() {
+  app.set('loaded', true);
+  app.dispatchEvent(new Event('app-loaded'));
+  document.getElementById('loading').innerHTML = '';
+  app.log.info(app.settings.title + ' loaded');
+}
+
+function _loadApp(loaders) {
+  var promises = [];
+  _.each(loaders, (loader) => {
+    promises.push(_runLoader.bind(this, loader));
+  });
+  var promiseChain = Promise.resolve();
+  _.each(promises, (promise) => {
+    promiseChain = promiseChain.then(promise);
+  });
+  return promiseChain.then((res) => {
+    return res;
+  }).catch((err) => {
+    console.error(err);
+  });
+}
+
+function _runLoader(loader) {
+  var loaderElement = document.createElement('load-' + loader);
+  return loaderElement.load().then((res) => {
+    return res;
+  });
+}

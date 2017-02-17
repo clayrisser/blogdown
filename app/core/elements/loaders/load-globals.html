@@ -1,9 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <dom-module id="load-globals">
-  <template>
-
-  </template>
   <script>
     (function() {
       'use strict';
@@ -13,30 +10,78 @@
         properties: {
           globals: {
             type: Object,
-            value: {
-              log: {
-                error: function(message) {
-                  if (app.settings.debug) {
-                    console.error(message);
-                  }
-                }
-              }
-            }
+            value: {}
           }
         },
 
         load: function() {
-          return new Promise(function(resolve, reject) {
-            var globals = this.loadGlobals();
-            resolve(globals);
-          }.bind(this));
+          console.log('loading globals . . .');
+          this.globals = {
+            log: this.log,
+            go: this.go,
+            scrollToTop: this.scrollToTop,
+            closeDrawer: this.closeDrawer,
+            local: this.local,
+            toast: this.toast
+          };
+          return new Promise((resolve, reject) => {
+            _.each(this.globals, (global, key) => {
+              app[key] = global;
+            });
+            resolve(this.globals);
+          });
         },
 
-        loadGlobals: function() {
-          _.each(this.globals, function(global, key) {
-            app[key] = global;
-          });
-          return this.globals;
+        log: {
+          error: function(err) {
+            if (app.settings.logLevel.value === 1) {
+              if (err.message) return console.log(err.message);
+            }
+            if (app.settings.logLevel.value > 1) return console.error(err);
+          },
+          warn: function(err) {
+            if (app.settings.logLevel.value === 2) {
+              if (err.message) return console.log(err.message);
+            }
+            if (app.settings.logLevel.value > 2) return console.warn(err);
+          },
+          info: function(info) {
+            if (app.settings.logLevel.value >= 3) return console.info(info);
+          },
+          debug: function(info) {
+            if (app.settings.logLevel.value >= 4) return console.debug(info);
+          },
+          silly: function(info) {
+            if (app.settings.logLevel.value >= 5) return console.log(info);
+          }
+        },
+
+        go: {
+          to: function(route) {
+            page.redirect(route);
+          },
+          back: function() {
+            window.history.back();
+          }
+        },
+
+        scrollToTop: function() {
+          app.log.silly('scrolling to top');
+          //  app.$.headerPanelMain.scrollToTop(true);
+        },
+
+        closeDrawer: function() {
+          app.log.silly('closing drawer');
+          //   app.$.paperDrawerPanel.closeDrawer();
+        },
+
+        toast: function(message, link, target) {
+          app.$.toast.text = message;
+          if (link) {
+            app.toastLink = link;
+            app.toastTarget = target;
+          }
+          app.$.toast.show();
         }
       });
     })();

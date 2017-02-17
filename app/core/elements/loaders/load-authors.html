@@ -1,18 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <dom-module id="load-authors">
-  <template>
-
-    <iron-ajax id="getAuthors"
-      url="../../../content/authors.json"
-      handle-as="json"
-      on-response="authorsResponse"
-      on-error="authorsError"
-      last-response="{{authors}}"i
-      last-error="{{authorsErrorResponse}}">
-    </iron-ajax>
-
-  </template>
   <script>
     (function() {
       'use strict';
@@ -20,24 +8,16 @@
         is: 'load-authors',
 
         load: function() {
-          return new Promise(function(resolve, reject) {
-            this.resolveRequest = resolve;
-            this.rejectRequest = reject;
-            this.$.getAuthors.generateRequest();
-          }.bind(this));
-        },
-
-        authorsResponse: function() {
-          this.storeAuthors(this.authors);
-          this.resolveRequest(app.authors);
-        },
-
-        authorsError: function() {
-          this.rejectRequest(this.authorsErrorResponse);
-        },
-
-        storeAuthors: function(authors) {
-          app.authors = authors;
+          app.log.debug('loading authors . . .');
+          return fetch('../../../content/authors.json')
+            .then((res) => {
+              return res.json();
+            }).then((body) => {
+              app.set('authors', body);
+              app.log.info('app.authors =>');
+              app.log.info(app.authors);
+              return body;
+            });
         }
       });
     })();
