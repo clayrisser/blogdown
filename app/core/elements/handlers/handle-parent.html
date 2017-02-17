@@ -3,7 +3,7 @@
 <dom-module id="handle-parent">
   <template>
 
-    <load-page page="[[page]]"></load-page>
+    <handle-page page="[[page]]"></handle-page>
 
   </template>
   <script>
@@ -20,9 +20,6 @@
         },
 
         ready: function() {
-          app.addEventListener('route-changed', function() {
-            this.routeChanged();
-          }.bind(this));
           this.routeChanged();
         },
 

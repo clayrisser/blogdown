@@ -25,17 +25,6 @@
     }, 1000);
   });
 
-  app.properties = {
-    route: {
-      type: Object,
-      observer: 'routeChanged'
-    }
-  };
-
-  app.routeChanged = function() {
-    app.dispatchEvent(new Event('route-changed'));
-  };
-
   app.toastClicked = function() {
     if (!app.toastTarget) {
       app.toastTarget = '_self';
@@ -63,8 +52,7 @@
 })(document);
 
 function _appLoaded() {
-  app.set('loaded', true);
-  app.dispatchEvent(new Event('app-loaded'));
+  store.dispatch({ type: APP_LOADED });
   document.getElementById('loading').innerHTML = '';
   app.log.info(store.getState().settings.title + ' loaded');
 }

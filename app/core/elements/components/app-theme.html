@@ -22,24 +22,17 @@
       Polymer({
         is: 'app-theme',
 
+        behaviors: [ ReduxBehavior ],
+
         properties: {
           themeLoaded: {
             type: Boolean,
-            value: false
+            statePath: 'meta.themeLoaded'
           },
           appLoaded: {
             type: Boolean,
-            value: false
+            statePath: 'meta.appLoaded'
           }
-        },
-
-        ready: function() {
-          app.addEventListener('theme-loaded', () => {
-            this.set('themeLoaded', true);
-          });
-          app.addEventListener('app-loaded', () => {
-            this.set('appLoaded', true);
-          });
         }
       });
     })();

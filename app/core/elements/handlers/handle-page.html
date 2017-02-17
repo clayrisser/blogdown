@@ -1,0 +1,73 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="handle-page">
+  <template>
+
+    <template is="dom-if" if="[[format.md]]" restamp>
+      <marked-element markdown="[[body]]">
+        <div class="markdown-html"></div>
+      </marked-element>
+    </template>
+
+    <template is="dom-if" if="[[format.html]]" restamp>
+      <div>
+        [[body]]
+      </div>
+    </template>
+
+  </template>
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'handle-page',
+
+        properties: {
+          page: {
+            type: Object,
+            value: {},
+            observer: 'pageChanged'
+          },
+          format: {
+            type: Object,
+            value: {}
+          },
+          body: {
+            type: String,
+            value: ''
+          }
+        },
+
+        pageChanged: function() {
+          this.set('format', {});
+          this.set('body', '');
+          if (this.page.slug) this._loadPage(this.page.slug, this.page.format);
+        },
+
+        _loadPage: function(name, format) {
+          return fetch(app.rootURL + 'content/pages/' + name + '.' + format).then((res) => {
+            return res.text();
+          }).then((body) => {
+            this.body = body;
+            this._setFormat(format);
+          }).catch((err) => {
+            app.log.error(err);
+          });
+          /* this.importHref(app.rootURL + 'content/pages/' + name + '.' + format, function() {
+           *   app.debug(name + '.html was imported.');
+           * }.bind(this), function() {
+           *   window.history.back();
+           *   app.debug('WARNING: ' + name + '.dyn.html import failed to load');
+           *   app.toast('WARNING: ' + name + '.dyn.html import failed to load');
+           * }.bind(this));*/
+        },
+
+        _setFormat: function(format) {
+          var temp = {};
+          temp[format] = true;
+          this.set('format', temp);
+        }
+      });
+    })();
+  </script>
+</dom-module>

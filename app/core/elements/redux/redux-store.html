@@ -1,4 +1,4 @@
-<link rel="import" href="redux-reducers.html">
+<link rel="import" href="redux-reducer.html">
 
 <script>
 
@@ -6,7 +6,14 @@
     authors: {},
     pages: [],
     settings: {},
-    taxonomies: {}
+    taxonomies: {},
+    route: {},
+    meta: {
+      appLoaded: false,
+      themeLoaded: false,
+      loading: false,
+      progress: -1
+    }
   };
 
   var store = Redux.createStore(reducer, Redux.applyMiddleware(ReduxThunk.default));

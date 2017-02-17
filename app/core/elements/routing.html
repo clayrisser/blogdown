@@ -15,38 +15,53 @@
     });
 
     page('/', (req) => {
-      app.route = {
-        type: 'home',
-        slugs: req.params
-      };
+      store.dispatch({
+        type: CHANGE_ROUTE,
+        route: {
+          type: 'home',
+          slugs: req.params
+        }
+      });
     });
 
     page(app.baseUrl, (req) => {
-      app.route = {
-        type: 'home',
-        slugs: req.params
-      };
+      store.dispatch({
+        type: CHANGE_ROUTE,
+        route: {
+          type: 'home',
+          slugs: req.params
+        }
+      });
     });
 
     page('/:parent', (req) => {
-      app.route = {
-        type: 'parent',
-        slugs: req.params
-      };
+      store.dispatch({
+        type: CHANGE_ROUTE,
+        route: {
+          type: 'parent',
+          slugs: req.params
+        }
+      });
     });
 
     page('/:parent/:child', (req) => {
-      app.route = {
-        type: 'child',
-        slugs: req.params
-      };
+      store.dispatch({
+        type: CHANGE_ROUTE,
+        route: {
+          type: 'child',
+          slugs: req.params
+        }
+      });
     });
 
     page('*', (req) => {
-      app.route = {
-        type: '404',
-        slugs: req.params
-      };
+      store.dispatch({
+        type: CHANGE_ROUTE,
+        route: {
+          type: '404',
+          slugs: req.params
+        }
+      });
     });
 
     page({

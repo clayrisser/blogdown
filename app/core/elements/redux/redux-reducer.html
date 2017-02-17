@@ -19,6 +19,22 @@
         return _.assign({}, state, {
           taxonomies: _.clone(action.taxonomies)
         });
+      case CHANGE_ROUTE:
+        return _.assign({}, state, {
+          route: _.clone(action.route)
+        });
+      case APP_LOADED:
+        return _.assign({}, state, {
+          meta: _.assign({}, state.meta, {
+            appLoaded: true
+          })
+        });
+      case THEME_LOADED:
+        return _.assign({}, state, {
+          meta: _.assign({}, state.meta, {
+            themeLoaded: true
+          })
+        });
       default:
         return state;
     }

@@ -3,15 +3,15 @@
 <dom-module id="handle-content">
   <template>
 
-    <template is="dom-if" if="[[isHome]]">
+    <template is="dom-if" if="[[_isEqual(route.type, 'home')]]">
       home
     </template>
 
-    <template is="dom-if" if="[[isParent]]">
+    <template is="dom-if" if="[[_isEqual(route.type, 'parent')]]">
       <handle-parent page="[[page]]"></handle-parent>
     </template>
 
-    <template is="dom-if" if="[[isChild]]">
+    <template is="dom-if" if="[[_isEqual(route.type, 'child')]]">
       child
     </template>
 
@@ -22,53 +22,40 @@
       Polymer({
         is: 'handle-content',
 
-        properties: {
-          isHome: {
-            type: Boolean,
-            value: true
-          },
-          isParent: {
-            type: Boolean,
-            value: true
-          },
-          isChild: {
-            type: Boolean,
-            value: true
-          }
-        },
+        behaviors: [ ReduxBehavior ],
 
-        ready: function() {
-          app.addEventListener('route-changed', function() {
-            this.routeChanged();
-          }.bind(this));
+        properties: {
+          route: {
+            type: Object,
+            statePath: 'route',
+            observer: 'routeChanged'
+          },
+          pages: {
+            type: Array,
+            statePath: 'pages'
+          },
+          appLoaded: {
+            type: Boolean,
+            statePath: 'meta.appLoaded',
+            observer: 'routeChanged'
+          }
         },
 
         routeChanged: function() {
-          var page = _.filter(store.getState().pages, function(page) {
-            return page.slug === app.route.slugs.parent;
-          })[0];
-          if (page) {
-            this.set('page', page);
-            switch(app.route.type) {
-              default:
-                this.set('isHome', true);
-                this.set('isParent', false);
-                this.set('isChild', false);
-                break;
-              case 'parent':
-                this.set('isHome', false);
-                this.set('isParent', true);
-                this.set('isChild', false);
-                break;
-              case 'child':
-                this.set('isHome', false);
-                this.set('isParent', false);
-                this.set('isChild', true);
-                break;
+          if (this.appLoaded) {
+            var page = _.filter(this.pages, (page) => {
+              return page.slug === this.route.slugs.parent;
+            })[0];
+            if (page) {
+              this.set('page', page);
+            } else {
+              app.toast('Does not exist');
             }
-          } else {
-            app.toast('Does not exist');
           }
+        },
+
+        _isEqual: function(left, right) {
+          return left === right;
         }
       });
     })();
