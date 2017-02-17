@@ -10,7 +10,7 @@
   },
   {
     "title": "Booo Yup",
-    "slug": "resume",
+    "slug": "subscribe",
     "addToMenu": true
   },
   {
@@ -20,6 +20,7 @@
     "format": "md"
   },
   {
-    "title": "Chinchilla"
+    "title": "Chinchilla",
+    "format": "html"
   }
 ]
