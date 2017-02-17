@@ -115,7 +115,7 @@
         },
 
         ready: function() {
-          this.title = app.settings.title;
+          this.title = store.getState().settings.title;
           this.loadMenuItems();
           this.loadSocialAccounts();
         },
@@ -134,19 +134,19 @@
 
         loadMenuItems: function() {
           this.menuItems = [];
-          _.each(app.pages, function(page) {
+          _.each(store.getState().pages, (page) => {
             if (page.addToMenu) {
               this.push('menuItems', {
                 title: page.title,
                 slug: page.slug
               });
             }
-          }.bind(this));
+          });
         },
 
         loadSocialAccounts: function() {
           this.socialAccounts = [];
-          var socialAccounts = app.settings.socialAccounts;
+          var socialAccounts = store.getState().settings.socialAccounts;
           if (socialAccounts) {
             _.each(_.keys(socialAccounts), function(socialAccount) {
               this.push('socialAccounts', {

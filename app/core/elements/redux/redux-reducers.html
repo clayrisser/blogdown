@@ -1,0 +1,27 @@
+<script>
+
+  const reducer = (state, action) => {
+    if (!state) return initialState;
+    switch(action.type) {
+      case LOAD_SETTINGS:
+        return _.assign({}, state, {
+          settings: _.clone(action.settings)
+        });
+      case LOAD_AUTHORS:
+        return _.assign({}, state, {
+          authors: _.clone(action.authors)
+        });
+      case LOAD_PAGES:
+        return _.assign({}, state, {
+          pages: _.clone(action.pages)
+        });
+      case LOAD_TAXONOMIES:
+        return _.assign({}, state, {
+          taxonomies: _.clone(action.taxonomies)
+        });
+      default:
+        return state;
+    }
+  };
+
+</script>

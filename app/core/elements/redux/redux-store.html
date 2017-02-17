@@ -1,0 +1,15 @@
+<link rel="import" href="redux-reducers.html">
+
+<script>
+
+  const initialState = {
+    authors: {},
+    pages: [],
+    settings: {},
+    taxonomies: {}
+  };
+
+  var store = Redux.createStore(reducer, Redux.applyMiddleware(ReduxThunk.default));
+  const ReduxBehavior = PolymerRedux(store);
+
+</script>

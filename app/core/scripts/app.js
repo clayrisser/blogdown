@@ -66,7 +66,7 @@ function _appLoaded() {
   app.set('loaded', true);
   app.dispatchEvent(new Event('app-loaded'));
   document.getElementById('loading').innerHTML = '';
-  app.log.info(app.settings.title + ' loaded');
+  app.log.info(store.getState().settings.title + ' loaded');
 }
 
 function _loadApp(loaders) {

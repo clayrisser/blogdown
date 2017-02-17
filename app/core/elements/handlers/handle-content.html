@@ -44,7 +44,7 @@
         },
 
         routeChanged: function() {
-          var page = _.filter(app.pages, function(page) {
+          var page = _.filter(store.getState().pages, function(page) {
             return page.slug === app.route.slugs.parent;
           })[0];
           if (page) {

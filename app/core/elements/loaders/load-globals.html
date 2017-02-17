@@ -34,25 +34,25 @@
 
         log: {
           error: function(err) {
-            if (app.settings.logLevel.value === 1) {
+            if (store.getState().settings.logLevel.value === 1) {
               if (err.message) return console.log(err.message);
             }
-            if (app.settings.logLevel.value > 1) return console.error(err);
+            if (store.getState().settings.logLevel.value > 1) return console.error(err);
           },
           warn: function(err) {
-            if (app.settings.logLevel.value === 2) {
+            if (store.getState().settings.logLevel.value === 2) {
               if (err.message) return console.log(err.message);
             }
-            if (app.settings.logLevel.value > 2) return console.warn(err);
+            if (store.getState().settings.logLevel.value > 2) return console.warn(err);
           },
           info: function(info) {
-            if (app.settings.logLevel.value >= 3) return console.info(info);
+            if (store.getState().settings.logLevel.value >= 3) return console.info(info);
           },
           debug: function(info) {
-            if (app.settings.logLevel.value >= 4) return console.debug(info);
+            if (store.getState().settings.logLevel.value >= 4) return console.debug(info);
           },
           silly: function(info) {
-            if (app.settings.logLevel.value >= 5) return console.log(info);
+            if (store.getState().settings.logLevel.value >= 5) return console.log(info);
           }
         },
 
