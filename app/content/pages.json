@@ -1,5 +1,10 @@
 [
   {
+    "slug": "home",
+    "addToMenu": false,
+    "format": "dyn"
+  },
+  {
     "title": "Subscribe",
     "slug": "subscribe",
     "addToMenu": true,

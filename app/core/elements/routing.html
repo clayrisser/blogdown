@@ -18,8 +18,10 @@
       store.dispatch({
         type: CHANGE_ROUTE,
         route: {
-          type: 'home',
-          slugs: req.params
+          type: 'parent',
+          slugs: {
+            parent: 'home'
+          }
         }
       });
     });
@@ -28,8 +30,10 @@
       store.dispatch({
         type: CHANGE_ROUTE,
         route: {
-          type: 'home',
-          slugs: req.params
+          type: 'parent',
+          slugs: {
+            parent: 'home'
+          }
         }
       });
     });

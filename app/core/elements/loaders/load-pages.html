@@ -52,21 +52,30 @@
         _getPagesMeta: function(pages) {
           var pagesMeta = [];
           var overriddenTaxonomies = [];
+          var loadedHome = false;
           _.each(pages, (page) => {
             if (page.format === 'dyn') page.format = 'dyn.html';
+            var slug = page.slug ? page.slug : changeCase.paramCase(page.title);
+            if (slug === 'home') {
+              loadedHome = true;
+              if (!page.title) page.title = this.settings.title;
+              if (page.addToMenu === undefined) page.addToMenu = false;
+            }
+            var title = page.title ? page.title : changeCase.titleCase(page.slug);
+            var addToMenu = page.addToMenu !== undefined ? page.addToMenu : true;
             if (_.includes(this.settings.taxonomies, page.slug)) {
               pagesMeta.push({
-                title: page.title ? page.title : changeCase.titleCase(page.slug),
-                slug: page.slug ? page.slug : changeCase.paramCase(page.title),
-                addToMenu: page.addToMenu ? page.addToMenu : true,
+                title: title,
+                slug: slug,
+                addToMenu: addToMenu,
                 taxonomy: true
               });
               overriddenTaxonomies.push(page.slug);
             } else {
               pagesMeta.push({
-                title: page.title ? page.title : changeCase.titleCase(page.slug),
-                slug: page.slug ? page.slug : changeCase.paramCase(page.title),
-                addToMenu: page.addToMenu ? page.addToMenu : true,
+                title: title,
+                slug: slug,
+                addToMenu: addToMenu,
                 format: page.format ? page.format : 'md'
               });
             }
@@ -81,6 +90,14 @@
               });
             }
           });
+          if (!loadedHome) {
+              pagesMeta.push({
+                title: this.settings.title,
+                slug: 'home',
+                addToMenu: false,
+                format: 'md'
+              });
+          }
           return pagesMeta;
         }
       });
