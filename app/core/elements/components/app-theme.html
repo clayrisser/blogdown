@@ -3,16 +3,14 @@
 <dom-module id="app-theme">
   <template>
 
-    <template id="theme" is="dom-if" if="[[themeLoaded]]" restamp>
-      <div hidden="[[!appLoaded]]">
-        <the-theme
-          narrow="{{narrow}}"
-          loading="[[loading]]"
-          progress="[[progress]]"
-          page-title="[[pageTitle]]"
-          route-data="[[routeData]]">
-        </the-theme>
-      </div>
+    <template id="theme" is="dom-if" if="[[appLoaded]]" restamp>
+      <the-theme
+        narrow="{{narrow}}"
+        loading="[[loading]]"
+        progress="[[progress]]"
+        page-title="[[pageTitle]]"
+        route-data="[[routeData]]">
+      </the-theme>
     </template>
 
   </template>
@@ -25,10 +23,6 @@
         behaviors: [ ReduxBehavior ],
 
         properties: {
-          themeLoaded: {
-            type: Boolean,
-            statePath: 'meta.themeLoaded'
-          },
           appLoaded: {
             type: Boolean,
             statePath: 'meta.appLoaded'

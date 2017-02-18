@@ -50,7 +50,7 @@
     <style include="iron-positioning"></style>
 
     <app-drawer-layout fullbleed narrow="{{narrow}}">
-      <app-drawer id="drawer" swipeOpen>
+      <app-drawer id="drawer" swipe-open>
         <app-toolbar></app-toolbar>
         <paper-menu>
           <template is="dom-repeat" items="[[menuItems]]" as="menuItem">
@@ -61,11 +61,8 @@
         </paper-menu>
       </app-drawer>
 
-      <app-header-layout has-scrolling-region>
-        <app-header id="mainHeader" condenses reveals effects="waterfall">
-          <app-toolbar></app-toolbar>
-        </app-header>
-
+      <app-header-layout>
+        <app-toolbar></app-toolbar>
         <div id="content">
           <handle-content></handle-content>
         </div>
@@ -74,10 +71,10 @@
 
     <app-toolbar class="fixed-top">
       <div class="fixed-top">
-        <paper-progress id="loadingBar" class="desktop" value="[[progress]]" indeterminate="[[indeterminateLoading]]" hidden="[[!loading]]"></paper-progress>
+        <paper-progress id="loadingBar" class="desktop" value="[[_progress]]" indeterminate="[[loading]]"></paper-progress>
       </div>
-      <paper-icon-button class="above-loading-bar" icon="menu" on-click="openDrawer" hidden=[[!narrow]]></paper-icon-button>
-      <a id="title" class="above-loading-bar" href="/">[[title]]</a>
+      <paper-icon-button class="above-loading-bar" icon="menu" on-click="_openDrawer" hidden=[[!narrow]]></paper-icon-button>
+      <a id="title" class="above-loading-bar" href="/">[[settings.title]]</a>
       <div id="social-accounts">
         <template is="dom-repeat" items=[[socialAccounts]] as="socialAccount">
           <a class="social-account" href="[[socialAccount.url]]" target="_blank">
@@ -94,47 +91,61 @@
       Polymer({
         is: 'the-theme',
 
+        behaviors: [ ReduxBehavior ],
+
+        actions: {
+          updateNarrow: (narrow) => {
+            return {
+              type: UPDATE_NARROW,
+              narrow: narrow
+            }
+          }
+        },
+
         properties: {
-          progress: {
-            type: Number,
-            value: -1,
-            observer: 'setIndeterminateLoading'
-          },
           indeterminateLoading: {
             type: Boolean,
             value: true
           },
           loading: {
             type: Boolean,
-            value: false
+            statePath: 'meta.loading',
+            observer: '_updateProgress'
+          },
+          progress: {
+            type: Number,
+            statePath: 'meta.progress',
+            observer: '_updateProgress'
           },
           narrow: {
             type: Boolean,
-            notify: true
+            observer: '_updateNarrow'
+          },
+          settings: {
+            type: Object,
+            statePath: 'settings'
+          },
+          pages: {
+            type: [],
+            statePath: 'pages'
+          },
+          socialAccounts: {
+            type: Object,
+            value: []
+          },
+          menuItems: {
+            type: Object,
+            value: []
           }
         },
 
         ready: function() {
-          this.title = store.getState().settings.title;
-          this.loadMenuItems();
-          this.loadSocialAccounts();
+          this._loadMenuItems();
+          this._loadSocialAccounts();
         },
 
-        setIndeterminateLoading: function() {
-          if (this.progress >= 0) {
-            this.indeterminateLoading = false;
-          } else {
-            this.indeterminateLoading = true;
-          }
-        },
-
-        openDrawer: function() {
-          this.$.drawer.open();
-        },
-
-        loadMenuItems: function() {
-          this.menuItems = [];
-          _.each(store.getState().pages, (page) => {
+        _loadMenuItems: function() {
+          _.each(this.pages, (page) => {
             if (page.addToMenu) {
               this.push('menuItems', {
                 title: page.title,
@@ -144,17 +155,26 @@
           });
         },
 
-        loadSocialAccounts: function() {
-          this.socialAccounts = [];
-          var socialAccounts = store.getState().settings.socialAccounts;
-          if (socialAccounts) {
-            _.each(_.keys(socialAccounts), function(socialAccount) {
-              this.push('socialAccounts', {
-                type: socialAccount,
-                url: socialAccounts[socialAccount]
-              });
-            }.bind(this));
-          }
+        _loadSocialAccounts: function() {
+          _.each(this.settings.socialAccounts, (socialAccount, key) => {
+            this.push('socialAccounts', {
+              type: key,
+              url: socialAccount
+            });
+          });
+        },
+
+        _openDrawer: function() {
+          this.$.drawer.open();
+        },
+
+        _updateNarrow: function() {
+          this.dispatch('updateNarrow', this.narrow);
+        },
+
+        _updateProgress: function() {
+          if (this.loading) return this.set('_progress', -1);
+          return this.set('_progress', this.progress);
         }
       });
     })();

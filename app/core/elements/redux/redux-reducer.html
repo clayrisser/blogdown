@@ -41,10 +41,10 @@
             progress: action.progress
           })
         });
-      case THEME_LOADED:
+      case UPDATE_NARROW:
         return _.assign({}, state, {
           meta: _.assign({}, state.meta, {
-            themeLoaded: true
+            narrow: action.narrow
           })
         });
       default:
