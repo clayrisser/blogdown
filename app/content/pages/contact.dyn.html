@@ -2,7 +2,8 @@
   <template>
 
     <span>Contact us here.</span>
-    <load-module name="boo"></load-module>
+    <paper-input is="iron-input" label="Time" value="[[time]]" bind-value="{{time}}"></paper-input>
+    [[updatedTime]]
 
   </template>
 
@@ -12,8 +13,20 @@
       Polymer({
         is: 'dyn-contact',
 
-        ready: function() {
+        properties: {
+          time: {
+            type: String,
+            value: '',
+            observer: 'updated'
+          },
+          updatedTime: {
+            type: String,
+            value: ''
+          }
+        },
 
+        updated: function() {
+          this.set('updatedTime', moment(this.time).format('X'));
         }
       });
     })();

@@ -29,6 +29,18 @@
             appLoaded: true
           })
         });
+      case APP_LOADING:
+        return _.assign({}, state, {
+          meta: _.assign({}, state.meta, {
+            loading: action.loading
+          })
+        });
+      case APP_PROGRESS:
+        return _.assign({}, state, {
+          meta: _.assign({}, state.meta, {
+            progress: action.progress
+          })
+        });
       case THEME_LOADED:
         return _.assign({}, state, {
           meta: _.assign({}, state.meta, {

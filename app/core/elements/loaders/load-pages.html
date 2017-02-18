@@ -33,6 +33,13 @@
           }
         },
 
+        properties: {
+          settings: {
+            type: Object,
+            statePath: 'settings'
+          }
+        },
+
         load: function() {
           app.log.debug('loading pages . . .');
           return new Promise((resolve, reject) => {
@@ -44,14 +51,35 @@
 
         _getPagesMeta: function(pages) {
           var pagesMeta = [];
-          _.each(pages, function(page) {
+          var overriddenTaxonomies = [];
+          _.each(pages, (page) => {
             if (page.format === 'dyn') page.format = 'dyn.html';
-            pagesMeta.push({
-              title: page.title ? page.title : changeCase.titleCase(page.slug),
-              slug: page.slug ? page.slug : changeCase.paramCase(page.title),
-              addToMenu: page.addToMenu ? page.addToMenu : true,
-              format: page.format ? page.format : 'md'
-            });
+            if (_.includes(this.settings.taxonomies, page.slug)) {
+              pagesMeta.push({
+                title: page.title ? page.title : changeCase.titleCase(page.slug),
+                slug: page.slug ? page.slug : changeCase.paramCase(page.title),
+                addToMenu: page.addToMenu ? page.addToMenu : true,
+                taxonomy: true
+              });
+              overriddenTaxonomies.push(page.slug);
+            } else {
+              pagesMeta.push({
+                title: page.title ? page.title : changeCase.titleCase(page.slug),
+                slug: page.slug ? page.slug : changeCase.paramCase(page.title),
+                addToMenu: page.addToMenu ? page.addToMenu : true,
+                format: page.format ? page.format : 'md'
+              });
+            }
+          });
+          _.each(this.settings.taxonomies, (taxonomy) => {
+            if (!_.includes(overriddenTaxonomies, taxonomy)) {
+              pagesMeta.push({
+                title: changeCase.titleCase(taxonomy),
+                slug: taxonomy,
+                addToMenu: true,
+                taxonomy: true
+              });
+            }
           });
           return pagesMeta;
         }

@@ -29,6 +29,10 @@
       <page-dyn page="[[page]]" format="dyn"></page-dyn>
     </template>
 
+    <template is="dom-if" if="[[taxonomy]]" restamp>
+      <page-posts page="[[page]]"></page-posts>
+    </template>
+
   </template>
   <script>
     (function() {
@@ -56,17 +60,31 @@
             type: String,
             value: ''
           },
-          settings: {
-            type: Object,
-            statePath: 'settings'
+          taxonomy: {
+            type: Boolean,
+            value: false
+          },
+          fileName: {
+            type: String,
+            value: ''
+          },
+          format: {
+            type: String,
+            value: ''
           }
         },
 
         pageChanged: function() {
           this.set('fileKnown', false);
           this.set('booleanFormat', {});
+          this.set('format', {});
           this.set('body', '');
-          if (this.page.slug) this._loadPage(this.page);
+          this.set('taxonomy', false);
+          this.set('fileName', '');
+          window.setTimeout(() => {
+            if (this.page.slug && !this.page.taxonomy) return this._loadPage(this.page);
+            if (this.page.taxonomy) this.set('taxonomy', true);
+          }, 1);
         },
 
         _loadPage: function(page) {
@@ -89,27 +107,29 @@
           var promises = [];
           _.each(formats, (format) => {
             var url = app.rootURL + 'content/pages/' + page.slug + '.' + format;
-            promises.push(this._getFile.bind(this, url, format));
+            promises.push(this._getFile.bind(this, url, format, page.slug));
           });
-          _.each(formats, (format) => {
-            var url = app.rootURL + 'content/pages/' + changeCase.paramCase(page.title) + '.' + format;
-            promises.push(this._getFile.bind(this, url, format));
-          });
+          if (page.slug !== changeCase.paramCase(page.title)) {
+            _.each(formats, (format) => {
+              var url = app.rootURL + 'content/pages/' + changeCase.paramCase(page.title) + '.' + format;
+              promises.push(this._getFile.bind(this, url, format, changeCase.paramCase(page.title)));
+            });
+          }
           var promiseChain = Promise.resolve();
           _.each(promises, (promise) => {
             promiseChain = promiseChain.then(promise);
           });
           promiseChain.then(() => {
             this._setBooleanFormat(this.format);
-            if (this.format !== 'dyn' && this.format !== 'dyn.html') {
-              app.log.info(this.page.slug + '.' + this.format + ' was imported.');
+            if (this.format && this.format !== 'dyn' && this.format !== 'dyn.html') {
+              app.log.info(this.fileName + '.' + this.format + ' was imported.');
             }
           }).catch((err) => {
             app.log.error(err);
           });
         },
 
-        _getFile: function(url, format) {
+        _getFile: function(url, format, fileName) {
           if (this.fileKnown) return Promise.resolve();
           return fetch(url).then((res) => {
             if (res.status === 404) return '';
@@ -117,6 +137,7 @@
               this.set('fileKnown', true);
               this.set('format', format);
               this.set('url', url);
+              this.set('fileName', fileName);
               return res.text();
             }
             var err = new Error('Error gettings file');

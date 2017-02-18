@@ -12,7 +12,7 @@
     </template>
 
     <template is="dom-if" if="[[_isEqual(route.type, 'child')]]">
-      child
+      <handle-child post="[[post]]"></handle-child>
     </template>
 
   </template>
@@ -34,6 +34,10 @@
             type: Array,
             statePath: 'pages'
           },
+          taxonomies: {
+            type: Object,
+            statePath: 'taxonomies'
+          },
           appLoaded: {
             type: Boolean,
             statePath: 'meta.appLoaded',
@@ -43,13 +47,30 @@
 
         routeChanged: function() {
           if (this.appLoaded) {
-            var page = _.filter(this.pages, (page) => {
-              return page.slug === this.route.slugs.parent;
-            })[0];
-            if (page) {
-              this.set('page', page);
-            } else {
-              app.toast('Does not exist');
+            switch(this.route.type) {
+              case 'parent':
+                var page = _.filter(this.pages, (page) => {
+                  return page.slug === this.route.slugs.parent;
+                })[0];
+                if (page) {
+                  this.set('page', page);
+                } else {
+                  app.toast('Does not exist');
+                }
+                break;
+              case 'child':
+                var post = _.filter(this.taxonomies[this.route.slugs.parent], (post) => {
+                  return post.slug === this.route.slugs.child;
+                })[0];
+                if (post) {
+                  this.set('post', post);
+                } else {
+                  app.toast('Does not exist');
+                }
+                break;
+              default:
+                app.toast('Does not exist');
+                break;
             }
           }
         },
