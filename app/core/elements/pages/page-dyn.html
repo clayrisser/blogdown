@@ -1,0 +1,39 @@
+<dom-module id="page-dyn">
+  <template></template>
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'page-dyn',
+
+        properties: {
+          page: {
+            type: Object,
+            value: {}
+          },
+          body: {
+            type: String,
+            value: ''
+          },
+          format: {
+            type: String,
+            value: 'dyn.html'
+          }
+        },
+
+        ready: function() {
+          Polymer.dom(this.root).innerHTML = '<dyn-' + this.page.slug + '>';
+          this._loadElement(this.page.slug, this.format);
+        },
+
+        _loadElement: function(name, format) {
+          this.importHref('../content/pages/' + name + '.' + format, () => {
+            app.log.info(name + '.' + format + ' was imported.');
+          }, () => {
+            app.log.error(name + '.' + format + ' import failed to load');
+          });
+        }
+      });
+    })();
+  </script>
+</dom-module>

@@ -45,6 +45,7 @@
         _getPagesMeta: function(pages) {
           var pagesMeta = [];
           _.each(pages, function(page) {
+            if (page.format === 'dyn') page.format = 'dyn.html';
             pagesMeta.push({
               title: page.title ? page.title : changeCase.titleCase(page.slug),
               slug: page.slug ? page.slug : changeCase.paramCase(page.title),

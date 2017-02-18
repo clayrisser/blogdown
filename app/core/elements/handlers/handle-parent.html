@@ -3,7 +3,31 @@
 <dom-module id="handle-parent">
   <template>
 
-    <handle-page page="[[page]]"></handle-page>
+    <template is="dom-if" if="[[booleanFormat.md]]" restamp>
+      <marked-element markdown="[[body]]">
+        <div class="markdown-html"></div>
+      </marked-element>
+    </template>
+
+    <template is="dom-if" if="[[booleanFormat.html]]" restamp>
+      <template is="juicy-html" content$="[[body]]"></template>
+    </template>
+
+    <template is="dom-if" if="[[booleanFormat.pdf]]" restamp>
+      <div class="card-content">
+        <pdf-object file="[[url]]" height="400px"></pdf-object>
+      </div>
+      <div class="card-actions">
+        <paper-button on-click="_download">Fullscreen</paper-button>
+      </div>
+    </template>
+
+    <template is="dom-if" if="[[booleanFormat.dyn-html]]" restamp>
+      <page-dyn page="[[page]]" format="dyn.html"></page-dyn>
+    </template>
+    <template is="dom-if" if="[[booleanFormat.dyn]]" restamp>
+      <page-dyn page="[[page]]" format="dyn"></page-dyn>
+    </template>
 
   </template>
   <script>
@@ -12,19 +36,108 @@
       Polymer({
         is: 'handle-parent',
 
+        behaviors: [ ReduxBehavior ],
+
         properties: {
           page: {
             type: Object,
+            value: {},
+            observer: 'pageChanged'
+          },
+          fileKnown: {
+            type: Boolean,
+            value: false
+          },
+          booleanFormat: {
+            type: Object,
             value: {}
+          },
+          body: {
+            type: String,
+            value: ''
+          },
+          settings: {
+            type: Object,
+            statePath: 'settings'
           }
         },
 
-        ready: function() {
-          this.routeChanged();
+        pageChanged: function() {
+          this.set('fileKnown', false);
+          this.set('booleanFormat', {});
+          this.set('body', '');
+          if (this.page.slug) this._loadPage(this.page);
         },
 
-        routeChanged: function() {
+        _loadPage: function(page) {
+          var formats = [page.format];
+          _.each([
+            'md',
+            'html',
+            'pdf',
+            'dyn.html',
+            'dyn'
+          ], (format) => {
+            if (format !== page.format) formats.push(format);
+          });
+          if (formats[0] === 'dyn.html') {
+            formats = _.remove(formats, (format) => {
+              return format !== 'dyn';
+            });
+            formats.splice(1, 0, 'dyn');
+          }
+          var promises = [];
+          _.each(formats, (format) => {
+            var url = app.rootURL + 'content/pages/' + page.slug + '.' + format;
+            promises.push(this._getFile.bind(this, url, format));
+          });
+          _.each(formats, (format) => {
+            var url = app.rootURL + 'content/pages/' + changeCase.paramCase(page.title) + '.' + format;
+            promises.push(this._getFile.bind(this, url, format));
+          });
+          var promiseChain = Promise.resolve();
+          _.each(promises, (promise) => {
+            promiseChain = promiseChain.then(promise);
+          });
+          promiseChain.then(() => {
+            this._setBooleanFormat(this.format);
+            if (this.format !== 'dyn' && this.format !== 'dyn.html') {
+              app.log.info(this.page.slug + '.' + this.format + ' was imported.');
+            }
+          }).catch((err) => {
+            app.log.error(err);
+          });
+        },
 
+        _getFile: function(url, format) {
+          if (this.fileKnown) return Promise.resolve();
+          return fetch(url).then((res) => {
+            if (res.status === 404) return '';
+            if (res.status >= 200 && res.status < 500) {
+              this.set('fileKnown', true);
+              this.set('format', format);
+              this.set('url', url);
+              return res.text();
+            }
+            var err = new Error('Error gettings file');
+            err.res = res;
+            throw err;
+          }).then((body) => {
+            this.set('body', body);
+            return;
+          });
+        },
+
+        _setBooleanFormat: function(format) {
+          if (format) {
+            var tmp = {};
+            tmp[format.replace('.', '-')] = true;
+            this.set('booleanFormat', tmp);
+          }
+        },
+
+        _download: function() {
+          window.open(this.url);
         }
       });
     })();

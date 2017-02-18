@@ -2,7 +2,7 @@
   "title": "BlogDown",
   "dateFormat": "MMMM D, YYYY",
   "logLevel": "silly",
-  "easterEggs": "true",
+  "easterEggs": true,
   "ajaxTimeout": "10000",
   "toastDuration": "5000",
   "theme": "drawer",

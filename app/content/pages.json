@@ -1,26 +1,26 @@
 [
   {
-    "slug": "yo-dude",
-    "addToMenu": true,
-    "format": "md"
-  },
-  {
-    "title": "Hi, Awsome",
-    "format": "md"
-  },
-  {
-    "title": "Booo Yup",
+    "title": "Subscribe",
     "slug": "subscribe",
-    "addToMenu": true
+    "addToMenu": true,
+    "format": "html"
   },
   {
-    "title": "Resumes",
-    "slug": "resumes",
+    "title": "Resume",
+    "slug": "resume",
     "addToMenu": true,
-    "format": "md"
+    "format": "pdf"
   },
   {
     "title": "Chinchilla",
-    "format": "html"
+    "slug": "chinchilla",
+    "addToMenu": true,
+    "format": "md"
+  },
+  {
+    "title": "Contact",
+    "slug": "contact",
+    "addToMenu": true,
+    "format": "dyn"
   }
 ]
