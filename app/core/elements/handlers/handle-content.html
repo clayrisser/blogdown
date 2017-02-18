@@ -3,15 +3,11 @@
 <dom-module id="handle-content">
   <template>
 
-    <template is="dom-if" if="[[_isEqual(route.type, 'home')]]">
-      home
-    </template>
-
-    <template is="dom-if" if="[[_isEqual(route.type, 'parent')]]">
+    <template is="dom-if" if="[[_isEqual(route.type, 'parent')]]" restamp>
       <handle-parent page="[[page]]"></handle-parent>
     </template>
 
-    <template is="dom-if" if="[[_isEqual(route.type, 'child')]]">
+    <template is="dom-if" if="[[_isEqual(route.type, 'child')]]" restamp>
       <handle-child post="[[post]]"></handle-child>
     </template>
 
@@ -55,7 +51,8 @@
                 if (page) {
                   this.set('page', page);
                 } else {
-                  app.toast('Does not exist');
+                  app.log.warn('404 error');
+                  app.go.to('/404');
                 }
                 break;
               case 'child':
@@ -65,11 +62,13 @@
                 if (post) {
                   this.set('post', post);
                 } else {
-                  app.toast('Does not exist');
+                  app.log.warn('404 error');
+                  app.go.to('/404');
                 }
                 break;
               default:
-                app.toast('Does not exist');
+                app.log.warn('404 error');
+                app.go.to('/404');
                 break;
             }
           }

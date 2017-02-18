@@ -62,8 +62,10 @@
       store.dispatch({
         type: CHANGE_ROUTE,
         route: {
-          type: '404',
-          slugs: req.params
+          type: 'parent',
+          slugs: {
+            parent: '404'
+          }
         }
       });
     });

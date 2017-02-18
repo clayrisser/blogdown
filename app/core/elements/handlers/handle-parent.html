@@ -121,8 +121,13 @@
           });
           promiseChain.then(() => {
             this._setBooleanFormat(this.format);
-            if (this.format && this.format !== 'dyn' && this.format !== 'dyn.html') {
-              app.log.info(this.fileName + '.' + this.format + ' was imported.');
+            if (this.format) {
+              if (this.format !== 'dyn' && this.format !== 'dyn.html') {
+                app.log.info(this.fileName + '.' + this.format + ' was imported.');
+              }
+            } else {
+              app.log.warn('404 error');
+              app.go.to('/404');
             }
           }).catch((err) => {
             app.log.error(err);

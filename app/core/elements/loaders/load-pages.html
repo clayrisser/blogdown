@@ -53,13 +53,20 @@
           var pagesMeta = [];
           var overriddenTaxonomies = [];
           var loadedHome = false;
+          var loaded404 = false;
           _.each(pages, (page) => {
             if (page.format === 'dyn') page.format = 'dyn.html';
             var slug = page.slug ? page.slug : changeCase.paramCase(page.title);
-            if (slug === 'home') {
-              loadedHome = true;
-              if (!page.title) page.title = this.settings.title;
-              if (page.addToMenu === undefined) page.addToMenu = false;
+            switch(slug) {
+              case 'home':
+                loadedHome = true;
+                if (!page.title) page.title = this.settings.title;
+                if (page.addToMenu === undefined) page.addToMenu = false;
+                break;
+              case '404':
+                loaded404 = true;
+                if (page.addToMenu === undefined) page.addToMenu = false;
+                break;
             }
             var title = page.title ? page.title : changeCase.titleCase(page.slug);
             var addToMenu = page.addToMenu !== undefined ? page.addToMenu : true;
@@ -94,6 +101,14 @@
               pagesMeta.push({
                 title: this.settings.title,
                 slug: 'home',
+                addToMenu: false,
+                format: 'md'
+              });
+          }
+          if (!loaded404) {
+              pagesMeta.push({
+                title: 'Page Not Found',
+                slug: '404',
                 addToMenu: false,
                 format: 'md'
               });
