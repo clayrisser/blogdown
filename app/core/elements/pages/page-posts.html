@@ -37,7 +37,10 @@
       Polymer({
         is: 'page-posts',
 
-        behaviors: [ ReduxBehavior ],
+        behaviors: [
+          ReduxBehavior,
+          ReduxActions
+        ],
 
         properties: {
           page: {
@@ -56,6 +59,10 @@
 
         ready: function() {
           this.set('posts', this.taxonomies[this.page.slug]);
+        },
+
+        attached: function() {
+          this.dispatch('appLoading', false);
         }
       });
     })();

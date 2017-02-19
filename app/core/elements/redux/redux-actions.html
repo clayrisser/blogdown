@@ -12,7 +12,25 @@
   const UPDATE_SELECTED_MENU_ITEM = 'UPDATE_SELECTED_MENU_ITEM';
 
   const ReduxActions = {
-
+    actions: {
+      appLoading: (loading) => {
+        return (dispatch) => {
+          if (loading) {
+            dispatch({
+              type: APP_LOADING,
+              loading: true
+            });
+          } else {
+            window.setTimeout(() => {
+              dispatch({
+                type: APP_LOADING,
+                loading: false
+              });
+            }, 333);
+          }
+        }
+      }
+    }
   };
 
 </script>

@@ -23,10 +23,10 @@
     </template>
 
     <template is="dom-if" if="[[booleanFormat.dyn-html]]" restamp>
-      <page-dyn page="[[post]]" format="dyn.html"></page-dyn>
+      <post-dyn post="[[post]]" format="dyn.html" parent="[[route.slugs.parent]]"></page-dyn>
     </template>
     <template is="dom-if" if="[[booleanFormat.dyn]]" restamp>
-      <page-dyn page="[[post]]" format="dyn"></page-dyn>
+      <post-dyn post="[[post]]" format="dyn" parent="[[route.slugs.parent]]"></page-dyn>
     </template>
 
   </template>
@@ -36,7 +36,10 @@
       Polymer({
         is: 'handle-child',
 
-        behaviors: [ ReduxBehavior ],
+        behaviors: [
+          ReduxBehavior,
+          ReduxActions
+        ],
 
         properties: {
           post: {
@@ -124,6 +127,7 @@
             if (this.format) {
               if (this.format !== 'dyn' && this.format !== 'dyn.html') {
                 app.log.info(route.slugs.parent + '/' + this.fileName + '.' + this.format + ' was imported.');
+                this.dispatch('appLoading', false);
               }
             } else {
               app.log.error('404 error');

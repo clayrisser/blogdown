@@ -52,7 +52,8 @@
 })(document);
 
 function _appLoaded() {
-  var slugs = store.getState().route.slugs;
+  var route = store.getState().route;
+  var slugs = route.slugs ? route.slugs : {};
   var parent = '/' + (slugs.parent ? slugs.parent : '');
   var child = slugs.child ? '/' + slugs.child : '';
   app.go.to(parent + child);

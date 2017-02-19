@@ -18,7 +18,7 @@
       Polymer({
         is: 'handle-content',
 
-        behaviors: [ ReduxBehavior ],
+        behaviors: [ ReduxBehavior, ReduxActions ],
 
         properties: {
           route: {
@@ -38,38 +38,47 @@
             type: Boolean,
             statePath: 'meta.appLoaded',
             observer: 'routeChanged'
+          },
+          previousRoute: {
+            type: Object,
+            value: {}
           }
         },
 
         routeChanged: function() {
-          if (this.appLoaded) {
-            switch(this.route.type) {
-              case 'parent':
-                var page = _.filter(this.pages, (page) => {
-                  return page.slug === this.route.slugs.parent;
-                })[0];
-                if (page) {
-                  this.set('page', page);
-                } else {
+          if (this.appLoaded && this.route.slugs) {
+            if (!this.previousRoute.slugs || this.route.slugs.parent !== this.previousRoute.slugs.parent ||
+                this.route.slugs.child !== this.previousRoute.slugs.child) {
+              this.dispatch('appLoading', true);
+              switch(this.route.type) {
+                case 'parent':
+                  var page = _.filter(this.pages, (page) => {
+                    return page.slug === this.route.slugs.parent;
+                  })[0];
+                  if (page) {
+                    this.set('page', page);
+                  } else {
+                    app.log.warn('404 error');
+                    app.go.to('/404');
+                  }
+                  break;
+                case 'child':
+                  var post = _.filter(this.taxonomies[this.route.slugs.parent], (post) => {
+                    return post.slug === this.route.slugs.child;
+                  })[0];
+                  if (post) {
+                    this.set('post', post);
+                  } else {
+                    app.log.warn('404 error');
+                    app.go.to('/404');
+                  }
+                  break;
+                default:
                   app.log.warn('404 error');
                   app.go.to('/404');
-                }
-                break;
-              case 'child':
-                var post = _.filter(this.taxonomies[this.route.slugs.parent], (post) => {
-                  return post.slug === this.route.slugs.child;
-                })[0];
-                if (post) {
-                  this.set('post', post);
-                } else {
-                  app.log.warn('404 error');
-                  app.go.to('/404');
-                }
-                break;
-              default:
-                app.log.warn('404 error');
-                app.go.to('/404');
-                break;
+                  break;
+              }
+              this.set('previousRoute', this.route);
             }
           }
         },

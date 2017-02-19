@@ -40,7 +40,10 @@
       Polymer({
         is: 'handle-parent',
 
-        behaviors: [ ReduxBehavior ],
+        behaviors: [
+          ReduxBehavior,
+          ReduxActions
+        ],
 
         properties: {
           page: {
@@ -124,6 +127,7 @@
             if (this.format) {
               if (this.format !== 'dyn' && this.format !== 'dyn.html') {
                 app.log.info(this.fileName + '.' + this.format + ' was imported.');
+                this.dispatch('appLoading', false);
               }
             } else {
               app.log.warn('404 error');
