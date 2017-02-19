@@ -3,12 +3,16 @@
 <dom-module id="handle-content">
   <template>
 
-    <template is="dom-if" if="[[_isEqual(route.type, 'parent')]]" restamp>
-      <handle-parent page="[[page]]"></handle-parent>
+    <template is="dom-if" if="[[_isEqual(contentType, 'page')]]" restamp>
+      <theme-page page="[[page]]"><theme-page>
     </template>
 
-    <template is="dom-if" if="[[_isEqual(route.type, 'child')]]" restamp>
-      <handle-child post="[[post]]"></handle-child>
+    <template is="dom-if" if="[[_isEqual(contentType, 'post')]]" restamp>
+      <theme-post post="[[post]]"><theme-post>
+    </template>
+
+    <template is="dom-if" if="[[_isEqual(contentType, 'posts')]]" restamp>
+      <theme-posts page="[[page]]" posts="[[posts]]"><theme-posts>
     </template>
 
   </template>
@@ -42,6 +46,10 @@
           previousRoute: {
             type: Object,
             value: {}
+          },
+          contentType: {
+            type: String,
+            value: ''
           }
         },
 
@@ -61,6 +69,13 @@
                     app.log.warn('404 error');
                     app.go.to('/404');
                   }
+                  if (page.taxonomy) {
+                    this.set('posts', this.taxonomies[this.page.slug]);
+                    this.dispatch('appLoading', false);
+                    this.set('contentType', 'posts');
+                  } else {
+                    this.set('contentType', 'page');
+                  }
                   break;
                 case 'child':
                   var post = _.filter(this.taxonomies[this.route.slugs.parent], (post) => {
@@ -72,6 +87,7 @@
                     app.log.warn('404 error');
                     app.go.to('/404');
                   }
+                  this.set('contentType', 'post');
                   break;
                 default:
                   app.log.warn('404 error');

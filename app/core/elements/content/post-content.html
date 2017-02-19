@@ -1,6 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<dom-module id="handle-parent">
+<dom-module id="post-content">
   <template>
 
     <template is="dom-if" if="[[booleanFormat.md]]" restamp>
@@ -23,14 +23,10 @@
     </template>
 
     <template is="dom-if" if="[[booleanFormat.dyn-html]]" restamp>
-      <page-dyn page="[[page]]" format="dyn.html"></page-dyn>
+      <post-dyn post="[[post]]" format="dyn.html" parent="[[route.slugs.parent]]"></page-dyn>
     </template>
     <template is="dom-if" if="[[booleanFormat.dyn]]" restamp>
-      <page-dyn page="[[page]]" format="dyn"></page-dyn>
-    </template>
-
-    <template is="dom-if" if="[[taxonomy]]" restamp>
-      <page-posts page="[[page]]"></page-posts>
+      <post-dyn post="[[post]]" format="dyn" parent="[[route.slugs.parent]]"></page-dyn>
     </template>
 
   </template>
@@ -38,7 +34,7 @@
     (function() {
       'use strict';
       Polymer({
-        is: 'handle-parent',
+        is: 'post-content',
 
         behaviors: [
           ReduxBehavior,
@@ -46,10 +42,10 @@
         ],
 
         properties: {
-          page: {
+          post: {
             type: Object,
             value: {},
-            observer: 'pageChanged'
+            observer: 'postChanged'
           },
           fileKnown: {
             type: Boolean,
@@ -63,9 +59,9 @@
             type: String,
             value: ''
           },
-          taxonomy: {
-            type: Boolean,
-            value: false
+          route: {
+            type: Object,
+            statePath: 'route'
           },
           fileName: {
             type: String,
@@ -77,21 +73,19 @@
           }
         },
 
-        pageChanged: function() {
+        postChanged: function() {
           this.set('fileKnown', false);
           this.set('booleanFormat', {});
-          this.set('format', {});
           this.set('body', '');
-          this.set('taxonomy', false);
           this.set('fileName', '');
+          this.set('format', '');
           window.setTimeout(() => {
-            if (this.page.slug && !this.page.taxonomy) return this._loadPage(this.page);
-            if (this.page.taxonomy) this.set('taxonomy', true);
+            if (this.post.slug) return this._loadPost(this.post, this.route);
           }, 1);
         },
 
-        _loadPage: function(page) {
-          var formats = [page.format];
+        _loadPost: function(post, route) {
+          var formats = [post.format];
           _.each([
             'md',
             'html',
@@ -99,7 +93,7 @@
             'dyn.html',
             'dyn'
           ], (format) => {
-            if (format !== page.format) formats.push(format);
+            if (format !== post.format) formats.push(format);
           });
           if (formats[0] === 'dyn.html') {
             formats = _.remove(formats, (format) => {
@@ -109,13 +103,19 @@
           }
           var promises = [];
           _.each(formats, (format) => {
-            var url = app.rootURL + 'content/pages/' + page.slug + '.' + format;
-            promises.push(this._getFile.bind(this, url, format, page.slug));
+            var url = app.rootURL + 'content/' + route.slugs.parent + '/' + post.slug + '.' + format;
+            promises.push(this._getFile.bind(this, url, format, post.slug));
           });
-          if (page.slug !== changeCase.paramCase(page.title)) {
+          if (post.slug !== changeCase.paramCase(post.title)) {
             _.each(formats, (format) => {
-              var url = app.rootURL + 'content/pages/' + changeCase.paramCase(page.title) + '.' + format;
-              promises.push(this._getFile.bind(this, url, format, changeCase.paramCase(page.title)));
+              var url = app.rootURL + 'content/' + route.slugs.parent + '/' + changeCase.paramCase(post.title) + '.' + format;
+              promises.push(this._getFile.bind(this, url, format, changeCase.paramCase(post.title)));
+            });
+          }
+          if (post.slug !== post.date.format('X')) {
+            _.each(formats, (format) => {
+              var url = app.rootURL + 'content/' + route.slugs.parent + '/' + post.date.format('X') + '.' + format;
+              promises.push(this._getFile.bind(this, url, format, post.date.format('X')));
             });
           }
           var promiseChain = Promise.resolve();
@@ -126,11 +126,11 @@
             this._setBooleanFormat(this.format);
             if (this.format) {
               if (this.format !== 'dyn' && this.format !== 'dyn.html') {
-                app.log.info(this.fileName + '.' + this.format + ' was imported.');
+                app.log.info(route.slugs.parent + '/' + this.fileName + '.' + this.format + ' was imported.');
                 this.dispatch('appLoading', false);
               }
             } else {
-              app.log.warn('404 error');
+              app.log.error('404 error');
               app.go.to('/404');
             }
           }).catch((err) => {
@@ -164,10 +164,6 @@
             tmp[format.replace('.', '-')] = true;
             this.set('booleanFormat', tmp);
           }
-        },
-
-        _download: function() {
-          window.open(this.url);
         }
       });
     })();

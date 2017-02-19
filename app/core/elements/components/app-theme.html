@@ -4,13 +4,7 @@
   <template>
 
     <template id="theme" is="dom-if" if="[[appLoaded]]" restamp>
-      <the-theme
-        narrow="{{narrow}}"
-        loading="[[loading]]"
-        progress="[[progress]]"
-        page-title="[[pageTitle]]"
-        route-data="[[routeData]]">
-      </the-theme>
+      <theme-body></theme-body>
     </template>
 
   </template>

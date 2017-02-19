@@ -7,27 +7,39 @@
       Polymer({
         is: 'load-theme',
 
+        behaviors: [ ReduxBehavior ],
+
+        properties: {
+          theme: {
+            type: Object,
+            statePath: 'settings.theme'
+          }
+        },
+
         load: function() {
           app.log.debug('loading theme . . .');
-          var promise = new Promise((resolve, reject) => {
-            this.set('resolve', resolve);
-            this.set('reject', reject);
+          return this._importTheme().then(() => {
+            app.log.info('theme loaded');
+            return;
           });
-          this._importTheme();
-          return promise;
         },
 
         _importTheme: function() {
-          var theme = store.getState().settings.theme;
+          return this._importHref('../../../content/themes/' + this.theme + '/theme-body.html').then(() => {
+            return this._importHref('../../../content/themes/' + this.theme + '/theme-page.html');
+          }).then(() => {
+            return this._importHref('../../../content/themes/' + this.theme + '/theme-posts.html');
+          }).then(() => {
+            return this._importHref('../../../content/themes/' + this.theme + '/theme-post.html');
+          });
+        },
+
+        _importHref: function(url) {
           return new Promise((resolve, reject) => {
-            this.importHref('../../../content/themes/' + theme + '/the-theme.html', () => {
-              var message = 'theme loaded';
-              app.log.info(message);
-              this.resolve({
-                message: message
-              });
+            this.importHref(url, () => {
+              resolve();
             }, (err) => {
-              this.reject(err);
+              reject(err);
             });
           });
         }

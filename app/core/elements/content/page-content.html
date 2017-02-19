@@ -1,6 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<dom-module id="handle-child">
+<dom-module id="page-content">
   <template>
 
     <template is="dom-if" if="[[booleanFormat.md]]" restamp>
@@ -14,19 +14,15 @@
     </template>
 
     <template is="dom-if" if="[[booleanFormat.pdf]]" restamp>
-      <div class="card-content">
-        <pdf-object file="[[url]]" height="400px"></pdf-object>
-      </div>
-      <div class="card-actions">
-        <paper-button on-click="_download">Fullscreen</paper-button>
-      </div>
+      <pdf-object file="[[url]]" height="400px"></pdf-object>
+      <paper-button on-click="_download">Fullscreen</paper-button>
     </template>
 
     <template is="dom-if" if="[[booleanFormat.dyn-html]]" restamp>
-      <post-dyn post="[[post]]" format="dyn.html" parent="[[route.slugs.parent]]"></page-dyn>
+      <page-dyn page="[[page]]" format="dyn.html"></page-dyn>
     </template>
     <template is="dom-if" if="[[booleanFormat.dyn]]" restamp>
-      <post-dyn post="[[post]]" format="dyn" parent="[[route.slugs.parent]]"></page-dyn>
+      <page-dyn page="[[page]]" format="dyn"></page-dyn>
     </template>
 
   </template>
@@ -34,7 +30,7 @@
     (function() {
       'use strict';
       Polymer({
-        is: 'handle-child',
+        is: 'page-content',
 
         behaviors: [
           ReduxBehavior,
@@ -42,10 +38,10 @@
         ],
 
         properties: {
-          post: {
+          page: {
             type: Object,
             value: {},
-            observer: 'postChanged'
+            observer: 'pageChanged'
           },
           fileKnown: {
             type: Boolean,
@@ -59,10 +55,6 @@
             type: String,
             value: ''
           },
-          route: {
-            type: Object,
-            statePath: 'route'
-          },
           fileName: {
             type: String,
             value: ''
@@ -73,19 +65,19 @@
           }
         },
 
-        postChanged: function() {
+        pageChanged: function() {
           this.set('fileKnown', false);
           this.set('booleanFormat', {});
+          this.set('format', {});
           this.set('body', '');
           this.set('fileName', '');
-          this.set('format', '');
           window.setTimeout(() => {
-            if (this.post.slug) return this._loadPost(this.post, this.route);
+            if (this.page.slug && !this.page.taxonomy) return this._loadPage(this.page);
           }, 1);
         },
 
-        _loadPost: function(post, route) {
-          var formats = [post.format];
+        _loadPage: function(page) {
+          var formats = [page.format];
           _.each([
             'md',
             'html',
@@ -93,7 +85,7 @@
             'dyn.html',
             'dyn'
           ], (format) => {
-            if (format !== post.format) formats.push(format);
+            if (format !== page.format) formats.push(format);
           });
           if (formats[0] === 'dyn.html') {
             formats = _.remove(formats, (format) => {
@@ -103,19 +95,13 @@
           }
           var promises = [];
           _.each(formats, (format) => {
-            var url = app.rootURL + 'content/' + route.slugs.parent + '/' + post.slug + '.' + format;
-            promises.push(this._getFile.bind(this, url, format, post.slug));
+            var url = app.rootURL + 'content/pages/' + page.slug + '.' + format;
+            promises.push(this._getFile.bind(this, url, format, page.slug));
           });
-          if (post.slug !== changeCase.paramCase(post.title)) {
+          if (page.slug !== changeCase.paramCase(page.title)) {
             _.each(formats, (format) => {
-              var url = app.rootURL + 'content/' + route.slugs.parent + '/' + changeCase.paramCase(post.title) + '.' + format;
-              promises.push(this._getFile.bind(this, url, format, changeCase.paramCase(post.title)));
-            });
-          }
-          if (post.slug !== post.date.format('X')) {
-            _.each(formats, (format) => {
-              var url = app.rootURL + 'content/' + route.slugs.parent + '/' + post.date.format('X') + '.' + format;
-              promises.push(this._getFile.bind(this, url, format, post.date.format('X')));
+              var url = app.rootURL + 'content/pages/' + changeCase.paramCase(page.title) + '.' + format;
+              promises.push(this._getFile.bind(this, url, format, changeCase.paramCase(page.title)));
             });
           }
           var promiseChain = Promise.resolve();
@@ -126,11 +112,11 @@
             this._setBooleanFormat(this.format);
             if (this.format) {
               if (this.format !== 'dyn' && this.format !== 'dyn.html') {
-                app.log.info(route.slugs.parent + '/' + this.fileName + '.' + this.format + ' was imported.');
+                app.log.info(this.fileName + '.' + this.format + ' was imported.');
                 this.dispatch('appLoading', false);
               }
             } else {
-              app.log.error('404 error');
+              app.log.warn('404 error');
               app.go.to('/404');
             }
           }).catch((err) => {
@@ -164,6 +150,10 @@
             tmp[format.replace('.', '-')] = true;
             this.set('booleanFormat', tmp);
           }
+        },
+
+        _download: function() {
+          window.open(this.url);
         }
       });
     })();

@@ -1,0 +1,88 @@
+<dom-module id="theme-posts">
+  <template>
+    <style>
+      paper-card.post {
+        width: 100%;
+        margin-bottom: 20px;
+      }
+      .heading {
+        margin-top: 10px;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+      .header {
+        padding: 0px 20px 10px 20px;
+      }
+    </style>
+    <style is="custom-style" include="iron-flex iron-flex-alignment"></style>
+
+    <div class="header">
+      <h1>[[page.title]]</h1>
+    </div>
+    <template is="dom-repeat" items="[[posts]]" as="post">
+      <paper-card class="post" elevation="3">
+        <div class="card-content">
+          <div class="layout horizontal justified">
+            <div>
+              <a href="/[[page.slug]]/[[post.slug]]">
+                <h2 class="heading">
+                  [[post.title]]
+                </h2>
+              </a>
+            </div>
+            <div style="text-align:right">
+              <div style="font-weight:bold">[[_getDate(post.date)]]</div>
+              <div>[[_getAuthorDisplayName(post.author)]]</div>
+            </div>
+          </div>
+          <div>[[post.description]]</div>
+        </div>
+        <div class="card-actions">
+          <a href="/[[page.slug]]/[[post.slug]]">
+            <paper-button>Read More</paper-button>
+          </a>
+        </div>
+      </paper-card>
+    </template>
+
+  </template>
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'theme-posts',
+
+        behaviors: [ ReduxBehavior ],
+
+        properties: {
+          page: {
+            type: Object,
+            value: {}
+          },
+          posts: {
+            type: Array,
+            value: []
+          },
+          authors: {
+            type: Object,
+            statePath: 'authors'
+          },
+          settings: {
+            type: Object,
+            statePath: 'settings'
+          }
+        },
+
+        _getAuthorDisplayName: function(author) {
+          return author ? this.authors[author].displayName : '';
+        },
+
+        _getDate: function(date) {
+          return date.format(this.settings.dateFormat);
+        }
+      });
+    })();
+  </script>
+</dom-module>

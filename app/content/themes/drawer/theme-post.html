@@ -1,0 +1,75 @@
+<dom-module id="theme-post">
+  <template>
+    <style>
+      .header {
+        padding: 0px 20px 10px 20px;
+      }
+      .content {
+        width: 100%;
+      }
+      .meta {
+        margin: 20px 5px 5px 5px;
+      }
+      .meta div {
+        margin: 0px 5px 5px 5px;
+      }
+    </style>
+    <style is="custom-style" include="iron-flex iron-flex-alignment"></style>
+
+    <div class="header">
+      <div class="layout horizontal justified">
+        <div>
+          <h1>[[post.title]]</h1>
+        </div>
+        <div class="meta" style="text-align:right;font-size:18px">
+          <div style="font-weight:bold">[[date]]</div>
+          <div>[[author.displayName]]</div>
+        </div>
+      </div>
+    </div>
+    <paper-card class="content" elevation="3">
+      <div class="card-content">
+        <post-content post="[[post]]" ></post-content>
+      </div>
+    </paper-card>
+
+  </template>
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'theme-post',
+
+        behaviors: [ ReduxBehavior ],
+
+        properties: {
+          post: {
+            type: Object,
+            value: {}
+          },
+          authors: {
+            type: Object,
+            statePath: 'authors'
+          },
+          settings: {
+            type: Object,
+            statePath: 'settings'
+          },
+          author: {
+            type: Object,
+            value: {}
+          },
+          date: {
+            type: String,
+            value: ''
+          }
+        },
+
+        ready: function() {
+          if (this.post.author) this.set('author', this.authors[this.post.author]);
+          if (this.post.date) this.set('date', this.post.date.format(this.settings.dateFormat));
+        }
+      });
+    })();
+  </script>
+</dom-module>

@@ -1,0 +1,37 @@
+<dom-module id="theme-page">
+  <template>
+    <style>
+      .header {
+        padding: 0px 20px 10px 20px;
+      }
+      .content {
+        width: 100%;
+      }
+    </style>
+
+    <div class="header">
+      <h1>[[page.title]]</h1>
+    </div>
+    <paper-card class="content" elevation="3">
+      <div class="card-content">
+        <page-content page="[[page]]"></page-content>
+      </div>
+    </paper-card>
+
+  </template>
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'theme-page',
+
+        properties: {
+          page: {
+            type: Object,
+            value: {}
+          }
+        }
+      });
+    })();
+  </script>
+</dom-module>
