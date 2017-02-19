@@ -21,7 +21,14 @@
         },
 
         ready: function() {
-          Polymer.dom(this.root).innerHTML = '<mod-' + this.name + '>';
+          var mod = document.createElement('mod-' + this.name);
+          var properties = [];
+          _.each(this, (value, key) => {
+            if (key.substring(0, 4) === 'prop') {
+              mod[key.substring(4, key.length)] = value;
+            }
+          });
+          Polymer.dom(this.root).appendChild(mod);
           this._loadElement(this.name, this.format);
         },
 

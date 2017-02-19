@@ -54,49 +54,65 @@
         },
 
         routeChanged: function() {
-          if (this.appLoaded && this.route.slugs) {
-            if (!this.previousRoute.slugs || this.route.slugs.parent !== this.previousRoute.slugs.parent ||
-                this.route.slugs.child !== this.previousRoute.slugs.child) {
-              this.dispatch('appLoading', true);
-              switch(this.route.type) {
-                case 'parent':
-                  var page = _.filter(this.pages, (page) => {
-                    return page.slug === this.route.slugs.parent;
-                  })[0];
-                  if (page) {
-                    this.set('page', page);
-                  } else {
+          if (this.appLoaded) {
+            if (this._loadHashId()) return;
+            if (this.route.slugs) {
+              if (!this.previousRoute.slugs || this.route.slugs.parent !== this.previousRoute.slugs.parent ||
+                  this.route.slugs.child !== this.previousRoute.slugs.child) {
+                this.dispatch('appLoading', true);
+                switch(this.route.type) {
+                  case 'parent':
+                    var page = _.filter(this.pages, (page) => {
+                      return page.slug === this.route.slugs.parent;
+                    })[0];
+                    if (page) {
+                      this.set('page', page);
+                    } else {
+                      app.log.warn('404 error');
+                      app.go.to('/404');
+                    }
+                    if (page.taxonomy) {
+                      this.set('posts', this.taxonomies[this.page.slug]);
+                      this.dispatch('appLoading', false);
+                      this.set('contentType', 'posts');
+                    } else {
+                      this.set('contentType', 'page');
+                    }
+                    break;
+                  case 'child':
+                    var post = _.filter(this.taxonomies[this.route.slugs.parent], (post) => {
+                      return post.slug === this.route.slugs.child;
+                    })[0];
+                    if (post) {
+                      this.set('post', post);
+                    } else {
+                      app.log.warn('404 error');
+                      app.go.to('/404');
+                    }
+                    this.set('contentType', 'post');
+                    break;
+                  default:
                     app.log.warn('404 error');
                     app.go.to('/404');
-                  }
-                  if (page.taxonomy) {
-                    this.set('posts', this.taxonomies[this.page.slug]);
-                    this.dispatch('appLoading', false);
-                    this.set('contentType', 'posts');
-                  } else {
-                    this.set('contentType', 'page');
-                  }
-                  break;
-                case 'child':
-                  var post = _.filter(this.taxonomies[this.route.slugs.parent], (post) => {
-                    return post.slug === this.route.slugs.child;
-                  })[0];
-                  if (post) {
-                    this.set('post', post);
-                  } else {
-                    app.log.warn('404 error');
-                    app.go.to('/404');
-                  }
-                  this.set('contentType', 'post');
-                  break;
-                default:
-                  app.log.warn('404 error');
-                  app.go.to('/404');
-                  break;
+                    break;
+                }
+                this.set('previousRoute', this.route);
               }
-              this.set('previousRoute', this.route);
             }
           }
+        },
+
+        _loadHashId: function() {
+          var url = window.location.href;
+          var hashLocation = url.indexOf('#', url.indexOf('#') + 1);
+          var hashId = false;
+          if (hashLocation >= 0) {
+            hashId = url.substring(hashLocation, url.length);
+          }
+          if (hashId) {
+            app.go.to(url.substring(url.indexOf('/#!') + 3, hashLocation));
+          }
+          return hashId;
         },
 
         _isEqual: function(left, right) {

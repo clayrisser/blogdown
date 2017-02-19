@@ -6,6 +6,7 @@
       }
       .content {
         width: 100%;
+        margin: 0px 0px 20px 0px;
       }
       .meta {
         margin: 20px 5px 5px 5px;
@@ -30,6 +31,12 @@
     <paper-card class="content" elevation="3">
       <div class="card-content">
         <post-content post="[[post]]" ></post-content>
+      </div>
+    </paper-card>
+
+    <paper-card class="content" elevation="3">
+      <div class="card-content">
+        <load-module name="disqus" propPost="[[post]]"></load-module>
       </div>
     </paper-card>
 
@@ -62,6 +69,10 @@
           date: {
             type: String,
             value: ''
+          },
+          disqusProperties: {
+            type: Object,
+            value: {}
           }
         },
 

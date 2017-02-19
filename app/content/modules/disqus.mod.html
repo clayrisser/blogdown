@@ -1,0 +1,131 @@
+<dom-module name="mod-disqus">
+  <style>
+    :host {
+      display: block;
+    }
+  </style>
+  <template>
+
+    <div id="disqus" hidden="[[!loaded]]">
+      <div id="disqus_thread"></div>
+    </div>
+
+  </template>
+</dom-module>
+<script>
+  (function () {
+    'use strict';
+    Polymer({
+      is: 'mod-disqus',
+
+      behaviors: [ ReduxBehavior ],
+
+      properties: {
+        shortname: {
+          type: Object,
+          statePath: 'settings.disqusShortname'
+        },
+        identifier:  {
+          type: String
+        },
+        title:  {
+          type: String
+        },
+        url:  {
+          type: String
+        },
+        category:  {
+          type: String
+        },
+        https:  {
+          type: Boolean,
+          value: true
+        },
+        post: {
+          type: Object,
+          value: {}
+        },
+        loaded: {
+          type: Boolean,
+          value: false
+        }
+      },
+
+      attached: function() {
+        var page = this._generatePage();
+        if (!!!window.disqus_config) {
+          window.disqus_config = function() {
+            this.page = page;
+          }
+          this._injectScript().then(() => {
+            window.DISQUS.reset({
+              reload: true,
+              config: function() {
+                this.page = page;
+              }
+            });
+            this.set('loaded', true);
+          }).catch((err) => {
+            app.log.error(err);
+          });
+        } else {
+          window.DISQUS.reset({
+            reload: true,
+            config: function() {
+              this.page = page;
+            }
+          });
+          window.DISQUS.reset({
+            reload: true,
+            config: function() {
+              this.page = page;
+            }
+          });
+          this.set('loaded', true);
+        }
+      },
+
+      _injectScript: function() {
+        var protocol = this.https ? 'https' : 'http';
+        var src = protocol + '://' + this.shortname + '.disqus.com';
+        return new Promise((resolve, reject) => {
+          var script = document.createElement('script');
+          script.type = 'text/javascript';
+          script.async = true;
+          script.src = src + '/embed.js';
+          script.dataTimestamp = new Date();
+          script.onload = () => {
+            resolve();
+          };
+          script.onerror = (err) => {
+            reject(err);
+          };
+          (document.head || document.body).appendChild(script);
+        }).then(() => {
+          return new Promise((resolve, reject) => {
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.async = true;
+            script.src = src + '/count.js';
+            script.onload = () => {
+              resolve();
+            };
+            script.onerror = (err) => {
+              reject(err);
+            };
+            (document.head || document.body).appendChild(script);
+          });
+        });
+      },
+
+      _generatePage: function() {
+        var page = {};
+        page.identifier = this.identifier ? this.identifier : (this.post.taxonomy + this.post.slug.replace('-', ''));
+        page.title = this.title ? this.title : (this.post.title ? this.post.title : '');
+        page.url = this.url ? this.url : window.location.href;
+        page.category_id = this.category ? this.category : '';
+        return page;
+      }
+    });
+  })();
+  </script>
