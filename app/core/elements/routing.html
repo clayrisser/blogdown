@@ -15,57 +15,42 @@
     });
 
     page('/', (req) => {
-      store.dispatch({
-        type: CHANGE_ROUTE,
-        route: {
-          type: 'parent',
-          slugs: {
-            parent: 'home'
-          }
+      changeRoute({
+        type: 'parent',
+        slugs: {
+          parent: 'home'
         }
       });
     });
 
     page(app.baseUrl, (req) => {
-      store.dispatch({
-        type: CHANGE_ROUTE,
-        route: {
-          type: 'parent',
-          slugs: {
-            parent: 'home'
-          }
+      changeRoute({
+        type: 'parent',
+        slugs: {
+          parent: 'home'
         }
       });
     });
 
     page('/:parent', (req) => {
-      store.dispatch({
-        type: CHANGE_ROUTE,
-        route: {
-          type: 'parent',
-          slugs: req.params
-        }
+      changeRoute({
+        type: 'parent',
+        slugs: req.params
       });
     });
 
     page('/:parent/:child', (req) => {
-      store.dispatch({
-        type: CHANGE_ROUTE,
-        route: {
-          type: 'child',
-          slugs: req.params
-        }
+      changeRoute({
+        type: 'child',
+        slugs: req.params
       });
     });
 
     page('*', (req) => {
-      store.dispatch({
-        type: CHANGE_ROUTE,
-        route: {
-          type: 'parent',
-          slugs: {
-            parent: '404'
-          }
+      changeRoute({
+        type: 'parent',
+        slugs: {
+          parent: '404'
         }
       });
     });
@@ -73,5 +58,30 @@
     page({
       hashbang: true
     });
+
+    function changeRoute(route) {
+      var state = store.getState();
+      var pages = _.filter(state.pages, (page) => {
+        return page.addToMenu;
+      });
+      var selectedMenuItem = -1;
+      for (var i = 0; pages.length > i; i++) {
+        var page = pages[i];
+        if (route.slugs.parent === page.slug) {
+          selectedMenuItem = i;
+          break;
+        }
+      }
+      store.dispatch({
+        type: CHANGE_ROUTE,
+        route: route
+      });
+      if (state.meta.selectedMenuItem !== selectedMenuItem) {
+        store.dispatch({
+          type: UPDATE_SELECTED_MENU_ITEM,
+          selectedMenuItem: selectedMenuItem
+        });
+      }
+    };
   });
 </script>

@@ -52,6 +52,10 @@
 })(document);
 
 function _appLoaded() {
+  var slugs = store.getState().route.slugs;
+  var parent = '/' + (slugs.parent ? slugs.parent : '');
+  var child = slugs.child ? '/' + slugs.child : '';
+  app.go.to(parent + child);
   store.dispatch({ type: APP_LOADED });
   document.getElementById('loading').innerHTML = '';
   app.log.info(store.getState().settings.title + ' loaded');

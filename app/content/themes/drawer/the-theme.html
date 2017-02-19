@@ -27,13 +27,12 @@
         color: var(--text-primary-color);
         text-decoration: none;
       }
-      .menu-item {
-        color: var(--primary-text-color);
-        text-decoration: none;
+      .menu-item a {
+        all: inherit;
+        cursor: pointer;
       }
-      .menu-item:hover {
-        color: var(--primary-text-color);
-        text-decoration: none;
+      .menu-item paper-item {
+        font-weight: inherit;
       }
       #title {
         color: var(--text-primary-color);
@@ -46,17 +45,24 @@
       #social-accounts {
         margin-left: auto;
       }
+      #drawer-button {
+        margin-right: 10px;
+      }
     </style>
     <style include="iron-positioning"></style>
 
     <app-drawer-layout fullbleed narrow="{{narrow}}">
       <app-drawer id="drawer" swipe-open>
         <app-toolbar></app-toolbar>
-        <paper-menu>
+        <paper-menu selected="[[selectedMenuItem]]">
           <template is="dom-repeat" items="[[menuItems]]" as="menuItem">
-            <a class="menu-item" href="/[[menuItem.slug]]">
-              <paper-item id="[[menuItem.slug]]">[[menuItem.title]]</paper-item>
-            </a>
+            <div class="menu-item">
+              <a href="/[[menuItem.slug]]">
+                <paper-item on-click="_closeDrawer" id="[[menuItem.slug]]">
+                  [[menuItem.title]]
+                </paper-item>
+              </a>
+            </div>
           </template>
         </paper-menu>
       </app-drawer>
@@ -73,7 +79,7 @@
       <div class="fixed-top">
         <paper-progress id="loadingBar" class="desktop" value="[[_progress]]" indeterminate="[[loading]]"></paper-progress>
       </div>
-      <paper-icon-button class="above-loading-bar" icon="menu" on-click="_openDrawer" hidden=[[!narrow]]></paper-icon-button>
+      <paper-icon-button id="drawer-button" class="above-loading-bar" icon="menu" on-click="_toggleDrawer" hidden=[[!narrow]]></paper-icon-button>
       <a id="title" class="above-loading-bar" href="/">[[settings.title]]</a>
       <div id="social-accounts">
         <template is="dom-repeat" items=[[socialAccounts]] as="socialAccount">
@@ -136,6 +142,10 @@
           menuItems: {
             type: Object,
             value: []
+          },
+          selectedMenuItem: {
+            type: Number,
+            statePath: 'meta.selectedMenuItem'
           }
         },
 
@@ -164,8 +174,12 @@
           });
         },
 
-        _openDrawer: function() {
-          this.$.drawer.open();
+        _toggleDrawer: function() {
+          this.$.drawer.toggle();
+        },
+
+        _closeDrawer: function() {
+          if (this.narrow) this.$.drawer.close();
         },
 
         _updateNarrow: function() {

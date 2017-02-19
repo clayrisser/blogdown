@@ -47,6 +47,12 @@
             narrow: action.narrow
           })
         });
+      case UPDATE_SELECTED_MENU_ITEM:
+        return _.assign({}, state, {
+          meta: _.assign({}, state.meta, {
+            selectedMenuItem: action.selectedMenuItem
+          })
+        });
       default:
         return state;
     }
