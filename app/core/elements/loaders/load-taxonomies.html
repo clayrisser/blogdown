@@ -37,6 +37,10 @@
         },
 
         properties: {
+          baseUrl: {
+            type: String,
+            statePath: 'meta.baseUrl'
+          },
           settings: {
             type: Object,
             statePath: 'settings'
@@ -88,12 +92,19 @@
                 slug = changeCase.paramCase(title);
               }
             }
+            var featuredImage = post.featuredImage ? post.featuredImage : false;
+            if (typeof featuredImage === 'string') {
+              var matches = featuredImage.match(/^(((https*)|file):)*\/{2}/g);
+              if (!matches) {
+                featuredImage = this.baseUrl + ((featuredImage[0] === '/') ? featuredImage : ('/' + featuredImage));
+              }
+            }
             var postMeta = {
               title: title,
               slug: slug,
               date: date,
               author: post.author ? post.author : false,
-              featuredImage: post.featuredImage ? post.featuredImage : false,
+              featuredImage: featuredImage,
               description: post.description ? post.description : '',
               format: post.format ? post.format : 'md',
               taxonomy: taxonomy

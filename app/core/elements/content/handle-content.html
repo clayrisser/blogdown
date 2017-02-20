@@ -24,6 +24,15 @@
 
         behaviors: [ ReduxBehavior, ReduxActions ],
 
+        actions: {
+          setHashId: function(hashId) {
+            return {
+              type: SET_HASH_ID,
+              hashId: hashId
+            };
+          }
+        },
+
         properties: {
           route: {
             type: Object,
@@ -55,7 +64,7 @@
 
         routeChanged: function() {
           if (this.appLoaded) {
-            if (this._loadHashId()) return;
+            if (this._setHashId()) return;
             if (this.route.slugs) {
               if (!this.previousRoute.slugs || this.route.slugs.parent !== this.previousRoute.slugs.parent ||
                   this.route.slugs.child !== this.previousRoute.slugs.child) {
@@ -102,14 +111,15 @@
           }
         },
 
-        _loadHashId: function() {
+        _setHashId: function() {
           var url = window.location.href;
           var hashLocation = url.indexOf('#', url.indexOf('#') + 1);
           var hashId = false;
           if (hashLocation >= 0) {
-            hashId = url.substring(hashLocation, url.length);
+            hashId = url.substring(hashLocation + 1, url.length);
           }
           if (hashId) {
+            this.dispatch('setHashId', hashId);
             app.go.to(url.substring(url.indexOf('/#!') + 3, hashLocation));
           }
           return hashId;

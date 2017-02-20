@@ -1,16 +1,20 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <dom-module id="load-module">
-  <template>
-
-  </template>
+  <template></template>
   <script>
     (function() {
       'use strict';
       Polymer({
         is: 'load-module',
 
+        behaviors: [ ReduxBehavior ],
+
         properties: {
+          baseUrl: {
+            type: String,
+            statePath: 'meta.baseUrl'
+          },
           name: {
             type: String
           }
@@ -22,7 +26,7 @@
         },
 
         _loadElement: function(name) {
-          this.importHref(app.rootURL + 'content/modules/' + name + '.mod', function() {
+          this.importHref(this.baseUrl + '/content/modules/' + name + '.mod', function() {
             app.debug(name + '.mod was imported.');
           }.bind(this), function() {
               window.history.back();

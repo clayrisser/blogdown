@@ -53,6 +53,18 @@
             selectedMenuItem: action.selectedMenuItem
           })
         });
+      case SET_BASE_URL:
+        return _.assign({}, state, {
+          meta: _.assign({}, state.meta, {
+            baseUrl: action.baseUrl
+          })
+        });
+      case SET_HASH_ID:
+        return _.assign({}, state, {
+          meta: _.assign({}, state.meta, {
+            hashId: action.hashId
+          })
+        });
       default:
         return state;
     }

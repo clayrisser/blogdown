@@ -43,7 +43,16 @@
       Polymer({
         is: 'service-content',
 
+        behaviors: [
+          ReduxBehavior,
+          ReduxActions
+        ],
+
         properties: {
+          baseUrl: {
+            type: String,
+            statePath: 'meta.baseUrl'
+          },
           routeData: {
             type: Object,
             observer: 'routeChanged'
@@ -215,7 +224,7 @@
           if (dynamic) {
             name = name + '.dyn';
           }
-          this.importHref(app.rootURL + 'core/elements/pages/page-' + name + '.html', function() {
+          this.importHref(this.baseUrl + '/core/elements/pages/page-' + name + '.html', function() {
             app.debug('page-' + name + '.html was imported.');
           }.bind(this), function() {
               window.history.back();

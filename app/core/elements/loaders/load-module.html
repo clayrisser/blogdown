@@ -6,7 +6,13 @@
       Polymer({
         is: 'load-module',
 
+        behaviors: [ ReduxBehavior ],
+
         properties: {
+          baseUrl: {
+            type: String,
+            statePath: 'meta.baseUrl'
+          },
           name: {
             type: String
           },
@@ -60,7 +66,7 @@
           });
           var promises = [];
           _.each(formats, (format) => {
-            var url = app.rootURL + 'content/modules/' + name + '.' + format;
+            var url = this.baseUrl + '/content/modules/' + name + '.' + format;
             promises.push(this._getFile.bind(this, url, format, name));
           });
           var promiseChain = Promise.resolve();

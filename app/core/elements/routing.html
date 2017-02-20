@@ -2,8 +2,10 @@
 
 <script>
   window.addEventListener('WebComponentsReady', () => {
+    var state = store.getState();
+
     if (window.location.port === '') {
-      page.base(app.baseUrl.replace(/\/$/, ''));
+      page.base(state.meta.baseUrl.replace(/\/$/, ''));
     }
 
     function middleware(ctx, next) {
@@ -23,7 +25,7 @@
       });
     });
 
-    page(app.baseUrl, (req) => {
+    page(state.meta.baseUrl, (req) => {
       changeRoute({
         type: 'parent',
         slugs: {

@@ -42,6 +42,10 @@
         ],
 
         properties: {
+          baseUrl: {
+            type: String,
+            statePath: 'meta.baseUrl'
+          },
           post: {
             type: Object,
             value: {},
@@ -103,18 +107,18 @@
           }
           var promises = [];
           _.each(formats, (format) => {
-            var url = app.rootURL + 'content/' + route.slugs.parent + '/' + post.slug + '.' + format;
+            var url = this.baseUrl + '/content/' + route.slugs.parent + '/' + post.slug + '.' + format;
             promises.push(this._getFile.bind(this, url, format, post.slug));
           });
           if (post.slug !== changeCase.paramCase(post.title)) {
             _.each(formats, (format) => {
-              var url = app.rootURL + 'content/' + route.slugs.parent + '/' + changeCase.paramCase(post.title) + '.' + format;
+              var url = this.baseUrl + '/content/' + route.slugs.parent + '/' + changeCase.paramCase(post.title) + '.' + format;
               promises.push(this._getFile.bind(this, url, format, changeCase.paramCase(post.title)));
             });
           }
           if (post.slug !== post.date.format('X')) {
             _.each(formats, (format) => {
-              var url = app.rootURL + 'content/' + route.slugs.parent + '/' + post.date.format('X') + '.' + format;
+              var url = this.baseUrl + '/content/' + route.slugs.parent + '/' + post.date.format('X') + '.' + format;
               promises.push(this._getFile.bind(this, url, format, post.date.format('X')));
             });
           }

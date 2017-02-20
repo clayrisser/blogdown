@@ -38,6 +38,10 @@
         ],
 
         properties: {
+          baseUrl: {
+            type: String,
+            statePath: 'meta.baseUrl'
+          },
           page: {
             type: Object,
             value: {},
@@ -95,12 +99,12 @@
           }
           var promises = [];
           _.each(formats, (format) => {
-            var url = app.rootURL + 'content/pages/' + page.slug + '.' + format;
+            var url = this.baseUrl + '/content/pages/' + page.slug + '.' + format;
             promises.push(this._getFile.bind(this, url, format, page.slug));
           });
           if (page.slug !== changeCase.paramCase(page.title)) {
             _.each(formats, (format) => {
-              var url = app.rootURL + 'content/pages/' + changeCase.paramCase(page.title) + '.' + format;
+              var url = this.baseUrl + '/content/pages/' + changeCase.paramCase(page.title) + '.' + format;
               promises.push(this._getFile.bind(this, url, format, changeCase.paramCase(page.title)));
             });
           }

@@ -2,14 +2,7 @@
   'use strict';
   var app = document.getElementById('app');
 
-  var scriptElements = document.getElementsByTagName('script');
-  _.each(scriptElements, (scriptElement) => {
-    var source = scriptElement.src;
-    if (source.indexOf('/core/scripts/app.js') > -1) {
-      app.rootURL = source.substring(0, source.indexOf('core/scripts/app.js'));
-    }
-  });
-  app.baseUrl = app.rootURL.substring(window.location.origin.length, app.rootURL.length);
+  _setBaseUrl();
 
   _loadApp([
     'settings',
@@ -50,6 +43,20 @@
     console.log('web components are ready');
   });
 })(document);
+
+function _setBaseUrl() {
+  var matches = window.location.href.match(/[\w\d\.:\/\\]+(?=\/#!)/g);
+  var baseUrl = window.location.href;
+  if (matches) {
+    baseUrl = matches[0];
+  } else {
+    if (baseUrl[baseUrl.length - 1] === '/') baseUrl = baseUrl.substring(0, baseUrl.length - 1);
+  }
+  store.dispatch({
+    type: SET_BASE_URL,
+    baseUrl: baseUrl
+  });
+}
 
 function _appLoaded() {
   var route = store.getState().route;

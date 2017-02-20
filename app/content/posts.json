@@ -1,12 +1,11 @@
 [
   {
     "date": "july 8, 1995",
-    "title": "umm",
     "status": "published",
     "featuredImage": true,
     "description": "yo this is an awsome description.",
     "author": "jamrizzi",
-    "wow": "ho",
+    "featuredImage": "/foo/bar",
     "viewProject": "http://google.com"
   },
   {
@@ -19,6 +18,7 @@
     "title": "3ndpost",
     "date": "jul 8 : 1995",
     "author": "jamrizzi",
+    "featuredImage": "bar/foo",
     "format": "pdf"
   }
 ]
