@@ -120,7 +120,7 @@
 
       _generatePage: function() {
         var page = {};
-        page.identifier = this.identifier ? this.identifier : (this.post.taxonomy + this.post.slug.replace('-', ''));
+        page.identifier = this.identifier ? this.identifier : (this.post.taxonomy.name + this.post.slug.replace('-', ''));
         page.title = this.title ? this.title : (this.post.title ? this.post.title : '');
         page.url = this.url ? this.url : window.location.href;
         page.category_id = this.category ? this.category : '';

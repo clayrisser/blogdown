@@ -15,7 +15,15 @@
   },
   "disqusShortname": "jamrizzi",
   "taxonomies": [
-    "posts",
-    "portfolio"
+    {
+      "name": "posts",
+      "singularForm": "post",
+      "disqus": true
+    },
+    {
+      "name": "portfolio",
+      "singularForm": "showcase",
+      "disqus": false
+    }
   ]
 }

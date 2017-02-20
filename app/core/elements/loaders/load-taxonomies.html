@@ -12,7 +12,7 @@
         actions: {
           loadTaxonomies: function() {
             return (dispatch) => {
-              var promises = _.map(store.getState().settings.taxonomies, (taxonomy) => {
+              var promises = _.map(this.settings.taxonomies, (taxonomy) => {
                 return this._loadTaxonomy(taxonomy);
               });
               return Promise.all(promises).then((taxonomiesMeta) => {
@@ -53,7 +53,7 @@
         },
 
         _loadTaxonomy: function(taxonomy) {
-          return fetch('../../../content/' + taxonomy + '.json')
+          return fetch('../../../content/' + taxonomy.name + '.json')
             .then((res) => {
               return res.json();
             }).then((body) => {
@@ -69,16 +69,16 @@
               if (typeof post.date === 'number') {
                 date = moment.unix(post.date);
               } else {
-                var date = moment(new Date(post.date));
+                date = moment(new Date(post.date));
               }
             }
             var title = false;
             if (post.title) {
               title = post.title;
             } else if (post.author) {
-              title = changeCase.titleCase(taxonomy) + ' by ' + post.author;
+              title = changeCase.titleCase(taxonomy.singularForm) + ' by ' + post.author;
             } else if (date) {
-              title = changeCase.titleCase(taxonomy) + ' on ' + date.format(store.getState().settings.dateFormat);
+              title = changeCase.titleCase(taxonomy.singularForm) + ' on ' + date.format(this.settings.dateFormat);
             }
             var slug = post.slug;
             if (!slug) {
@@ -88,7 +88,7 @@
                 slug = changeCase.paramCase(title);
               }
             }
-            taxonomyPosts.push({
+            var postMeta = {
               title: title,
               slug: slug,
               date: date,
@@ -97,10 +97,16 @@
               description: post.description ? post.description : '',
               format: post.format ? post.format : 'md',
               taxonomy: taxonomy
+            };
+            _.each(post, (value, key) => {
+              if (!_.includes(_.keys(postMeta), key)) {
+                postMeta[key] = value;
+              }
             });
+            taxonomyPosts.push(postMeta);
           });
           return {
-            name: taxonomy,
+            name: taxonomy.name,
             posts: taxonomyPosts
           }
         }

@@ -34,11 +34,13 @@
       </div>
     </paper-card>
 
-    <paper-card class="content" elevation="3">
-      <div class="card-content">
-        <load-module name="disqus" propPost="[[post]]"></load-module>
-      </div>
-    </paper-card>
+    <template is="dom-if" if="[[post.taxonomy.disqus]]">
+      <paper-card class="content" elevation="3">
+        <div class="card-content">
+          <load-module name="disqus" propPost="[[post]]"></load-module>
+        </div>
+      </paper-card>
+    </template>
 
   </template>
   <script>
