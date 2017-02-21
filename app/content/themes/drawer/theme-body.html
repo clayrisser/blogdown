@@ -3,7 +3,7 @@
     <style>
       app-toolbar {
         background-color: var(--default-primary-color);
-        color: #fff;
+        color: var(--paper-toolbar-color);
       }
       #content {
         padding: 20px;
@@ -12,6 +12,7 @@
         width: 100%;
         --paper-progress-height: 64px;
         --paper-progress-container-color: rgba(255, 255, 255, 0);
+        --paper-progress-active-color: var(--paper-progress-secondary-color);
       }
       paper-menu {
         height: 100%;
@@ -20,11 +21,11 @@
         z-index: 0;
       }
       .social-account {
-        color: var(--text-primary-color);
+        color: var(--paper-toolbar-color);
         text-decoration: none;
       }
       .social-account:hover {
-        color: var(--text-primary-color);
+        color: var(--paper-toolbar-color);
         text-decoration: none;
       }
       .menu-item a {
@@ -35,11 +36,11 @@
         font-weight: inherit;
       }
       #title {
-        color: var(--text-primary-color);
+        color: var(--paper-toolbar-color);
         text-decoration: none;
       }
       #title:hover {
-        color: var(--text-primary-color);
+        color: var(--paper-toolbar-color);
         text-decoration: none;
       }
       #social-accounts {

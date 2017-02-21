@@ -1,17 +1,27 @@
 <dom-module id="theme-post">
   <template>
     <style>
+      paper-card {
+        --paper-card-background-color: var(--paper-menu-background-color);
+      }
       .featured-image .image {
         position: absolute;
         left: 0px;
         right: 0px;
         margin-top: -20px;
       }
-      .featured-image .image div {
+      .featured-image .image .background {
         position: fixed;
         width: 100%;
         height: calc(15vw + 100px);
         background-size: cover;
+      }
+      .featured-image .image .mask {
+        position: fixed;
+        width: 100%;
+        height: calc(15vw + 100px);
+        background-color: black;
+        opacity: .2;
       }
       .featured-image .spacer {
         height: calc(15vw - 100px);
@@ -58,7 +68,8 @@
     <template is="dom-if" if="[[featuredImage]]">
       <div class="featured-image">
         <div class="image" style="z-index:-1">
-          <div style$="background-image:url('[[featuredImage]]')"></div>
+          <div class="background" style$="background-image:url('[[featuredImage]]')"></div>
+          <div class="mask"></div>
         </div>
         <div class="header">
           <div class="layout horizontal justified">
