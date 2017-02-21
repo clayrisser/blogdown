@@ -1,9 +1,12 @@
 <dom-module id="theme-posts">
   <template>
     <style>
-      paper-card.post {
+      .post {
         width: 100%;
         margin-bottom: 20px;
+      }
+      .featured-image .post {
+        @apply(--layout-horizontal);
       }
       .heading {
         margin-top: 10px;
@@ -15,36 +18,94 @@
       .header {
         padding: 0px 20px 10px 20px;
       }
+      .featured-image .content {
+        @apply(--layout-flex);
+        float: left;
+      }
+      .featured-image .image {
+        width: 33.4%;
+      }
+      .featured-image .image .background {
+        position: absolute;
+        height: 100%;
+        left: 66.6%;
+        right: 0px;
+        background-size: cover;
+      }
+      .featured-image .image .mask {
+        width: 100%;
+        height: 100%;
+        background-color: black;
+        opacity: .2;
+      }
     </style>
     <style is="custom-style" include="iron-flex iron-flex-alignment"></style>
 
     <div class="header">
       <h1>[[page.title]]</h1>
     </div>
-    <template is="dom-repeat" items="[[posts]]" as="post">
-      <paper-card class="post" elevation="3">
-        <div class="card-content">
-          <div class="layout horizontal justified">
-            <div>
-              <a href="/[[page.slug]]/[[post.slug]]">
-                <h2 class="heading">
-                  [[post.title]]
-                </h2>
-              </a>
+
+    <template is="dom-repeat" items="[[posts]]" as="post" restamp>
+
+      <template is="dom-if" if="[[!post._featuredImage]]" restamp>
+        <paper-card class="post" elevation="3">
+          <div class="card-content">
+            <div class="layout horizontal justified">
+              <div>
+                <a href="/[[page.slug]]/[[post.slug]]">
+                  <h2 class="heading">
+                    [[post.title]]
+                  </h2>
+                </a>
+              </div>
+              <div style="text-align:right">
+                <div style="font-weight:bold">[[_getDate(post.date)]]</div>
+                <div>[[_getAuthorDisplayName(post.author)]]</div>
+              </div>
             </div>
-            <div style="text-align:right">
-              <div style="font-weight:bold">[[_getDate(post.date)]]</div>
-              <div>[[_getAuthorDisplayName(post.author)]]</div>
-            </div>
+            <div>[[post.description]]</div>
           </div>
-          <div>[[post.description]]</div>
+          <div class="card-actions">
+            <a href="/[[page.slug]]/[[post.slug]]">
+              <paper-button>Read More</paper-button>
+            </a>
+          </div>
+        </paper-card>
+      </template>
+
+      <template is="dom-if" if="[[post._featuredImage]]" restamp>
+        <div class="featured-image">
+          <paper-card class="post" elevation="3">
+            <div class="content">
+              <div class="card-content">
+                <div class="layout horizontal justified">
+                  <div>
+                    <a href="/[[page.slug]]/[[post.slug]]">
+                      <h2 class="heading">
+                        [[post.title]]
+                      </h2>
+                    </a>
+                  </div>
+                  <div style="text-align:right">
+                    <div style="font-weight:bold">[[_getDate(post.date)]]</div>
+                    <div>[[_getAuthorDisplayName(post.author)]]</div>
+                  </div>
+                </div>
+                <div>[[post.description]]</div>
+              </div>
+              <div class="card-actions">
+                <a href="/[[page.slug]]/[[post.slug]]">
+                  <paper-button>Read More</paper-button>
+                </a>
+              </div>
+            </div>
+            <div class="image">
+              <div class="background" style$="background-image:url('[[post._featuredImage]]')"></div>
+              <div class="mask"></div>
+            </div>
+          </paper-card>
         </div>
-        <div class="card-actions">
-          <a href="/[[page.slug]]/[[post.slug]]">
-            <paper-button>Read More</paper-button>
-          </a>
-        </div>
-      </paper-card>
+      </template>
     </template>
 
   </template>
@@ -63,7 +124,8 @@
           },
           posts: {
             type: Array,
-            value: []
+            value: [],
+            observer: 'postsChanged'
           },
           authors: {
             type: Object,
@@ -75,12 +137,25 @@
           }
         },
 
+        postsChanged: function() {
+          for (var i = 0; i < this.posts.length; i++) {
+            var post = this.posts[i];
+            this._loadImage(post, i);
+          }
+        },
+
+        _loadImage(post, i) {
+          app.loadImage(post).then((image) => {
+            this.set(['posts', i, '_featuredImage'], image);
+          });
+        },
+
         _getAuthorDisplayName: function(author) {
           return author ? this.authors[author].displayName : '';
         },
 
         _getDate: function(date) {
-          return date.format(this.settings.dateFormat);
+          return date ? date.format(this.settings.dateFormat) : '';
         }
       });
     })();
