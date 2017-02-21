@@ -120,9 +120,10 @@ gulp.task('scripts', function() {
   gulp.src([
     'app/core/scripts/*.js'
   ])
-  .pipe($.uglify({
-    preserveComments: 'some'
-  }))
+  // THIS NEEDS TO SUPPORT PROMISES
+  // .pipe($.uglify({
+  //   preserveComments: 'some'
+  // }))
   .pipe(gulp.dest(dist('core/scripts')));
 });
 
@@ -150,50 +151,10 @@ gulp.task('copy', function() {
 
   // Copy content
   var content = gulp.src([
-    'app/content/*'
+    'app/content/**/*'
   ]).pipe(gulp.dest(dist('content')));
 
-  // Copy pages
-  var pages = gulp.src([
-    'app/content/pages/*'
-  ]).pipe(gulp.dest(dist('content/pages')));
-
-  // Copy posts
-  var posts = gulp.src([
-    'app/content/posts/*'
-  ]).pipe(gulp.dest(dist('content/posts')));
-
-  // Copy images
-  var images = gulp.src([
-    'app/content/images/*'
-  ]).pipe(gulp.dest(dist('content/images')));
-
-  // Copy modules
-  var modules = gulp.src([
-    'app/content/modules/*'
-  ]).pipe(gulp.dest(dist('content/modules')));
-
-  // Copy themes
-  var themes = gulp.src([
-    'app/content/themes/*'
-  ]).pipe(gulp.dest(dist('content/themes')));
-
-  // Copy styles
-  var styles = gulp.src([
-    'app/content/styles/*'
-  ]).pipe(gulp.dest(dist('content/styles')));
-
-  // Copy page elements
-  var pageElements = gulp.src([
-    'app/core/elements/pages/*.dyn.html'
-  ]).pipe(gulp.dest(dist('core/elements/pages')));
-
-  // Copy custom elements
-  var customElements = gulp.src([
-    'app/core/elements/custom/*.dyn.html'
-  ]).pipe(gulp.dest(dist('core/elements/custom')));
-
-  return merge(app, bower, content, pages, posts, images, modules, themes, styles, pageElements, customElements)
+  return merge(app, bower, content)
     .pipe($.size({
       title: 'copy'
     }));
