@@ -81,6 +81,12 @@
         ready: function() {
           if (this.post.author) this.set('author', this.authors[this.post.author]);
           if (this.post.date) this.set('date', this.post.date.format(this.settings.dateFormat));
+        },
+
+        attached: function() {
+          app.loadImage(this.post.featuredImage, this.post).then((image) => {
+            /* console.log(image);*/
+          });
         }
       });
     })();

@@ -146,7 +146,7 @@
           if (this.fileKnown) return Promise.resolve();
           return fetch(url).then((res) => {
             if (res.status === 404) return '';
-            if (res.status >= 200 && res.status < 500) {
+            if (res.status >= 200 && res.status < 400) {
               this.set('fileKnown', true);
               this.set('format', format);
               this.set('url', url);

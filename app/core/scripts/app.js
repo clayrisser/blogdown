@@ -59,14 +59,15 @@ function _setBaseUrl() {
 }
 
 function _appLoaded() {
-  var route = store.getState().route;
+  var state = store.getState();
+  var route = state.route;
   var slugs = route.slugs ? route.slugs : {};
   var parent = '/' + (slugs.parent ? slugs.parent : '');
   var child = slugs.child ? '/' + slugs.child : '';
   app.go.to(parent + child);
   store.dispatch({ type: APP_LOADED });
   document.getElementById('loading').innerHTML = '';
-  app.log.info(store.getState().settings.title + ' loaded');
+  app.log.info(state.settings.title + ' loaded');
 }
 
 function _loadApp(loaders) {

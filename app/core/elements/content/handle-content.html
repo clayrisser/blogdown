@@ -22,7 +22,10 @@
       Polymer({
         is: 'handle-content',
 
-        behaviors: [ ReduxBehavior, ReduxActions ],
+        behaviors: [
+          ReduxBehavior,
+          ReduxActions
+        ],
 
         actions: {
           setHashId: function(hashId) {
