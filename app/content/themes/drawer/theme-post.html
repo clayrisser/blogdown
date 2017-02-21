@@ -1,8 +1,27 @@
 <dom-module id="theme-post">
   <template>
     <style>
+      .featured-image .image {
+        position: absolute;
+        left: 0px;
+        right: 0px;
+        margin-top: -20px;
+      }
+      .featured-image .image div {
+        position: fixed;
+        width: 100%;
+        height: calc(15vw + 100px);
+        background-size: cover;
+      }
+      .featured-image .spacer {
+        height: calc(15vw - 100px);
+      }
       .header {
         padding: 0px 20px 10px 20px;
+      }
+      .featured-image .header {
+        color: #ffffff;
+        text-shadow: #000000 0px 0px 12px;
       }
       .content {
         width: 100%;
@@ -17,22 +36,49 @@
     </style>
     <style is="custom-style" include="iron-flex iron-flex-alignment"></style>
 
-    <div class="header">
-      <div class="layout horizontal justified">
-        <div>
-          <h1>[[post.title]]</h1>
-        </div>
-        <div class="meta" style="text-align:right;font-size:18px">
-          <div style="font-weight:bold">[[date]]</div>
-          <div>[[author.displayName]]</div>
+    <template is="dom-if" if="[[!featuredImage]]">
+      <div class="header">
+        <div class="layout horizontal justified">
+          <div>
+            <h1>[[post.title]]</h1>
+          </div>
+          <div class="meta" style="text-align:right;font-size:18px">
+            <div style="font-weight:bold">[[date]]</div>
+            <div>[[author.displayName]]</div>
+          </div>
         </div>
       </div>
-    </div>
-    <paper-card class="content" elevation="3">
-      <div class="card-content">
-        <post-content post="[[post]]" ></post-content>
+      <paper-card class="content" elevation="3">
+        <div class="card-content">
+          <post-content post="[[post]]" ></post-content>
+        </div>
+      </paper-card>
+    </template>
+
+    <template is="dom-if" if="[[featuredImage]]">
+      <div class="featured-image">
+        <div class="image" style="z-index:-1">
+          <div style$="background-image:url('[[featuredImage]]')"></div>
+        </div>
+        <div class="header">
+          <div class="layout horizontal justified">
+            <div>
+              <h1>[[post.title]]</h1>
+            </div>
+            <div class="meta" style="text-align:right;font-size:18px">
+              <div style="font-weight:bold">[[date]]</div>
+              <div>[[author.displayName]]</div>
+            </div>
+          </div>
+        </div>
+        <div class="spacer"></div>
+        <paper-card class="content" elevation="3">
+          <div class="card-content">
+            <post-content post="[[post]]" ></post-content>
+          </div>
+        </paper-card>
       </div>
-    </paper-card>
+    </template>
 
     <template is="dom-if" if="[[post.taxonomy.disqus]]">
       <paper-card class="content" elevation="3">
@@ -84,8 +130,8 @@
         },
 
         attached: function() {
-          app.loadImage(this.post.featuredImage, this.post).then((image) => {
-            /* console.log(image);*/
+          app.loadImage(this.post).then((image) => {
+            this.set('featuredImage', image);
           });
         }
       });
