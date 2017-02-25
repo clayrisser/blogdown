@@ -1,3 +1,4 @@
 {
-  "directory": "app/core/bower_components"
+  "directory": "app/core/bower_components",
+  "allow_root": true
 }
