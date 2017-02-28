@@ -64,7 +64,6 @@
     var slugs = route.slugs ? route.slugs : {};
     var parent = '/' + (slugs.parent ? slugs.parent : '');
     var child = slugs.child ? '/' + slugs.child : '';
-    app.log.info('ooops');
     app.go.to(parent + child);
     store.dispatch({ type: APP_LOADED });
     document.getElementById('loading').innerHTML = '';
