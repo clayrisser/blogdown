@@ -2,23 +2,21 @@
   'use strict';
   var app = document.getElementById('app');
 
-  app.addEventListener('store-ready', () => {
-    window.addEventListener('WebComponentsReady', function() {
-      console.log('web components are ready');
-      _setBaseUrl();
-      _loadApp([
-        'settings',
-        'globals',
-        'authors',
-        'pages',
-        'taxonomies',
-        'style',
-        'theme'
-      ]).then((message) => {
-        window.setTimeout(function() {
-          _appLoaded();
-        }, 1000);
-      });
+  window.addEventListener('WebComponentsReady', function() {
+    console.log('web components are ready');
+    _setBaseUrl();
+    _loadApp([
+      'settings',
+      'globals',
+      'authors',
+      'pages',
+      'taxonomies',
+      'style',
+      'theme'
+    ]).then((message) => {
+      window.setTimeout(function() {
+        _appLoaded();
+      }, 1000);
     });
   });
 
@@ -42,7 +40,6 @@
   app.addEventListener('dom-change', function() {
     console.log('Our app is ready to rock!');
   });
-
 
   function _setBaseUrl() {
     var matches = window.location.href.match(/[\w\d\.:\/\\]+(?=\/#!)/g);
