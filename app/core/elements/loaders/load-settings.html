@@ -12,7 +12,7 @@
         actions: {
           loadSettings: () => {
             return function(dispatch) {
-              return fetch('../../../content/settings.json').then((res) => {
+              return fetch('../../../content/settings.json?' + moment().format('X')).then((res) => {
                 return res.json();
               }).then((body) => {
                 var settings = {};

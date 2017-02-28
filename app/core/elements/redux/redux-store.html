@@ -21,5 +21,6 @@
 
   var store = Redux.createStore(reducer, Redux.applyMiddleware(ReduxThunk.default));
   const ReduxBehavior = PolymerRedux(store);
+  app.dispatchEvent(new Event('store-ready'));
 
 </script>

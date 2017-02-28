@@ -129,6 +129,7 @@
         },
 
         _getFile: function(url, format, fileName) {
+          url = url + '?' + moment().format('X');
           if (this.fileKnown) return Promise.resolve();
           return fetch(url).then((res) => {
             if (res.status === 404) return '';

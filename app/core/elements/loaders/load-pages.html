@@ -12,7 +12,7 @@
         actions: {
           loadPages: function() {
             return (dispatch) => {
-              return fetch('../../../content/pages.json')
+              return fetch('../../../content/pages.json?' + moment().format('X'))
                 .then((res) => {
                   return res.json();
                 }).then((body) => {

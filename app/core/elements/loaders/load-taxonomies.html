@@ -57,7 +57,7 @@
         },
 
         _loadTaxonomy: function(taxonomy) {
-          return fetch('../../../content/' + taxonomy.name + '.json')
+          return fetch('../../../content/' + taxonomy.name + '.json?' + moment().format('X'))
             .then((res) => {
               return res.json();
             }).then((body) => {
