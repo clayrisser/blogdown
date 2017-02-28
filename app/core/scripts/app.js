@@ -3,7 +3,6 @@
   var app = document.getElementById('app');
 
   window.addEventListener('WebComponentsReady', function() {
-    console.log('web components are ready');
     _setBaseUrl();
     _loadApp([
       'settings',
