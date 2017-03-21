@@ -11,7 +11,8 @@ EXPOSE 5000
 
 WORKDIR /app/
 
-RUN apk add --no-cache tini && \
+RUN apk add --no-cache nginx \
+    tini && \
     apk add --no-cache --virtual build-dependencies build-base \
     autoconf \
     automake \
@@ -22,7 +23,8 @@ RUN apk add --no-cache tini && \
     optipng
 RUN npm install -g yarn && \
     yarn global add bower \
-    gulp
+    gulp && \
+    mkdir -p /run/nginx
 
 COPY ./.bowerrc /app/.tmp/.bowerrc
 COPY ./bower.json /app/.tmp/bower.json
