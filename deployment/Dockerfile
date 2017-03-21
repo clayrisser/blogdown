@@ -1,31 +1,39 @@
 ############################################################
 # Dockerfile to run BlogDown
-# Based on Ubuntu
+# Based on Alpine
 ############################################################
 
-FROM nginx:latest
+FROM alpine:3.5
 
 MAINTAINER Jam Risser (jamrizzi)
 
 EXPOSE 5000
 
-ENV NGINX_PORT=5000
-
 WORKDIR /app/
 
-RUN apt-get update && \
-    apt-get install -y curl git && \
-    curl -sL https://deb.nodesource.com/setup_7.x | bash - && \
-    apt-get install -y nodejs \
-    build-essential && \
-    npm install -g bower gulp
+RUN apk add --no-cache tini && \
+    apk add --no-cache --virtual build-dependencies build-base \
+    autoconf \
+    automake \
+    gettext-dev \
+    git \
+    nasm \
+    nodejs-current \
+    optipng
+RUN npm install -g yarn && \
+    yarn global add bower \
+    gulp
 
-COPY ./deployment/nginx.conf /etc/nginx/conf.d/default.conf
-COPY ./package.json /app/.tmp/package.json
-COPY ./bower.json /app/.tmp/bower.json
 COPY ./.bowerrc /app/.tmp/.bowerrc
-RUN cd /app/.tmp/ && npm install && bower install
+COPY ./bower.json /app/.tmp/bower.json
+COPY ./package.json /app/.tmp/package.json
+RUN cd /app/.tmp/ && yarn install && bower install
+COPY ./deployment/nginx.conf /etc/nginx/conf.d/default.conf
 COPY ./ /app/.tmp/
-RUN cd /app/.tmp/ && gulp && \
+RUN ln -sf /usr/bin/optipng /app/.tmp/node_modules/optipng-bin/vendor/optipng && \
+    cd /app/.tmp/ && gulp && \
     mv /app/.tmp/dist/* /app/ && rm -rf /app/.tmp/ && \
-    chmod -R 755 /app/
+    chown -R nobody:nobody /app/ && \
+    apk del build-dependencies
+
+ENTRYPOINT ["/sbin/tini", "--", "/usr/sbin/nginx", "-g", "daemon off;"]

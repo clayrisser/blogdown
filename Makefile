@@ -5,9 +5,13 @@ all: fetch_dependancies build sweep push
 
 .PHONY: build
 build:
-	# docker pull jamrizzi/blogdown
 	docker build -t thingdown/blogdown:latest -f $(CWD)/deployment/Dockerfile $(CWD)
 	$(info built myproject)
+
+.PHONY: pull
+pull:
+	docker pull thingdown/blogdown:latest
+	$(info pulled thingdown/blogdown:latest)
 
 .PHONY: push
 push:
