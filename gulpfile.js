@@ -67,7 +67,7 @@ var imageOptimizeTask = function(src, dest) {
       interlaced: true
     }))
     .pipe(gulp.dest(dest))
-    .pipe($.size({title: 'images'}));
+    .pipe($.size({title: 'assets'}));
 };
 
 var optimizeHtmlTask = function(src, dest) {
@@ -129,7 +129,7 @@ gulp.task('scripts', function() {
 
 // Optimize images
 gulp.task('images', function() {
-  return imageOptimizeTask('app/content/images/**/*', dist('content/images'));
+  return imageOptimizeTask('app/content/assets/**/*', dist('content/assets'));
 });
 
 // Copy all files at the root level (app)
@@ -257,7 +257,7 @@ gulp.task('serve', ['styles'], function() {
   gulp.watch(['app/core/scripts/**/*.js'], reload);
   gulp.watch(['app/content/pages/**/*'], reload);
   gulp.watch(['app/content/posts/**/*'], reload);
-  gulp.watch(['app/content/images/**/*'], reload);
+  gulp.watch(['app/content/assets/**/*'], reload);
   gulp.watch(['app/content/styles/**/*.css'], ['styles', reload]);
   gulp.watch(['app/content/modules/**/*.html'], reload);
   gulp.watch(['app/content/themes/**/*.html'], reload);
