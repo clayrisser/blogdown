@@ -1,5 +1,5 @@
 {
-  "title": "BlogDown",
+  "title": "Jams Portfolio",
   "dateFormat": "MMMM D, YYYY",
   "logLevel": "silly",
   "easterEggs": true,
@@ -9,9 +9,10 @@
   "permlinkMode": "title",
   "style": "default",
   "socialAccounts": {
-    "facebook": "https://facebook.com",
-    "twitter": "https://twitter.com",
-    "google-plus": "https://google.com"
+    "facebook": "https://www.facebook.com/jamrizzi",
+    "twitter": "https://twitter.com/jamrizzi",
+    "google-plus": "https://plus.google.com/+BenjaminRisserJam",
+    "github": "https://github.com/jamrizzi"
   },
   "disqusShortname": "jamrizzi",
   "taxonomies": [

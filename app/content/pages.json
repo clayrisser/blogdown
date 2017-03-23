@@ -5,27 +5,9 @@
     "format": "dyn"
   },
   {
-    "title": "Subscribe",
-    "slug": "subscribe",
-    "addToMenu": true,
-    "format": "html"
-  },
-  {
     "title": "Resume",
     "slug": "resume",
     "addToMenu": true,
-    "format": "pdf"
-  },
-  {
-    "title": "Chinchilla",
-    "slug": "chinchilla",
-    "addToMenu": true,
     "format": "md"
-  },
-  {
-    "title": "Contact",
-    "slug": "contact",
-    "addToMenu": true,
-    "format": "dyn"
   }
 ]

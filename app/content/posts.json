@@ -1,22 +1,10 @@
 [
   {
-    "title": "Hello world",
-    "date": "july 8, 1995",
+    "title": "Top 5 Most Important Emerging Web Technologies for 2017",
+    "date": "feb 28, 1017",
     "status": "published",
-    "featuredImage": "hello-world.png",
-    "description": "yo this is an awsome description.",
-    "author": "jamrizzi",
-    "viewProject": "http://google.com"
-  },
-  {
-    "title": "2ndpost",
-    "date": 1480572829,
+    "featuredImage": false,
+    "description": "",
     "author": "jamrizzi"
-  },
-  {
-    "title": "3ndpost",
-    "date": "jul 8 : 1995",
-    "author": "jamrizzi",
-    "format": "pdf"
   }
 ]

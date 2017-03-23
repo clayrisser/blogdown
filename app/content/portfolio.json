@@ -1,10 +1,38 @@
 [
   {
-    "title": "hello world",
-    "date": "july 8, 1995",
+    "title": "BlogDown",
+    "date": "feb 12, 2017",
     "status": "published",
     "featuredImage": true,
-    "description": "yo this is an awsome description.",
-    "viewProject": "http://google.com"
+    "author": "jamrizzi",
+    "description": "BlogDown is a blazing fast front-end blogging platform built with Polymer. In fact, this very website is running on BlogDown."
+  },
+  {
+    "title": "Deskterm",
+    "date": "aug 15, 2016",
+    "status": "published",
+    "featuredImage": true,
+    "author": "jamrizzi"
+  },
+  {
+    "title": "NestedPop",
+    "date": "oct 17, 2016",
+    "status": "published",
+    "featuredImage": false,
+    "author": "jamrizzi"
+  },
+  {
+    "title": "ReactGantt",
+    "date": "jul 27, 2016",
+    "status": "published",
+    "featuredImage": false,
+    "author": "jamrizzi"
+  },
+  {
+    "title": "Rizzi Guestbook",
+    "date": "feb 17, 2014",
+    "status": "published",
+    "featuredImage": false,
+    "author": "jamrizzi"
   }
 ]

@@ -1,11 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <dom-module id="load-globals">
-  <template>
-
-    <load-image id="loadImage"></load-image>
-
-  </template>
   <script>
     (function() {
       'use strict';
@@ -39,7 +34,8 @@
         },
 
         loadImage: function(image, page) {
-          return this.$.loadImage.load(image, page);
+          let loadImage = document.createElement('load-image');
+          return loadImage.load(image, page);
         },
 
         log: {
