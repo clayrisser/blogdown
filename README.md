@@ -1,5 +1,5 @@
 # BlogDown _Beta_
-BlogDown is a frontend blogging platform anyone can use with a bit of markdown magic.
+A back-end agnostic, zero compilation, markdown blogging platform
 
 ## Features
 * Custom Taxonomies
