@@ -17,7 +17,7 @@ Step 2: There is no step two. That's how easy it is to install BlogDown.
 You can easily try the platform locally by spinning up a python server.
 ```
 mkdir blogdown && cd blogdown
-curl -L https://github.com/thingdown/blogdown/releases/download/v0.1.0/blogdown.zip | unzip -
+curl -OL https://github.com/thingdown/blogdown/releases/download/v0.1.0/blogdown.zip | unzip blogdown.zip
 python -m SimpleHTTPServer
 ```
 Then, just go to [http://localhost:8000](http://localhost:8000) in your browser.
