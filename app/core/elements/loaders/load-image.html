@@ -102,7 +102,7 @@
           if (page.slug !== changeCase.paramCase(page.title)) {
             _.each(formats, (format) => {
               var image1 = basePath + '/' + page.slug + '.' + format;
-              var image2 = this.baseUrl + '/assets/' + page.slug + '.' + format;
+              var image2 = this.baseUrl + '/content/assets/' + page.slug + '.' + format;
               if (image1 !== image) promises.push(this._getFile.bind(this, image1, format, changeCase.paramCase(page.title)));
               if (image2 !== image) promises.push(this._getFile.bind(this, image2, format, changeCase.paramCase(page.title)));
             });
@@ -110,7 +110,7 @@
           if (page.date && page.slug !== page.date.format('X')) {
             _.each(formats, (format) => {
               var image1 = basePath + '/' + page.slug + '.' + format;
-              var image2 = this.baseUrl + '/assets/' + page.slug + '.' + format;
+              var image2 = this.baseUrl + '/content/assets/' + page.slug + '.' + format;
               if (image1 !== image) promises.push(this._getFile.bind(this, image1, format, page.date.format('X')));
               if (image2 !== image) promises.push(this._getFile.bind(this, image2, format, page.date.format('X')));
             });
