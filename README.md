@@ -10,6 +10,18 @@ A back-end agnostic, zero compilation, markdown blogging platform
 * Markdown, HTML, and PDF posts
 
 ## Installing
+Step 1: Unzip the contents from [HERE](https://github.com/thingdown/blogdown/releases/download/v0.1.0/blogdown.zip) on your server
+Step 2: There is no step two. That's how easy it is to install BlogDown.
+
+You can easily try the platform locally by spinning up a python server.
+```
+mkdir blogdown && cd blogdown
+curl -L https://github.com/thingdown/blogdown/releases/download/v0.1.0/blogdown.zip | unzip -
+python -m SimpleHTTPServer
+```
+Then, just go to [http://localhost:8000](http://localhost:8000) in your browser.
+
+If you want to build the platform yourself, you can run the following.
 ```
 git clone git@github.com:jamrizzi/blogdown.git
 npm install && bower install
