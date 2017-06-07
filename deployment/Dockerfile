@@ -11,16 +11,18 @@ EXPOSE 5000
 
 WORKDIR /app/
 
-RUN apk add --no-cache nginx \
-    tini && \
-    apk add --no-cache --virtual build-dependencies build-base \
-    autoconf \
-    automake \
-    gettext-dev \
-    git \
-    nasm \
-    nodejs-current \
-    optipng
+RUN apk add --no-cache \
+        nginx \
+        tini && \
+    apk add --no-cache --virtual build-deps \
+        autoconf \
+        build-base \
+        automake \
+        gettext-dev \
+        git \
+        nasm \
+        nodejs-current \
+        optipng
 RUN npm install -g yarn && \
     yarn global add bower \
     gulp && \
