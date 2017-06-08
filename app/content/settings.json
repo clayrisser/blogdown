@@ -26,5 +26,8 @@
       "singularForm": "showcase",
       "disqus": false
     }
+  ],
+  "modules": [
+    "disqus"
   ]
 }

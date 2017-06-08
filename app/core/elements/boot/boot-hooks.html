@@ -1,0 +1,48 @@
+<dom-module id="boot-hooks">
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'boot-hooks',
+
+        behaviors: [ ReduxBehavior ],
+
+        properties: {
+          settings: {
+            type: Object,
+            statePath: 'settings'
+          }
+        },
+
+        init: function() {
+          app.log.info('registering hooks . . .');
+          var promises = _.map(this.settings.modules, (module) => {
+            return this.getModuleHooks(module).then((hooks) => {
+              this.registerHooks(hooks);
+            });
+          });
+          return Promise.all(promises).then(() => {
+            app.log.info(app._hooks);
+            return Promise.resolve(app._hooks);
+          });
+        },
+
+        getModuleHooks: function(module) {
+          var blogdownModule = document.createElement('blogdown-module');
+          blogdownModule.name = module;
+          return blogdownModule.createModule().then((mod) => {
+            if (mod.registerHooks) return mod.registerHooks();
+            return {};
+          });
+        },
+
+        registerHooks: function(hooks) {
+          if (!app._hooks) app._hooks = {};
+          _.each(hooks, (hook, key) => {
+            app._hooks[key] ? app._hooks[key].push(hook) : app._hooks[key] = [hook];
+          });
+        }
+      });
+    })();
+  </script>
+</dom-module>

@@ -3,21 +3,37 @@
   var app = document.getElementById('app');
 
   window.addEventListener('WebComponentsReady', function() {
-    _setBaseUrl();
-    _loadApp([
+    boot([
       'settings',
       'globals',
-      'authors',
-      'pages',
-      'taxonomies',
-      'style',
-      'theme'
-    ]).then((message) => {
-      window.setTimeout(function() {
-        _appLoaded();
-      }, 1000);
+      'hooks'
+    ]).then(() => {
+      console.log('Boot successful');
     });
   });
+
+  function boot(bootSteps) {
+    var promises = [];
+    _.each(bootSteps, (bootStep) => {
+      promises.push(runBootStep.bind(this, bootStep));
+    });
+    var promiseChain = Promise.resolve();
+    _.each(promises, (promise) => {
+      promiseChain = promiseChain.then(promise);
+    });
+    return promiseChain.then((res) => {
+      return res;
+    }).catch((err) => {
+      console.error(err);
+    });
+  }
+
+  function runBootStep(bootStep) {
+    var bootStepElement = document.createElement('boot-' + bootStep);
+    return bootStepElement.init().then((res) => {
+      return res;
+    });
+  }
 
   app.toastClicked = function() {
     if (!app.toastTarget) {
@@ -66,26 +82,5 @@
     app.log.info(state.settings.title + ' loaded');
   }
 
-  function _loadApp(loaders) {
-    var promises = [];
-    _.each(loaders, (loader) => {
-      promises.push(_runLoader.bind(this, loader));
-    });
-    var promiseChain = Promise.resolve();
-    _.each(promises, (promise) => {
-      promiseChain = promiseChain.then(promise);
-    });
-    return promiseChain.then((res) => {
-      return res;
-    }).catch((err) => {
-      console.error(err);
-    });
-  }
 
-  function _runLoader(loader) {
-    var loaderElement = document.createElement('load-' + loader);
-    return loaderElement.load().then((res) => {
-      return res;
-    });
-  }
 })(document);

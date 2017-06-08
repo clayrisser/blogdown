@@ -51,6 +51,18 @@
         }
       },
 
+      registerHooks: function() {
+        return {
+          bop: () => {
+            console.log('hahaha, this is what I do to the bop hook');
+            return 1;
+          },
+          hop: () => {
+            return Promise.resolve(2);
+          }
+        };
+      },
+
       attached: function() {
         var page = this._generatePage();
         if (!!!window.disqus_config) {
