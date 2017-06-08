@@ -44,38 +44,38 @@
           }
         },
 
-        settingsRegistered: function() {
+        settingsRegistered: function(cx) {
           app.log.info('state.settings =>');
           app.log.info(this.settings);
         },
 
-        globalsRegistered: function() {},
+        globalsRegistered: function(cx) {},
 
-        hooksRegistered: function() {
+        hooksRegistered: function(cx) {
           app.log.info('hooks =>');
           app.log.info(_.keys(app._hooks));
         },
 
-        baseUrlSet: function() {
+        baseUrlSet: function(cx) {
           app.log.info('state.meta.baseUrl =>');
           app.log.info(this.meta.baseUrl);
         },
 
-        pagesRegistered: function() {
+        pagesRegistered: function(cx) {
           app.log.info('state.pages =>');
           app.log.info(this.pages);
         },
 
-        taxonomiesRegistered: function() {
+        taxonomiesRegistered: function(cx) {
           app.log.info('state.taxonomies =>');
           app.log.info(this.taxonomies);
         },
 
-        styleImported: function() {},
+        styleImported: function(cx) {},
 
-        themeImported: function() {},
+        themeImported: function(cx) {},
 
-        appLoaded: function() {
+        appLoaded: function(cx) {
           var slugs = this.route.slugs ? this.route.slugs : {};
           var parent = '/' + (slugs.parent ? slugs.parent : '');
           var child = slugs.child ? '/' + slugs.child : '';

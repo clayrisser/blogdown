@@ -53,14 +53,14 @@
 
       registerHooks: function() {
         return {
-          bop: () => {
+          bop: (cx) => {
             console.log('hahaha, this is what I do to the bop hook');
             return 1;
           },
-          hop: () => {
+          hop: (cx) => {
             return Promise.resolve(2);
           },
-          hooksRegistered: () => {
+          hooksRegistered: (cx) => {
             console.log('hahahaha taking over');
           }
         };

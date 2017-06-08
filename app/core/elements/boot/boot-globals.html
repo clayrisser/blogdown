@@ -89,14 +89,14 @@
           app.$.toast.show();
         },
 
-        runHook: function(hookName) {
+        runHook: function(hookName, cx) {
           app.log.info(`⥽: ${hookName}`);
           var promises = _.map(app._hooks[hookName], (hookInstance) => {
             if (typeof hookInstance.then === 'function') {
-              return hookInstance();
+              return hookInstance(cx);
             } else {
               return new Promise((resolve, reject) => {
-                return resolve(hookInstance());
+                return resolve(hookInstance(cx));
               });
             }
           });
