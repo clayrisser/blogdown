@@ -1,0 +1,90 @@
+<dom-module id="hooks-core">
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'hooks-core',
+
+        behaviors: [ ReduxBehavior ],
+
+        properties: {
+          settings: {
+            type: Object,
+            statePath: 'settings'
+          },
+          pages: {
+            type: Array,
+            statePath: 'pages'
+          },
+          taxonomies: {
+            type: Object,
+            statePath: 'taxonomies'
+          },
+          route: {
+            type: Object,
+            statePath: 'route'
+          },
+          meta: {
+            type: Object,
+            statePath: 'meta'
+          }
+        },
+
+        registerHooks: function() {
+          return {
+            settingsRegistered: this.settingsRegistered.bind(this),
+            globalsRegistered: this.globalsRegistered.bind(this),
+            hooksRegistered: this.hooksRegistered.bind(this),
+            baseUrlSet: this.baseUrlSet.bind(this),
+            pagesRegistered: this.pagesRegistered.bind(this),
+            taxonomiesRegistered: this.taxonomiesRegistered.bind(this),
+            styleImported: this.styleImported.bind(this),
+            themeImported: this.themeImported.bind(this),
+            appLoaded: this.appLoaded.bind(this)
+          }
+        },
+
+        settingsRegistered: function() {
+          app.log.info('state.settings =>');
+          app.log.info(this.settings);
+        },
+
+        globalsRegistered: function() {},
+
+        hooksRegistered: function() {
+          app.log.info('hooks =>');
+          app.log.info(_.keys(app._hooks));
+        },
+
+        baseUrlSet: function() {
+          app.log.info('state.meta.baseUrl =>');
+          app.log.info(this.meta.baseUrl);
+        },
+
+        pagesRegistered: function() {
+          app.log.info('state.pages =>');
+          app.log.info(this.pages);
+        },
+
+        taxonomiesRegistered: function() {
+          app.log.info('state.taxonomies =>');
+          app.log.info(this.taxonomies);
+        },
+
+        styleImported: function() {},
+
+        themeImported: function() {},
+
+        appLoaded: function() {
+          var slugs = this.route.slugs ? this.route.slugs : {};
+          var parent = '/' + (slugs.parent ? slugs.parent : '');
+          var child = slugs.child ? '/' + slugs.child : '';
+          app.go.to(parent + child);
+          this.dispatch({ type: APP_LOADED });
+          document.getElementById('loading').innerHTML = '';
+          app.log.info(this.settings.title + ' loaded');
+        }
+      });
+    })();
+  </script>
+</dom-module>

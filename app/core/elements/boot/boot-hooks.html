@@ -11,29 +11,47 @@
           settings: {
             type: Object,
             statePath: 'settings'
+          },
+          internalHookComponents: {
+            type: Array,
+            value: [
+              'core'
+            ]
           }
         },
 
         init: function() {
           app.log.info('registering hooks . . .');
-          var promises = _.map(this.settings.modules, (module) => {
+          var promises = _.flatten([_.map(this.settings.modules, (module) => {
             return this.getModuleHooks(module).then((hooks) => {
-              this.registerHooks(hooks);
+              return this.registerHooks(hooks);
             });
-          });
+          }), _.map(this.internalHookComponents, (internal) => {
+            return this.getInternalHooks(internal).then((hooks) => {
+              return this.registerHooks(hooks);
+            });
+          })]);
           return Promise.all(promises).then(() => {
-            app.log.info(app._hooks);
+            app.runHook('settingsRegistered');
+            app.runHook('globalsRegistered');
+            app.runHook('hooksRegistered');
             return Promise.resolve(app._hooks);
           });
         },
 
-        getModuleHooks: function(module) {
+        getModuleHooks: function(moduleName) {
           var blogdownModule = document.createElement('blogdown-module');
-          blogdownModule.name = module;
-          return blogdownModule.createModule().then((mod) => {
-            if (mod.registerHooks) return mod.registerHooks();
+          blogdownModule.name = moduleName;
+          return blogdownModule.createModule().then((module) => {
+            if (module.registerHooks) return module.registerHooks();
             return {};
           });
+        },
+
+        getInternalHooks: function(internalName) {
+          var internal = document.createElement(`hooks-${internalName}`);
+          if (internal.registerHooks) return Promise.resolve(internal.registerHooks());
+          return Promise.resolve({});
         },
 
         registerHooks: function(hooks) {

@@ -1,0 +1,41 @@
+<dom-module id="boot-meta">
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'boot-meta',
+
+        behaviors: [ ReduxBehavior ],
+
+        actions: {
+          setBaseUrl: (baseUrl) => {
+            return (dispatch) => {
+              dispatch({
+                type: SET_BASE_URL,
+                baseUrl: baseUrl
+              });
+              return app.runHook('baseUrlSet');
+            }
+          }
+        },
+
+        init: function() {
+          console.log('loading meta . . .');
+          var promises = [this.setBaseUrl()];
+          return Promise.all(promises);
+        },
+
+        setBaseUrl: function() {
+          var matches = window.location.href.match(/[\w\d\.:\/\\]+(?=\/#!)/g);
+          var baseUrl = window.location.href;
+          if (matches) {
+            baseUrl = matches[0];
+          } else {
+            if (baseUrl[baseUrl.length - 1] === '/') baseUrl = baseUrl.substring(0, baseUrl.length - 1);
+          }
+          return this.dispatch('setBaseUrl', baseUrl);
+        }
+      });
+    })();
+  </script>
+</dom-module>

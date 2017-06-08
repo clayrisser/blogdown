@@ -90,6 +90,7 @@
         },
 
         runHook: function(hookName) {
+          app.log.info(`⥽: ${hookName}`);
           var promises = _.map(app._hooks[hookName], (hookInstance) => {
             if (typeof hookInstance.then === 'function') {
               return hookInstance();

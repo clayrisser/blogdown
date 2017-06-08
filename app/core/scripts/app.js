@@ -6,9 +6,14 @@
     boot([
       'settings',
       'globals',
-      'hooks'
+      'hooks',
+      'meta',
+      'pages',
+      'taxonomies',
+      'style',
+      'theme'
     ]).then(() => {
-      console.log('Boot successful');
+      app.runHook('appLoaded');
     });
   });
 
@@ -53,34 +58,6 @@
   // Listen for template bound event to know when bindings
   // have resolved and content has been stamped to the page
   app.addEventListener('dom-change', function() {
-    console.log('Our app is ready to rock!');
+    console.log('DOM Ready');
   });
-
-  function _setBaseUrl() {
-    var matches = window.location.href.match(/[\w\d\.:\/\\]+(?=\/#!)/g);
-    var baseUrl = window.location.href;
-    if (matches) {
-      baseUrl = matches[0];
-    } else {
-      if (baseUrl[baseUrl.length - 1] === '/') baseUrl = baseUrl.substring(0, baseUrl.length - 1);
-    }
-    store.dispatch({
-      type: SET_BASE_URL,
-      baseUrl: baseUrl
-    });
-  }
-
-  function _appLoaded() {
-    var state = store.getState();
-    var route = state.route;
-    var slugs = route.slugs ? route.slugs : {};
-    var parent = '/' + (slugs.parent ? slugs.parent : '');
-    var child = slugs.child ? '/' + slugs.child : '';
-    app.go.to(parent + child);
-    store.dispatch({ type: APP_LOADED });
-    document.getElementById('loading').innerHTML = '';
-    app.log.info(state.settings.title + ' loaded');
-  }
-
-
 })(document);
