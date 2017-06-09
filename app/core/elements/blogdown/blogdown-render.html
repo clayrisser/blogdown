@@ -54,7 +54,7 @@
             firstRenderer = renderer;
             return false;
           });
-          renderers.unshift(firstRenderer);
+          if (firstRenderer) renderers.unshift(firstRenderer);
           var promises = [];
           if (this.page) {
             _.each(renderers, (renderer) => {
