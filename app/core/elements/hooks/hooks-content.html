@@ -1,0 +1,33 @@
+<dom-module id="hooks-content">
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'hooks-content',
+
+        registerHooks: function() {
+          return {
+            pageReady: this.pageReady.bind(this),
+            postsReady: this.postsReady.bind(this),
+            postReady: this.postReady.bind(this),
+            pageAttached: this.pageAttached.bind(this),
+            postsAttached: this.postsAttached.bind(this),
+            postAttached: this.postAttached.bind(this)
+          }
+        },
+
+        pageReady: function(cx) {},
+
+        postsReady: function(cx) {},
+
+        postReady: function(cx) {},
+
+        pageAttached: function(cx) {},
+
+        postsAttached: function(cx) {},
+
+        postAttached: function(cx) {}
+      });
+    })();
+  </script>
+</dom-module>

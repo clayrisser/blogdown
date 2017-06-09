@@ -1,0 +1,21 @@
+<dom-module id="theme-body">
+  <template>
+    <style>
+    </style>
+
+    <div>
+      <blogdown-content></blogdown-content>
+    </div>
+
+  </template>
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'theme-body',
+
+        behaviors: [ ReduxBehavior ]
+      });
+    })();
+  </script>
+</dom-module>

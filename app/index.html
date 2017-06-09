@@ -78,13 +78,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <template is="dom-bind" id="app">
 
-    <app-theme id="rootPage"
+    <blogdown-theme id="rootPage"
       narrow="{{narrow}}"
       loading="[[loading]]"
       progress="[[progress]]"
       page-title="[[pageTitle]]"
       route-data="[[routeData]]">
-    </app-theme>
+    </blogdown-theme>
 
     <paper-toast id="toast" text="[[message]]" duration="[[settings.toastDuration]]">
       <span class="toast-hide-button" role="button" tabindex="0" onclick="app.$.toast.hide()">Ok</span>

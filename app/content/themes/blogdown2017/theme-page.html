@@ -1,0 +1,21 @@
+<dom-module id="theme-page">
+  <template>
+    <style>
+    </style>
+
+    <h1>[[page.title]]</h1>
+
+    <blogdown-render page="[[page]]"></blogdown-render>
+
+  </template>
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'theme-page',
+
+        behaviors: [BlogdownPage]
+      });
+    })();
+  </script>
+</dom-module>

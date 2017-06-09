@@ -1,0 +1,26 @@
+<dom-module id="blogdown-theme">
+  <template>
+
+    <template id="theme" is="dom-if" if="[[appLoaded]]" restamp>
+      <theme-body></theme-body>
+    </template>
+
+  </template>
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'blogdown-theme',
+
+        behaviors: [ ReduxBehavior ],
+
+        properties: {
+          appLoaded: {
+            type: Boolean,
+            statePath: 'meta.appLoaded'
+          }
+        }
+      });
+    })();
+  </script>
+</dom-module>

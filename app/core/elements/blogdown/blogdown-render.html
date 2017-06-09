@@ -1,0 +1,29 @@
+<dom-module id="blogdown-render">
+  <template>
+
+    rendered
+
+  </template>
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'blogdown-render',
+
+        properties: {
+          page: {
+            type: Object,
+            value: {}
+          }
+        },
+
+        ready: function() {
+          this.page ? this.set('content', this.page) : this.set('content', this.post);
+          var renderer = document.createElement(`renderer-${this.content.format}`);
+          renderer.content = this.content;
+          Polymer.dom(this.root).appendChild(renderer);
+        }
+      });
+    })();
+  </script>
+</dom-module>

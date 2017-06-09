@@ -5,7 +5,7 @@
   "easterEggs": true,
   "ajaxTimeout": "10000",
   "toastDuration": "5000",
-  "theme": "drawer",
+  "theme": "blogdown2017",
   "permlinkMode": "title",
   "style": "default",
   "socialAccounts": {

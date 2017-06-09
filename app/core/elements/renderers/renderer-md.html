@@ -1,0 +1,17 @@
+<dom-module id="renderer-md">
+  <template>
+    yay markdown
+  </template>
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'renderer-md',
+
+        attached: function() {
+          console.log(this.content);
+        }
+      });
+    })();
+  </script>
+</dom-module>

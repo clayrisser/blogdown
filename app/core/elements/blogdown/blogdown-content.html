@@ -1,0 +1,80 @@
+<dom-module id="blogdown-content">
+  <template>
+
+    <template is="dom-if" if="[[isPage]]" restamp>
+      <theme-page page="[[page]]"></theme-page>
+    </template>
+    <template is="dom-if" if="[[isPosts]]" restamp>
+      <theme-posts page="[[page]]" posts="[[posts]]"></theme-posts>
+    </template>
+    <template is="dom-if" if="[[isPost]]" restamp>
+      <theme-post post="[[post]]"></theme-post>
+    </template>
+
+  </template>
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'blogdown-content',
+
+        behaviors: [ReduxBehavior],
+
+        properties: {
+          route: {
+            type: Object,
+            statePath: 'route'
+          },
+          pages: {
+            type: Array,
+            statePath: 'pages'
+          },
+          taxonomies: {
+            type: Object,
+            statePath: 'taxonomies'
+          },
+          isParent: {
+            type: Boolean,
+            value: false
+          },
+          isChild: {
+            type: Boolean,
+            value: false
+          },
+          page: {
+            type: Object,
+            value: {}
+          },
+          post: {
+            type: Object,
+            value: {}
+          }
+        },
+
+        ready: function() {
+          switch(this.route.type) {
+            case 'parent':
+              this.set('page', _.find(this.pages, {slug: this.route.slugs.parent}));
+              if (this.page.taxonomy) {
+                this.set('posts', this.taxonomies[this.route.slugs.parent]);
+                this.set('isPage', false);
+                this.set('isPosts', true);
+                this.set('isPost', false);
+              } else {
+                this.set('isPage', true);
+                this.set('isPosts', false);
+                this.set('isPost', false);
+              }
+              break;
+            default:
+              this.set('post', _.find(this.taxonomies[this.route.slugs.parent], {slug: this.route.slugs.child}));
+              this.set('isPage', false);
+              this.set('isPosts', false);
+              this.set('isPost', true);
+              break;
+          }
+        }
+      });
+    })();
+  </script>
+</dom-module>
