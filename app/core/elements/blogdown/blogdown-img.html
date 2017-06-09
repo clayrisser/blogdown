@@ -61,15 +61,6 @@
           },
           alt: {
             type: String
-          },
-          formats: {
-            type: Array,
-            value: [
-              'jpg',
-              'png',
-              'jpeg',
-              'gif'
-            ]
           }
         },
 
@@ -77,6 +68,15 @@
           this.getSrc(this.src).then((src) => {
             if (this.srcKnown) this.set('imageReady', true);
           });
+        },
+
+        ready: function() {
+          this.formats = [
+            'jpg',
+            'png',
+            'jpeg',
+            'gif'
+          ];
         },
 
         getSrc: function(src) {

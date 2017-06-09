@@ -31,10 +31,9 @@
         },
 
         sanitizeBody: function(body) {
-          var blogdownImg = document.createElement('blogdown-img');
           var promises = _.map(body.match(/]\(\/assets\/[^\)]+\)/g), (match) => {
             var src = match.replace('](/assets', '').replace(')', '');
-            return blogdownImg.getSrc(src).then((src) => {
+            return document.createElement('blogdown-img').getSrc(src).then((src) => {
               return {
                 relative: match,
                 absolute: `](${src})`
@@ -45,7 +44,6 @@
             _.each(sources, (source) => {
               body = body.replace(source.relative, source.absolute);
             });
-            console.log(body);
             return body;
           });
         }
