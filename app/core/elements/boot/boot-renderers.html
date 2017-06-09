@@ -21,6 +21,7 @@
         },
 
         init: function() {
+          if (!app._renderers) app._renderers = [];
           var promises = _.flatten([_.map(this.settings.modules, (module) => {
             return this.getModuleRenderer(module).then((renderer) => {
               return this.registerRenderer(renderer);
@@ -59,16 +60,13 @@
               component: internal.is
             });
           } else {
-            return null;
+            return Promise.resolve(null);
           }
         },
 
         registerRenderer: function(renderer) {
-          if (!app._renderers) app._renderers = {};
           if (renderer) {
-            app._renderers[renderer.format] = {
-              component: renderer.component
-            }
+            app._renderers.push(renderer);
           }
         }
       });

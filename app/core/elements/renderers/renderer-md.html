@@ -1,6 +1,15 @@
 <dom-module id="renderer-md">
   <template>
-    yay markdown
+    <style>
+      .markdown-html img {
+        max-width: 100%;
+      }
+    </style>
+
+    <marked-element markdown="[[sanitizedBody]]">
+      <div class="markdown-html"></div>
+    </marked-element>
+
   </template>
   <script>
     (function() {
@@ -16,7 +25,12 @@
         },
 
         attached: function() {
-          console.log(this.content);
+          var sanitizedBody = this.sanitizeBody(this.body);
+          this.set('sanitizedBody', sanitizedBody);
+        },
+
+        sanitizeBody: function(body) {
+          return body;
         }
       });
     })();

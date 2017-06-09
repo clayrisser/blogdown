@@ -64,7 +64,7 @@
 
         renderersRegistered: function(cx) {
           app.log.info('renderers =>');
-          app.log.info(app._renderers);
+          app.log.info(_.map(app._renderers, renderer => renderer));
         },
 
         pagesRegistered: function(cx) {

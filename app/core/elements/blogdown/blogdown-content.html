@@ -43,11 +43,11 @@
           },
           page: {
             type: Object,
-            value: {}
+            value: null
           },
           post: {
             type: Object,
-            value: {}
+            value: null
           }
         },
 
@@ -55,6 +55,7 @@
           switch(this.route.type) {
             case 'parent':
               this.set('page', _.find(this.pages, {slug: this.route.slugs.parent}));
+              if (!this.page) this.set('page', _.find(this.pages, {slug: '404'}));
               if (this.page.taxonomy) {
                 this.set('posts', this.taxonomies[this.route.slugs.parent]);
                 this.set('isPage', false);
@@ -68,6 +69,13 @@
               break;
             default:
               this.set('post', _.find(this.taxonomies[this.route.slugs.parent], {slug: this.route.slugs.child}));
+              if (!this.post) {
+                this.set('page', _.find(this.pages, {slug: '404'}));
+                this.set('isPage', true);
+                this.set('isPosts', false);
+                this.set('isPost', false);
+                break;
+              }
               this.set('isPage', false);
               this.set('isPosts', false);
               this.set('isPost', true);
