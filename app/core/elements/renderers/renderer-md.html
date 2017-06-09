@@ -8,6 +8,13 @@
       Polymer({
         is: 'renderer-md',
 
+        properties: {
+          renderer: {
+            type: 'string',
+            value: 'md'
+          }
+        },
+
         attached: function() {
           console.log(this.content);
         }

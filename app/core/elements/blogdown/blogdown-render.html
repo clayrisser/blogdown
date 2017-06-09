@@ -19,9 +19,16 @@
 
         ready: function() {
           this.page ? this.set('content', this.page) : this.set('content', this.post);
-          var renderer = document.createElement(`renderer-${this.content.format}`);
-          renderer.content = this.content;
-          Polymer.dom(this.root).appendChild(renderer);
+          this.getPath((path) => {
+            var renderer = document.createElement(`renderer-${this.content.format}`);
+            renderer.content = this.content;
+            Polymer.dom(this.root).appendChild(renderer);
+          });
+        },
+
+        getPath: function(content) {
+          return new Promise((resolve, reject) => {
+          });
         }
       });
     })();

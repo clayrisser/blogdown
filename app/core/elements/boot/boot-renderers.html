@@ -1,0 +1,77 @@
+<dom-module id="boot-renderers">
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'boot-renderers',
+
+        behaviors: [ ReduxBehavior ],
+
+        properties: {
+          settings: {
+            type: Object,
+            statePath: 'settings'
+          },
+          internalRendererComponents: {
+            type: Array,
+            value: [
+              'md'
+            ]
+          }
+        },
+
+        init: function() {
+          var promises = _.flatten([_.map(this.settings.modules, (module) => {
+            return this.getModuleRenderer(module).then((renderer) => {
+              return this.registerRenderer(renderer);
+            });
+          }), _.map(this.internalRendererComponents, (internal) => {
+            return this.getInternalRenderer(internal).then((renderer) => {
+              return this.registerRenderer(renderer);
+            });
+          })]);
+          return Promise.all(promises).then(() => {
+            app.runHook('renderersRegistered');
+            return Promise.resolve(app._renderers);
+          });
+        },
+
+        getModuleRenderer: function(moduleName) {
+          var blogdownModule = document.createElement('blogdown-module');
+          blogdownModule.name = moduleName;
+          return blogdownModule.createModule().then((module) => {
+            if (module.renderer) {
+              return {
+                format: module.renderer,
+                component: module.is
+              };
+            } else {
+              return null;
+            }
+          });
+        },
+
+        getInternalRenderer: function(internalName) {
+          var internal = document.createElement(`renderer-${internalName}`);
+          if (internal.renderer) {
+            return Promise.resolve({
+              format: internal.renderer,
+              component: internal.is
+            });
+          } else {
+            return null;
+          }
+        },
+
+        registerRenderer: function(renderer) {
+          if (!app._renderers) app._renderers = {};
+          if (renderer) {
+            app._renderers[renderer.format] = {
+              component: renderer.component
+            }
+          }
+        }
+      });
+    })();
+  </script>
+</dom-module>
