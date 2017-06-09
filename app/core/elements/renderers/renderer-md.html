@@ -31,8 +31,8 @@
         },
 
         sanitizeBody: function(body) {
-          var promises = _.map(body.match(/]\(\/assets\/[^\)]+\)/g), (match) => {
-            var src = match.replace('](/assets', '').replace(')', '');
+          var promises = _.map(body.match(/]\(\/[^\)]+\)/g), (match) => {
+            var src = match.replace('](/', '/').replace(')', '');
             return document.createElement('blogdown-img').getSrc(src).then((src) => {
               return {
                 relative: match,

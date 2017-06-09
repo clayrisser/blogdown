@@ -109,7 +109,7 @@
         setImageDefaults: function(src) {
           var matches = src.match(/^(https?|file):\/\//g);
           if (!matches || matches.length <= 0) {
-            src = `${this.baseUrl}/content/assets${src[0] === '/' ? '' : '/'}${src}`;
+            src = `${this.baseUrl}/content${src[0] === '/' ? '' : '/'}${src}`;
             var matches = src.match(/\/[\w\d\.\-\_]+/g);
             var format = 'png';
             if (matches && matches.length > 0) {
