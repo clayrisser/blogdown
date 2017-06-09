@@ -45,6 +45,10 @@
             type: Boolean,
             value: false
           },
+          filename: {
+            type: String,
+            value: ''
+          },
           imageReady: {
             type: Boolean,
             value: false
@@ -94,6 +98,17 @@
               var src = `${this.srcBase}.${format}`;
               promises.push(this.loadFile.bind(this, src, format));
             });
+            if (this.route.type === 'parent') {
+              _.each(formats, (format) => {
+                var src = `${this.baseUrl}/pages/${this.filename}.${format}`
+                promises.push(this.loadFile.bind(this, src, format));
+              });
+            } else {
+              _.each(formats, (format) => {
+                var src = `${this.baseUrl}/${this.route.slugs.parent}/${this.filename}.${format}`
+                promises.push(this.loadFile.bind(this, src, format));
+              });
+            }
           } else {
             promises.push(this.src, this.format);
           }
@@ -109,8 +124,10 @@
         setImageDefaults: function(src) {
           var matches = src.match(/^(https?|file):\/\//g);
           if (!matches || matches.length <= 0) {
-            src = `${this.baseUrl}/content${src[0] === '/' ? '' : '/'}${src}`;
-            var matches = src.match(/\/[\w\d\.\-\_]+/g);
+            src = (src[0] === '/' ? '' : '/') + src;
+            if ((src.match(/\//g) || []).length <= 1) src = `/assets${src}`;
+            src = `${this.baseUrl}/content${src}`;
+            var matches = src.match(/\/[^\/$#]+/g);
             var format = 'png';
             if (matches && matches.length > 0) {
               matches = matches[matches.length - 1].match(/\..+/g);
@@ -118,10 +135,22 @@
                 format = matches[0].replace('.', '');
               }
             }
-            var srcBase = src.match(new RegExp(`.+(?=\.${format})`, 'g'));
-            if (!srcBase) srcBase = src;
+            matches = src.match(new RegExp(`.+(?=\.${format})`, 'g'));
+            var srcBase = null;
+            var filename = '';
+            if (matches && matches.length > 0) srcBase = matches[0];
+            if (!srcBase) {
+              srcBase = src;
+              matches = src.match(/\/[^\/]+$/g);
+              if (matches && matches.length > 0) matches = matches[0].replace('/', '').match(/[^\?\#]+/g);
+              if (matches && matches.length > 0) filename = matches[0];
+            } else {
+              matches = src.match(new RegExp(`\/[^\/]+(?=.${format})`, 'g'));
+              if (matches && matches.length > 0) filename = matches[0].replace('/', '');
+            }
             this.set('localSrc', true);
             this.set('srcBase', srcBase);
+            this.set('filename', filename);
             this.set('format', format);
             this.set('src', `${srcBase}.${format}`);
           }
