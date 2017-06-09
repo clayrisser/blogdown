@@ -3,7 +3,6 @@
   "private": true,
   "dependencies": {
     "app-elements": "^0.10.1",
-    "changecase": "^1.0.0",
     "fa-awesome": "^2.0.2",
     "fetch": "^2.0.2",
     "gold-elements": "^1.0.1",
