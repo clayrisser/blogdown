@@ -56,7 +56,7 @@
           });
           if (firstRenderer) renderers.unshift(firstRenderer);
           var promises = [];
-          if (this.page) {
+          if (this.route.type === 'parent') {
             _.each(renderers, (renderer) => {
               var url = `${this.baseUrl}/content/pages/${this.page.slug}.${renderer.format}`;
               promises.push(this.loadFile.bind(this, url, renderer));

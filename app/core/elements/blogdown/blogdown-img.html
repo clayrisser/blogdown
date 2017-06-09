@@ -1,0 +1,152 @@
+<dom-module id="blogdown-img">
+  <template>
+    <style>
+      img {
+        max-height: 100%;
+        max-width: 100%;
+      }
+    </style>
+
+    <template is="dom-if" if="[[imageReady]]">
+      <img src="[[src]]" alt="[[alt]]" height="[[height]]" width="[[width]]">
+    </template>
+
+  </template>
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'blogdown-img',
+
+        behaviors: [ ReduxBehavior ],
+
+        properties: {
+          baseUrl: {
+            type: String,
+            statePath: 'meta.baseUrl'
+          },
+          route: {
+            type: String,
+            statePath: 'route'
+          },
+          body: {
+            type: Object,
+            value: null
+          },
+          url: {
+            type: String,
+            value: ''
+          },
+          format: {
+            type: String,
+            value: null
+          },
+          content: {
+            type: Object,
+            value: {}
+          },
+          srcKnown: {
+            type: Boolean,
+            value: false
+          },
+          imageReady: {
+            type: Boolean,
+            value: false
+          },
+          localSrc: {
+            type: Boolean,
+            value: false
+          },
+          height: {
+            type: String
+          },
+          width: {
+            type: String
+          },
+          alt: {
+            type: String
+          },
+          formats: {
+            type: Array,
+            value: [
+              'jpg',
+              'png',
+              'jpeg',
+              'gif'
+            ]
+          }
+        },
+
+        ready: function() {
+          this.setImageDefaults(this.src);
+          this.getSrc(this.content).then((src) => {
+            if (this.srcKnown) this.set('imageReady', true);
+          });
+        },
+
+        getSrc: function() {
+          var firstFormat = null;
+          var formats = _.remove(this.formats, (format) => {
+            if (this.format !== format) return true;
+            firstFormat = this.format;
+            return false;
+          });
+          if (firstFormat) formats.unshift(firstFormat);
+          var promises = [];
+          if (this.localSrc) {
+            _.each(formats, (format) => {
+              var src = `${this.srcBase}.${format}`;
+              promises.push(this.loadFile.bind(this, src, format));
+            });
+          } else {
+            promises.push(this.src, this.format);
+          }
+          var promiseChain = Promise.resolve();
+          _.each(promises, (promise) => {
+            promiseChain = promiseChain.then(promise);
+          });
+          return promiseChain.then(() => {
+            return this.src;
+          });
+        },
+
+        setImageDefaults: function(src) {
+          var matches = src.match(/^(https?|file):\/\//g);
+          if (!matches || matches.length <= 0) {
+            src = `${this.baseUrl}/content/assets${src[0] === '/' ? '' : '/'}${src}`;
+            var matches = src.match(/\/[\w\d\.\-\_]+/g);
+            var format = 'png';
+            if (matches && matches.length > 0) {
+              matches = matches[matches.length - 1].match(/\..+/g);
+              if (matches && matches.length > 0) {
+                format = matches[0].replace('.', '');
+              }
+            }
+            var srcBase = src.match(new RegExp(`.+(?=\.${format})`, 'g'));
+            if (!srcBase) srcBase = src;
+            this.set('localSrc', true);
+            this.set('srcBase', srcBase);
+            this.set('format', format);
+            this.set('src', `${srcBase}.${format}`);
+          }
+        },
+
+        loadFile: function(src, format) {
+          src = `${src}?${moment().format('X')}`;
+          if (this.srcKnown) return Promise.resolve();
+          return fetch(src).then((res) => {
+            if (res.status === 404) return null;
+            return res.blob();
+          }).then((body) => {
+            if (body) {
+              this.set('body', body);
+              this.set('src', src);
+              this.set('format', format);
+              this.set('srcKnown', true);
+            }
+          });
+        }
+      });
+    })();
+  </script>
+</dom-module>
