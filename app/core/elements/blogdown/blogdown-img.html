@@ -41,10 +41,6 @@
             type: String,
             value: null
           },
-          content: {
-            type: Object,
-            value: {}
-          },
           srcKnown: {
             type: Boolean,
             value: false
@@ -77,14 +73,14 @@
           }
         },
 
-        ready: function() {
-          this.setImageDefaults(this.src);
-          this.getSrc(this.content).then((src) => {
+        attached: function() {
+          this.getSrc(this.src).then((src) => {
             if (this.srcKnown) this.set('imageReady', true);
           });
         },
 
-        getSrc: function() {
+        getSrc: function(src) {
+          this.setImageDefaults(src);
           var firstFormat = null;
           var formats = _.remove(this.formats, (format) => {
             if (this.format !== format) return true;
