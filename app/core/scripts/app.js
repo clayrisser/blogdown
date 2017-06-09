@@ -1,5 +1,11 @@
 ((document) => {
   'use strict';
+
+  var link = document.createElement('link');
+  link.rel = 'import';
+  link.href = 'core/elements/elements.html';
+  document.head.appendChild(link);
+
   var app = document.getElementById('app');
 
   window.addEventListener('WebComponentsReady', function() {
