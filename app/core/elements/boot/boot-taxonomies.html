@@ -77,16 +77,16 @@
             if (post.title) {
               title = post.title;
             } else if (post.author) {
-              title = changeCase.titleCase(taxonomy.singularForm) + ' by ' + post.author;
+              title = _.startCase(taxonomy.singularForm.replace('-', ' '));
             } else if (date) {
-              title = changeCase.titleCase(taxonomy.singularForm) + ' on ' + date.format(this.settings.dateFormat);
+              title = _.startCase(taxonomy.singularForm.replace('-', ' ')) + ' on ' + date.format(this.settings.dateFormat);
             }
             var slug = post.slug;
             if (!slug) {
               if (date && this.settings.permlinkMode === 'date') {
                 slug = date.format('X');
               } else {
-                slug = changeCase.paramCase(title);
+                slug = _.snakeCase(title).replace('_', '-');
               }
             }
             var featuredImage = post.featuredImage ? post.featuredImage : false;

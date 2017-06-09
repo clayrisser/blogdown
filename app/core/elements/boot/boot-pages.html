@@ -51,7 +51,7 @@
           var loaded404 = false;
           _.each(pages, (page) => {
             if (page.format === 'dyn') page.format = 'dyn.html';
-            var slug = page.slug ? page.slug : changeCase.paramCase(page.title);
+            var slug = page.slug ? page.slug : _.snakeCase(page.title).replace('_', '-');
             switch(slug) {
               case 'home':
                 loadedHome = true;
@@ -63,7 +63,7 @@
                 if (page.addToMenu === undefined) page.addToMenu = false;
                 break;
             }
-            var title = page.title ? page.title : changeCase.titleCase(page.slug);
+            var title = page.title ? page.title : _.startCase(page.slug.replace('-', ' '));
             var addToMenu = page.addToMenu !== undefined ? page.addToMenu : true;
             var pageMeta = {
               title: title,
@@ -86,7 +86,7 @@
           _.each(this.settings.taxonomies, (taxonomy) => {
             if (!_.includes(overriddenTaxonomies, taxonomy)) {
               pagesMeta.push({
-                title: changeCase.titleCase(taxonomy.name),
+                title: _.startCase(taxonomy.name.replace('-', ' ')),
                 slug: taxonomy.name,
                 addToMenu: true,
                 taxonomy: true
