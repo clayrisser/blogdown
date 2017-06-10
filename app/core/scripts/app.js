@@ -12,9 +12,7 @@
     boot([
       'settings',
       'globals',
-      'hooks',
       'meta',
-      'renderers',
       'pages',
       'taxonomies',
       'style',

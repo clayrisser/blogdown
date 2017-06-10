@@ -91,7 +91,8 @@
 
         runHook: function(hookName, cx) {
           app.log.info(`⥽: ${hookName}`);
-          var promises = _.map(app._hooks[hookName], (hookInstance) => {
+          if (!app._hooks) app._hooks = {};
+          var promises = _.map(app._hooks[hookName], (hookInstance, key) => {
             if (typeof hookInstance.then === 'function') {
               return hookInstance(cx);
             } else {

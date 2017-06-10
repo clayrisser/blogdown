@@ -10,6 +10,10 @@
         behaviors: [ ReduxBehavior ],
 
         properties: {
+          settings: {
+            type: Object,
+            statePath: 'settings'
+          },
           route: {
             type: Object,
             statePath: 'route'
@@ -33,6 +37,12 @@
           body: {
             type: String,
             value: ''
+          },
+          page: {
+            type: Object
+          },
+          post: {
+            type: Object
           }
         },
 
@@ -44,7 +54,7 @@
               return url;
             });
           }).then((url) => {
-            var renderer = document.createElement(this.renderer.component);
+            var renderer = document.createElement(this.settings.renderers[this.renderer]);
             renderer.content = this.content;
             renderer.url = this.url;
             renderer.body = this.body;
@@ -54,8 +64,8 @@
 
         getUrl: function(content) {
           var firstRenderer = null;
-          var renderers = _.remove(app._renderers, (renderer) => {
-            if (this.content.format !== renderer.format) return true;
+          var renderers = _.remove(_.keys(this.settings.renderers), (renderer) => {
+            if (this.content.format !== renderer) return true;
             firstRenderer = renderer;
             return false;
           });
@@ -63,29 +73,29 @@
           var promises = [];
           if (this.page) {
             _.each(renderers, (renderer) => {
-              var url = `${this.baseUrl}/content/pages/${this.page.slug}.${renderer.format}`;
+              var url = `${this.baseUrl}/content/pages/${this.page.slug}.${renderer}`;
               promises.push(this.loadFile.bind(this, url, renderer));
             });
             if (this.page.slug !== _.snakeCase(this.page.title).replace(/_/g, '-')) {
               _.each(renderers, (renderer) => {
-                var url = `${this.baseUrl}/content/pages/${_.snakeCase(this.page.title).replace(/_/g, '-')}.${renderer.format}`;
+                var url = `${this.baseUrl}/content/pages/${_.snakeCase(this.page.title).replace(/_/g, '-')}.${renderer}`;
                 promises.push(this.loadFile.bind(this, url, renderer));
               });
             }
           } else {
             _.each(renderers, (renderer) => {
-              var url = `${this.baseUrl}/content/${this.route.slugs.parent}/${this.post.slug}.${renderer.format}`;
+              var url = `${this.baseUrl}/content/${this.route.slugs.parent}/${this.post.slug}.${renderer}`;
               promises.push(this.loadFile.bind(this, url, renderer));
             });
             if (this.post.slug !== _.snakeCase(this.post.title).replace(/_/g, '-')) {
               _.each(renderers, (renderer) => {
-                var url = `${this.baseUrl}/content/${this.route.slugs.parent}/${_.snakeCase(this.post.title).replace(/_/g, '-')}.${renderer.format}`;
+                var url = `${this.baseUrl}/content/${this.route.slugs.parent}/${_.snakeCase(this.post.title).replace(/_/g, '-')}.${renderer}`;
                 promises.push(this.loadFile.bind(this, url, renderer));
               });
             }
             if (this.post.date && this.post.slug !== this.post.date.format('X')) {
               _.each(renderers, (renderer) => {
-                var url = `${this.baseUrl}/content/${this.route.slugs.parent}/${this.post.date.format('X')}.${renderer.format}`;
+                var url = `${this.baseUrl}/content/${this.route.slugs.parent}/${this.post.date.format('X')}.${renderer}`;
                 promises.push(this.loadFile.bind(this, url, renderer));
               });
             }

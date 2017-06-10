@@ -5,7 +5,10 @@
       Polymer({
         is: 'hooks-core',
 
-        behaviors: [ ReduxBehavior ],
+        behaviors: [
+          ReduxBehavior,
+          BlogdownHooks
+        ],
 
         properties: {
           settings: {

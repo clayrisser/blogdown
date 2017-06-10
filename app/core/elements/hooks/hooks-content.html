@@ -5,6 +5,8 @@
       Polymer({
         is: 'hooks-content',
 
+        behaviors: [ BlogdownHooks ],
+
         registerHooks: function() {
           return {
             pageReady: this.pageReady.bind(this),

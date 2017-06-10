@@ -27,7 +27,7 @@
       "disqus": false
     }
   ],
-  "modules": [
-    "disqus"
-  ]
+  "renderers": {
+    "md": "renderer-md"
+  }
 }
