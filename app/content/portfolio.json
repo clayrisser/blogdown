@@ -3,7 +3,7 @@
     "title": "BlogDowns",
     "date": "feb 12, 2017",
     "status": "published",
-    "featuredImage": true,
+    "featuredImage": "bob",
     "author": "jamrizzi",
     "description": "BlogDown is a blazing fast front-end blogging platform built with Polymer. In fact, this very website is running on BlogDown."
   },
@@ -12,7 +12,7 @@
     "slug": "deskterm",
     "date": "aug 15, 2016",
     "status": "published",
-    "featuredImage": true,
+    "featuredImage": "screenshot-3",
     "author": "jamrizzi"
   },
   {

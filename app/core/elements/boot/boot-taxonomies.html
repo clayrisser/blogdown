@@ -90,12 +90,6 @@
               }
             }
             var featuredImage = post.featuredImage ? post.featuredImage : false;
-            if (typeof featuredImage === 'string') {
-              var matches = featuredImage.match(/^(((https*)|file):)*\/{2}/g);
-              if (!matches) {
-                featuredImage = this.baseUrl + '/content/assets' + ((featuredImage[0] === '/') ? featuredImage : ('/' + featuredImage));
-              }
-            }
             var postMeta = {
               title: title,
               slug: slug,

@@ -74,6 +74,15 @@
                 this.set('isPage', true);
                 this.set('isPosts', false);
                 this.set('isPost', false);
+                store.dispatch({
+                  type: CHANGE_ROUTE,
+                  route: {
+                    type: 'parent',
+                    slugs: {
+                      parent: '404'
+                    }
+                  }
+                });
                 break;
               }
               this.set('isPage', false);
