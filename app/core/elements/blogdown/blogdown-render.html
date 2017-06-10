@@ -39,6 +39,11 @@
         ready: function() {
           this.page ? this.set('content', this.page) : this.set('content', this.post);
           this.getUrl(this.content).then((url) => {
+            return this.getFeaturedImage(this.content.featuredImage).then((featuredImage) => {
+              this.content.featuredImage = featuredImage;
+              return url;
+            });
+          }).then((url) => {
             var renderer = document.createElement(this.renderer.component);
             renderer.content = this.content;
             renderer.url = this.url;
@@ -92,6 +97,37 @@
           return promiseChain.then(() => {
             return this.url;
           });
+        },
+
+        getFeaturedImage: function(featuredImage) {
+          if (featuredImage) {
+            if (_.isString(featuredImage)) {
+              return document.createElement('blogdown-img').getSrc(featuredImage).then((newFeaturedImage) => {
+                if (newFeaturedImage) return newFeaturedImage;
+                return document.createElement('blogdown-img').getSrc(this.content.slug).then((newFeaturedImage) => {
+                  if (newFeaturedImage) return newFeaturedImage;
+                  if (this.content.slug !== _.snakeCase(this.content.title).replace('_', '-')) {
+                    var src = _.snakeCase(this.content.title).replace('_', '-');
+                    return document.createElement('blogdown-img').getSrc(src);
+                  } else {
+                    return false;
+                  }
+                });
+              });
+            } else {
+              return document.createElement('blogdown-img').getSrc(this.content.slug).then((newFeaturedImage) => {
+                if (newFeaturedImage) return newFeaturedImage;
+                if (this.content.slug !== _.snakeCase(this.content.title).replace('_', '-')) {
+                  var src = _.snakeCase(this.content.title).replace('_', '-');
+                  return document.createElement('blogdown-img').getSrc(src);
+                } else {
+                  return false;
+                }
+              });
+            }
+          } else {
+            return Promise.resolve(featuredImage);
+          }
         },
 
         loadFile: function(url, renderer) {

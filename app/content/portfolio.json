@@ -1,6 +1,6 @@
 [
   {
-    "title": "BlogDown",
+    "title": "BlogDowns",
     "date": "feb 12, 2017",
     "status": "published",
     "featuredImage": true,
@@ -9,6 +9,7 @@
   },
   {
     "title": "Deskterm",
+    "slug": "deskterm",
     "date": "aug 15, 2016",
     "status": "published",
     "featuredImage": true,
