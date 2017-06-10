@@ -13,6 +13,7 @@
       'settings',
       'globals',
       'meta',
+      'authors',
       'pages',
       'taxonomies',
       'style',

@@ -15,6 +15,10 @@
             type: Object,
             statePath: 'settings'
           },
+          authors: {
+            type: Object,
+            statePath: 'authors'
+          },
           pages: {
             type: Array,
             statePath: 'pages'
@@ -37,9 +41,8 @@
           return {
             settingsRegistered: this.settingsRegistered.bind(this),
             globalsRegistered: this.globalsRegistered.bind(this),
-            hooksRegistered: this.hooksRegistered.bind(this),
             baseUrlSet: this.baseUrlSet.bind(this),
-            renderersRegistered: this.renderersRegistered.bind(this),
+            authorsRegistered: this.authorsRegistered.bind(this),
             pagesRegistered: this.pagesRegistered.bind(this),
             taxonomiesRegistered: this.taxonomiesRegistered.bind(this),
             styleImported: this.styleImported.bind(this),
@@ -55,19 +58,14 @@
 
         globalsRegistered: function(cx) {},
 
-        hooksRegistered: function(cx) {
-          app.log.info('hooks =>');
-          app.log.info(_.keys(app._hooks));
-        },
-
         baseUrlSet: function(cx) {
           app.log.info('state.meta.baseUrl =>');
           app.log.info(this.meta.baseUrl);
         },
 
-        renderersRegistered: function(cx) {
-          app.log.info('renderers =>');
-          app.log.info(_.map(app._renderers, renderer => renderer));
+        authorsRegistered: function(cx) {
+          app.log.info('state.authors =>');
+          app.log.info(this.authors);
         },
 
         pagesRegistered: function(cx) {

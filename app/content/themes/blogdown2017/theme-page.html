@@ -1,11 +1,25 @@
 <dom-module id="theme-page">
   <template>
     <style>
+      .header {
+        padding: 0px 20px 10px 20px;
+      }
+      .content {
+        width: 100%;
+      }
+      paper-card {
+        --paper-card-background-color: var(--paper-menu-background-color);
+      }
     </style>
 
-    <h1>[[page.title]]</h1>
-
-    <blogdown-render page="[[page]]"></blogdown-render>
+    <div class="header">
+      <h1>[[page.title]]</h1>
+    </div>
+    <paper-card class="content" elevation="3">
+      <div class="card-content">
+        <blogdown-render page="[[page]]"></blogdown-render>
+      </div>
+    </paper-card>
 
   </template>
   <script>
@@ -14,7 +28,14 @@
       Polymer({
         is: 'theme-page',
 
-        behaviors: [ BlogdownPage ]
+        behaviors: [ BlogdownPage ],
+
+        properties: {
+          page: {
+            type: Object,
+            value: {}
+          }
+        }
       });
     })();
   </script>
