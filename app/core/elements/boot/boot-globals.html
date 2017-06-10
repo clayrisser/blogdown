@@ -28,6 +28,8 @@
             _.each(this.globals, (global, key) => {
               app[key] = global;
             });
+            app.runHook('settingsRegistered');
+            app.runHook('globalsRegistered');
             resolve(this.globals);
           });
         },

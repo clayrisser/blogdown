@@ -78,9 +78,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <template is="dom-bind" id="app">
 
-    <hooks-core></hooks-core>
-    <hooks-content></hooks-content>
-
     <blogdown-theme id="rootPage"
       narrow="{{narrow}}"
       loading="[[loading]]"
@@ -92,6 +89,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <paper-toast id="toast" text="[[message]]" duration="[[settings.toastDuration]]">
       <span class="toast-hide-button" role="button" tabindex="0" onclick="app.$.toast.hide()">Ok</span>
     </paper-toast>
+
+    <hooks-core></hooks-core>
+    <hooks-content></hooks-content>
 
     <!-- Uncomment next block to enable Service Worker support (1/2) -->
     <!--
