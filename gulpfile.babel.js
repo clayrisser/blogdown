@@ -1,12 +1,15 @@
 'use strict';
 
 import 'babel-polyfill';
+import browserSync from 'browser-sync';
+import fs from 'fs-extra-promise';
 import gulp from 'gulp';
 import gulpLoadPlugins from 'gulp-load-plugins';
-import fs from 'fs-extra-promise';
-import path from 'path';
+import historyApiFallback from 'connect-history-api-fallback';
 import mergeStream from 'merge-stream';
+import path from 'path';
 import runSequence from 'run-sequence';
+import { reload } from 'browser-sync';
 
 const $ = gulpLoadPlugins();
 const autoprefixerBrowsers = [
@@ -22,14 +25,14 @@ const autoprefixerBrowsers = [
 ];
 
 gulp.task('default', ['clean'], (cb) => {
-  return runSequence([
+  runSequence([
     'vulcanize',
     'styles',
     'images',
     'html',
     'scripts',
     'copy'
-  ]);
+  ], cb);
 });
 
 gulp.task('babel', (cb) => {
@@ -87,8 +90,8 @@ gulp.task('vulcanize', ['babel'], (cb) => {
     .pipe(gulp.dest('./dist/core/'))
     .on('end', () => {
       gulp.src('./.tmp', { read: false })
-        .pipe($.clean())
-        .on('end', cb);
+        .pipe($.clean());
+      cb();
     });
 });
 
@@ -112,6 +115,7 @@ gulp.task('images', (cb) => {
 
 gulp.task('html', (cb) => {
   gulp.src('./app/*.html')
+    .pipe($.useref())
     .pipe($.htmlmin({
       collapseWhitespace: true,
       collapseInlineTagWhitespace: true,
@@ -154,4 +158,45 @@ gulp.task('clean', (cb) => {
     './.tmp'
   ], { read: false })
     .pipe($.clean());
+});
+
+gulp.task('serve', (cb) => {
+  browserSync({
+    port: 8081,
+    notify: false,
+    logPrefix: 'BD',
+    snippetOptions: {
+      rule: {
+        match: '<span id="browser-sync-binding"></span>',
+        fn: (snippet) => {
+          return snippet;
+        }
+      }
+    },
+    server: {
+      baseDir: ['app'],
+      middleware: [historyApiFallback()]
+    }
+  });
+  gulp.watch(['./app/**/*'], reload);
+});
+
+gulp.task('serve:dist', ['default'], (cb) => {
+  browserSync({
+    port: 8081,
+    notify: false,
+    logPrefix: 'BD',
+    snippetOptions: {
+      rule: {
+        match: '<span id="browser-sync-binding"></span>',
+        fn: (snippet) => {
+          return snippet;
+        }
+      }
+    },
+    server: {
+      baseDir: ['dist'],
+      middleware: [historyApiFallback()]
+    }
+  });
 });
