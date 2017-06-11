@@ -1,120 +1,62 @@
 <!doctype html>
-<!--
-@license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="generator" content="BlogDown">
-  <title>BlogDown</title>
+  <head>
 
-  <!-- build:css core/styles/loading.css -->
-  <link rel="stylesheet" type="text/css" href="core/styles/loading.css">
-  <!-- endbuild-->
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="BlogDown">
+    <meta name="theme-color" content="#2E3AA1">
+    <meta name="msapplication-TileColor" content="#3372DF">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="PSK">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="BlogDown">
+    <meta name="msapplication-TileImage" content="content/assets/touch/ms-touch-icon-144x144-precomposed.png">
 
-  <!-- Place favicon.ico in the `app/` directory -->
+    <title>BlogDown</title>
 
-  <!-- Chrome for Android theme color -->
-  <meta name="theme-color" content="#2E3AA1">
+    <link rel="icon" sizes="192x192" href="content/assets/touch/chrome-touch-icon-192x192.png">
+    <link rel="apple-touch-icon" href="content/assets/touch/apple-touch-icon.png">
+    <link rel="stylesheet" type="text/css" href="core/styles/loading.css">
+    <link rel="manifest" href="core/manifest.json">
+    <link rel="stylesheet" href="core/styles/main.css">
+    <link rel="import" href="core/elements.html">
 
-  <!-- Web Application Manifest -->
-  <link rel="manifest" href="core/manifest.json">
+    <style is="custom-style" include="shared-styles"></style>
 
-  <!-- Tile color for Win8 -->
-  <meta name="msapplication-TileColor" content="#3372DF">
+  </head>
+  <body>
 
-  <!-- Add to homescreen for Chrome on Android -->
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="application-name" content="PSK">
-  <link rel="icon" sizes="192x192" href="content/assets/touch/chrome-touch-icon-192x192.png">
-
-  <!-- Add to homescreen for Safari on iOS -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="BlogDown">
-  <link rel="apple-touch-icon" href="content/assets/touch/apple-touch-icon.png">
-
-  <!-- Tile icon for Win8 (144x144) -->
-  <meta name="msapplication-TileImage" content="content/assets/touch/ms-touch-icon-144x144-precomposed.png">
-
-  <!-- build:css core/styles/main.css -->
-  <link rel="stylesheet" href="core/styles/main.css">
-  <!-- endbuild-->
-
-  <!-- build:js core/bower_components/webcomponentsjs/webcomponents-lite.min.js -->
-  <script src="core/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-  <!-- endbuild -->
-
-  <!-- Because this project uses vulcanize this should be your only html import
-       in this file. All other imports should go in elements.html -->
-  <link rel="import" href="core/elements/elements.html">
-
-  <!-- For shared styles, shared-styles.html import in elements.html -->
-  <style is="custom-style" include="shared-styles"></style>
-</head>
-
-<body>
-
-  <!-- App loading -->
-  <div id="loading" style="margin-top:calc(50vh - 100px)">
-    <div  class="spinner">
-      <div class="cube1"></div>
-      <div class="cube2"></div>
+    <div id="loading" style="margin-top:calc(50vh - 100px)">
+      <div  class="spinner">
+        <div class="cube1"></div>
+        <div class="cube2"></div>
+      </div>
     </div>
-  </div>
 
-  <!-- build:remove -->
-  <span id="browser-sync-binding"></span>
-  <!-- endbuild -->
+    <template is="dom-bind" id="app">
 
-  <template is="dom-bind" id="app">
+      <blogdown-theme
+          id="rootPage"
+          narrow="{{narrow}}"
+          loading="[[loading]]"
+          progress="[[progress]]"
+          page-title="[[pageTitle]]"
+          route-data="[[routeData]]">
+      </blogdown-theme>
 
-    <blogdown-theme id="rootPage"
-      narrow="{{narrow}}"
-      loading="[[loading]]"
-      progress="[[progress]]"
-      page-title="[[pageTitle]]"
-      route-data="[[routeData]]">
-    </blogdown-theme>
+      <paper-toast id="toast" text="[[message]]" duration="[[settings.toastDuration]]">
+        <span class="toast-hide-button" role="button" tabindex="0" onclick="app.$.toast.hide()">Ok</span>
+      </paper-toast>
 
-    <paper-toast id="toast" text="[[message]]" duration="[[settings.toastDuration]]">
-      <span class="toast-hide-button" role="button" tabindex="0" onclick="app.$.toast.hide()">Ok</span>
-    </paper-toast>
+      <hooks-core></hooks-core>
+      <hooks-content></hooks-content>
 
-    <hooks-core></hooks-core>
-    <hooks-content></hooks-content>
+    </template>
 
-    <!-- Uncomment next block to enable Service Worker support (1/2) -->
-    <!--
-    <paper-toast id="caching-complete"
-      duration="6000"
-      text="Caching complete! This app will work offline.">
-    </paper-toast>
+    <script src="core/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
 
-    <platinum-sw-register auto-register
-      clients-claim
-      skip-waiting
-      base-uri="bower_components/platinum-sw/bootstrap"
-      on-service-worker-installed="displayInstalledToast">
-      <platinum-sw-cache default-cache-strategy="fastest"
-        cache-config-file="cache-config.json">
-      </platinum-sw-cache>
-    </platinum-sw-register>
-    -->
-
-  </template>
-
-  <!-- build:js core/scripts/app.js -->
-  <script src="core/scripts/app.js"></script>
-  <!-- endbuild-->
-</body>
+  </body>
 </html>
