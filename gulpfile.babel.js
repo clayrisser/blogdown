@@ -160,7 +160,7 @@ gulp.task('clean', (cb) => {
     .pipe($.clean());
 });
 
-gulp.task('serve', (cb) => {
+gulp.task('serve', ['babel'], (cb) => {
   browserSync({
     port: 8081,
     notify: false,
@@ -174,10 +174,11 @@ gulp.task('serve', (cb) => {
       }
     },
     server: {
-      baseDir: ['app'],
+      baseDir: ['.tmp', 'app'],
       middleware: [historyApiFallback()]
     }
   });
+  gulp.watch(['./app/core/**/*.{js,html}'], ['babel', reload]);
   gulp.watch(['./app/**/*'], reload);
 });
 
