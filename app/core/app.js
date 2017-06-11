@@ -1,15 +1,24 @@
-((document) => {
-  'use strict';
+'use strict';
 
-  // var link = document.createElement('link');
-  // link.rel = 'import';
-  // link.href = 'core/elements/elements.html';
-  // document.head.appendChild(link);
+class App {
 
-  var app = document.getElementById('app');
+  app = document.getElementById('app');
 
-  window.addEventListener('WebComponentsReady', function() {
-    boot([
+  constructor() {
+    this.app.addEventListener('dom-change', () => {
+      this.domReady();
+    });
+    window.addEventListener('WebComponentsReady', () => {
+      this.webComponentsReady();
+    });
+  }
+
+  domReady() {
+    console.info('DOM Ready');
+  }
+
+  webComponentsReady() {
+    this.boot([
       'settings',
       'globals',
       'meta',
@@ -19,16 +28,16 @@
       'style',
       'theme'
     ]).then(() => {
-      app.runHook('appLoaded');
+      this.app.runHook('appLoaded');
     });
-  });
+  }
 
-  function boot(bootSteps) {
-    var promises = [];
+  boot(bootSteps) {
+    let promises = [];
     _.each(bootSteps, (bootStep) => {
-      promises.push(runBootStep.bind(this, bootStep));
+      promises.push(this.runBootStep.bind(this, bootStep));
     });
-    var promiseChain = Promise.resolve();
+    let promiseChain = Promise.resolve();
     _.each(promises, (promise) => {
       promiseChain = promiseChain.then(promise);
     });
@@ -39,31 +48,14 @@
     });
   }
 
-  function runBootStep(bootStep) {
-    var bootStepElement = document.createElement('boot-' + bootStep);
+  runBootStep(bootStep) {
+    const bootStepElement = document.createElement('boot-' + bootStep);
     return bootStepElement.init().then((res) => {
       return res;
     });
   }
+};
 
-  app.toastClicked = function() {
-    if (!app.toastTarget) {
-      app.toastTarget = '_self';
-    }
-    window.open(app.toastLink, app.toastTarget);
-  };
-
-  app.displayInstalledToast = function() {
-    if (!Polymer.dom(document).querySelector('platinum-sw-cache').disabled) {
-      console.log('caching disabled');
-    } else {
-      console.log('caching enabled');
-    }
-  };
-
-  // Listen for template bound event to know when bindings
-  // have resolved and content has been stamped to the page
-  app.addEventListener('dom-change', function() {
-    console.log('DOM Ready');
-  });
+((document) => {
+  new App();
 })(document);

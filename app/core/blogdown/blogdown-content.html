@@ -13,14 +13,13 @@
 
   </template>
   <script>
-    (function() {
-      'use strict';
-      Polymer({
-        is: 'blogdown-content',
+    class BlogdownContent {
+      beforeRegister() {
+        this.is = 'blogdown-content';
 
-        behaviors: [ ReduxBehavior ],
+        this.behaviors = [ ReduxBehavior ];
 
-        properties: {
+        this.properties = {
           route: {
             type: Object,
             statePath: 'route',
@@ -58,61 +57,62 @@
             type: Object,
             statePath: 'meta'
           }
-        },
+        };
+      }
 
-        routeChanged: function() {
-          if (this.meta && this.meta.appLoaded) {
-            if (!this.isReady) this.set('isReady', true);
-            this.rerender();
-          }
-        },
-
-        rerender: function() {
-          this.set('isPage', false);
-          this.set('isPosts', false);
-          this.set('isPost', false);
-          window.setTimeout(() => {
-            switch(this.route.type) {
-              case 'parent':
-                this.set('page', _.find(this.pages, {slug: this.route.slugs.parent}));
-                if (!this.page) return this.render404();
-                if (this.page.taxonomy) {
-                  this.set('posts', this.taxonomies[this.route.slugs.parent]);
-                  this.set('isPosts', true);
-                } else {
-                  this.set('isPage', true);
-                }
-                break;
-              default:
-                this.set('post', _.find(this.taxonomies[this.route.slugs.parent], {slug: this.route.slugs.child}));
-                if (!this.post) return this.render404();
-                this.set('isPost', true);
-                break;
-            }
-            this.set('is404', false);
-            app.runHook('routeChanged', this.route);
-          }, 0);
-        },
-
-        render404: function() {
-          if (!this.is404) {
-            store.dispatch({
-              type: CHANGE_ROUTE,
-              route: {
-                type: 'parent',
-                slugs: {
-                  parent: '404'
-                }
-              }
-            });
-            this.set('is404', true);
-          }
-          this.set('page', _.find(this.pages, {slug: '404'}));
-          this.set('isPage', true);
-          this.set('isPosts', false);
-          this.set('isPost', false);
+      routeChanged() {
+        if (this.meta && this.meta.appLoaded) {
+          if (!this.isReady) this.set('isReady', true);
+          this.rerender();
         }
-      });
-    })();
+      }
+
+      rerender() {
+        this.set('isPage', false);
+        this.set('isPosts', false);
+        this.set('isPost', false);
+        window.setTimeout(() => {
+          switch(this.route.type) {
+            case 'parent':
+              this.set('page', _.find(this.pages, {slug: this.route.slugs.parent}));
+              if (!this.page) return this.render404();
+              if (this.page.taxonomy) {
+                this.set('posts', this.taxonomies[this.route.slugs.parent]);
+                this.set('isPosts', true);
+              } else {
+                this.set('isPage', true);
+              }
+              break;
+            default:
+              this.set('post', _.find(this.taxonomies[this.route.slugs.parent], {slug: this.route.slugs.child}));
+              if (!this.post) return this.render404();
+              this.set('isPost', true);
+              break;
+          }
+          this.set('is404', false);
+          app.runHook('routeChanged', this.route);
+        }, 0);
+      }
+
+      render404() {
+        if (!this.is404) {
+          store.dispatch({
+            type: CHANGE_ROUTE,
+            route: {
+              type: 'parent',
+              slugs: {
+                parent: '404'
+              }
+            }
+          });
+          this.set('is404', true);
+        }
+        this.set('page', _.find(this.pages, {slug: '404'}));
+        this.set('isPage', true);
+        this.set('isPosts', false);
+        this.set('isPost', false);
+      }
+    }
+    Polymer(BlogdownContent);
   </script>
 </dom-module>

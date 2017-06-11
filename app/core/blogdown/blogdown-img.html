@@ -13,14 +13,13 @@
 
   </template>
   <script>
-    (function() {
-      'use strict';
-      Polymer({
-        is: 'blogdown-img',
+    class BlogdownImg {
+      beforeRegister() {
+        this.is = 'blogdown-img';
 
-        behaviors: [ ReduxBehavior ],
+        this.behaviors = [ ReduxBehavior ];
 
-        properties: {
+        this.properties = {
           baseUrl: {
             type: String,
             statePath: 'meta.baseUrl'
@@ -66,120 +65,121 @@
           alt: {
             type: String
           }
-        },
+        };
+      }
 
-        attached: function() {
-          this.getSrc(this.src).then((src) => {
-            if (this.srcKnown) this.set('imageReady', true);
+      attached() {
+        this.getSrc(this.src).then((src) => {
+          if (this.srcKnown) this.set('imageReady', true);
+        });
+      }
+
+      ready() {
+        this.formats = [
+          'jpg',
+          'png',
+          'jpeg',
+          'gif'
+        ];
+      }
+
+      getSrc(src) {
+        this.setImageDefaults(src);
+        let firstFormat = null;
+        let formats = _.remove(this.formats, (format) => {
+          if (this.format !== format) return true;
+          firstFormat = this.format;
+          return false;
+        });
+        if (firstFormat) formats.unshift(firstFormat);
+        let promises = [];
+        if (this.localSrc) {
+          _.each(formats, (format) => {
+            let src = `${this.srcBase}.${format}`;
+            promises.push(this.loadFile.bind(this, src, format));
           });
-        },
-
-        ready: function() {
-          this.formats = [
-            'jpg',
-            'png',
-            'jpeg',
-            'gif'
-          ];
-        },
-
-        getSrc: function(src) {
-          this.setImageDefaults(src);
-          var firstFormat = null;
-          var formats = _.remove(this.formats, (format) => {
-            if (this.format !== format) return true;
-            firstFormat = this.format;
-            return false;
-          });
-          if (firstFormat) formats.unshift(firstFormat);
-          var promises = [];
-          if (this.localSrc) {
+          if (this.route.type === 'parent') {
             _.each(formats, (format) => {
-              var src = `${this.srcBase}.${format}`;
+              let src = `${this.baseUrl}/content/pages/${this.filename}.${format}`
               promises.push(this.loadFile.bind(this, src, format));
             });
-            if (this.route.type === 'parent') {
-              _.each(formats, (format) => {
-                var src = `${this.baseUrl}/content/pages/${this.filename}.${format}`
-                promises.push(this.loadFile.bind(this, src, format));
-              });
-            } else {
-              _.each(formats, (format) => {
-                var src = `${this.baseUrl}/content/${this.route.slugs.parent}/${this.filename}.${format}`
-                promises.push(this.loadFile.bind(this, src, format));
-              });
-            }
           } else {
-            promises.push(this.src, this.format);
+            _.each(formats, (format) => {
+              let src = `${this.baseUrl}/content/${this.route.slugs.parent}/${this.filename}.${format}`
+              promises.push(this.loadFile.bind(this, src, format));
+            });
           }
-          var promiseChain = Promise.resolve();
-          _.each(promises, (promise) => {
-            promiseChain = promiseChain.then(promise);
-          });
-          return promiseChain.then(() => {
-            return this.src;
-          });
-        },
+        } else {
+          promises.push(this.src, this.format);
+        }
+        let promiseChain = Promise.resolve();
+        _.each(promises, (promise) => {
+          promiseChain = promiseChain.then(promise);
+        });
+        return promiseChain.then(() => {
+          return this.src;
+        });
+      }
 
-        setImageDefaults: function(src) {
-          var matches = src.match(/^(https?|file):\/\//g);
-          if (!matches || matches.length <= 0) {
-            src = (src[0] === '/' ? '' : '/') + src;
-            if ((src.match(/\//g) || []).length <= 1) src = `/assets${src}`;
-            src = `${this.baseUrl}/content${src}`;
-            var matches = src.match(/\/[^\/$#]+/g);
-            var format = 'png';
-            var unknownFormat = false;
+      setImageDefaults(src) {
+        let matches = src.match(/^(https?|file):\/\//g);
+        if (!matches || matches.length <= 0) {
+          src = (src[0] === '/' ? '' : '/') + src;
+          if ((src.match(/\//g) || []).length <= 1) src = `/assets${src}`;
+          src = `${this.baseUrl}/content${src}`;
+          let matches = src.match(/\/[^\/$#]+/g);
+          let format = 'png';
+          let unknownFormat = false;
+          if (matches && matches.length > 0) {
+            matches = matches[matches.length - 1].match(/\..+/g);
             if (matches && matches.length > 0) {
-              matches = matches[matches.length - 1].match(/\..+/g);
-              if (matches && matches.length > 0) {
-                var _format = matches[0].replace('.', '');
-                if (_.includes(this.formats, _format)) {
-                  format = _format;
-                } else {
-                  unknownFormat = true;
-                }
+              let _format = matches[0].replace('.', '');
+              if (_.includes(this.formats, _format)) {
+                format = _format;
+              } else {
+                unknownFormat = true;
               }
             }
-            var srcBase = null;
-            var filename = '';
-            if (!unknownFormat) {
-              matches = src.match(new RegExp(`.+(?=\.${format})`, 'g'));
-              if (matches && matches.length > 0) srcBase = matches[0];
-            }
-            if (!srcBase) {
-              srcBase = src;
-              matches = src.match(/\/[^\/]+$/g);
-              if (matches && matches.length > 0) matches = matches[0].replace('/', '').match(/[^\?\#]+/g);
-              if (matches && matches.length > 0) filename = matches[0];
-            } else {
-              matches = src.match(new RegExp(`\/[^\/]+(?=.${format})`, 'g'));
-              if (matches && matches.length > 0) filename = matches[0].replace('/', '');
-            }
-            this.set('localSrc', true);
-            this.set('srcBase', srcBase);
-            this.set('filename', filename);
-            this.set('format', format);
-            this.set('src', `${srcBase}.${format}`);
           }
-        },
-
-        loadFile: function(src, format) {
-          src = `${src}?${moment().format('X')}`;
-          if (this.srcKnown) return Promise.resolve();
-          return fetch(src).then((res) => {
-            if (res.status === 404) return null;
-            return res.blob();
-          }).then((body) => {
-            if (body) {
-              this.set('body', body);
-              this.set('src', src);
-              this.set('format', format);
-              this.set('srcKnown', true);
-            }
-          });
+          let srcBase = null;
+          let filename = '';
+          if (!unknownFormat) {
+            matches = src.match(new RegExp(`.+(?=\.${format})`, 'g'));
+            if (matches && matches.length > 0) srcBase = matches[0];
+          }
+          if (!srcBase) {
+            srcBase = src;
+            matches = src.match(/\/[^\/]+$/g);
+            if (matches && matches.length > 0) matches = matches[0].replace('/', '').match(/[^\?\#]+/g);
+            if (matches && matches.length > 0) filename = matches[0];
+          } else {
+            matches = src.match(new RegExp(`\/[^\/]+(?=.${format})`, 'g'));
+            if (matches && matches.length > 0) filename = matches[0].replace('/', '');
+          }
+          this.set('localSrc', true);
+          this.set('srcBase', srcBase);
+          this.set('filename', filename);
+          this.set('format', format);
+          this.set('src', `${srcBase}.${format}`);
         }
-      });
-    })();
+      }
+
+      loadFile(src, format) {
+        src = `${src}?${moment().format('X')}`;
+        if (this.srcKnown) return Promise.resolve();
+        return fetch(src).then((res) => {
+          if (res.status === 404) return null;
+          return res.blob();
+        }).then((body) => {
+          if (body) {
+            this.set('body', body);
+            this.set('src', src);
+            this.set('format', format);
+            this.set('srcKnown', true);
+          }
+        });
+      }
+    }
+    Polymer(BlogdownImg);
   </script>
 </dom-module>

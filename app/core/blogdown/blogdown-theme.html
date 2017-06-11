@@ -7,20 +7,20 @@
 
   </template>
   <script>
-    (function() {
-      'use strict';
-      Polymer({
-        is: 'blogdown-theme',
+    class BlogdownTheme {
+      beforeRegister() {
+        this.is = 'blogdown-theme';
 
-        behaviors: [ ReduxBehavior ],
+        this.behaviors = [ ReduxBehavior ];
 
-        properties: {
+        this.properties = {
           appLoaded: {
             type: Boolean,
             statePath: 'meta.appLoaded'
           }
-        }
-      });
-    })();
+        };
+      }
+    }
+    Polymer(BlogdownTheme);
   </script>
 </dom-module>

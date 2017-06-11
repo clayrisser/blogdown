@@ -2,14 +2,13 @@
   <template>
   </template>
   <script>
-    (function() {
-      'use strict';
-      Polymer({
-        is: 'blogdown-render',
+    class BlogdownRender {
+      beforeRegister() {
+        this.is = 'blogdown-render';
 
-        behaviors: [ ReduxBehavior ],
+        this.behaviors = [ ReduxBehavior ];
 
-        properties: {
+        this.properties = {
           settings: {
             type: Object,
             statePath: 'settings'
@@ -44,118 +43,119 @@
           post: {
             type: Object
           }
-        },
+        };
+      }
 
-        ready: function() {
-          this.page ? this.set('content', this.page) : this.set('content', this.post);
-          this.getUrl(this.content).then((url) => {
-            return this.getFeaturedImage(this.content.featuredImage).then((featuredImage) => {
-              this.content.featuredImage = featuredImage;
-              return url;
-            });
-          }).then((url) => {
-            var renderer = document.createElement(this.settings.renderers[this.renderer]);
-            renderer.content = this.content;
-            renderer.url = this.url;
-            renderer.body = this.body;
-            Polymer.dom(this.root).appendChild(renderer);
+      ready() {
+        this.page ? this.set('content', this.page) : this.set('content', this.post);
+        this.getUrl(this.content).then((url) => {
+          return this.getFeaturedImage(this.content.featuredImage).then((featuredImage) => {
+            this.content.featuredImage = featuredImage;
+            return url;
           });
-        },
+        }).then((url) => {
+          let renderer = document.createElement(this.settings.renderers[this.renderer]);
+          renderer.content = this.content;
+          renderer.url = this.url;
+          renderer.body = this.body;
+          Polymer.dom(this.root).appendChild(renderer);
+        });
+      }
 
-        getUrl: function(content) {
-          var firstRenderer = null;
-          var renderers = _.remove(_.keys(this.settings.renderers), (renderer) => {
-            if (this.content.format !== renderer) return true;
-            firstRenderer = renderer;
-            return false;
+      getUrl(content) {
+        let firstRenderer = null;
+        let renderers = _.remove(_.keys(this.settings.renderers), (renderer) => {
+          if (this.content.format !== renderer) return true;
+          firstRenderer = renderer;
+          return false;
+        });
+        if (firstRenderer) renderers.unshift(firstRenderer);
+        let promises = [];
+        if (this.page) {
+          _.each(renderers, (renderer) => {
+            let url = `${this.baseUrl}/content/pages/${this.page.slug}.${renderer}`;
+            promises.push(this.loadFile.bind(this, url, renderer));
           });
-          if (firstRenderer) renderers.unshift(firstRenderer);
-          var promises = [];
-          if (this.page) {
+          if (this.page.slug !== _.snakeCase(this.page.title).replace(/_/g, '-')) {
             _.each(renderers, (renderer) => {
-              var url = `${this.baseUrl}/content/pages/${this.page.slug}.${renderer}`;
+              let url = `${this.baseUrl}/content/pages/${_.snakeCase(this.page.title).replace(/_/g, '-')}.${renderer}`;
               promises.push(this.loadFile.bind(this, url, renderer));
             });
-            if (this.page.slug !== _.snakeCase(this.page.title).replace(/_/g, '-')) {
-              _.each(renderers, (renderer) => {
-                var url = `${this.baseUrl}/content/pages/${_.snakeCase(this.page.title).replace(/_/g, '-')}.${renderer}`;
-                promises.push(this.loadFile.bind(this, url, renderer));
-              });
-            }
-          } else {
-            _.each(renderers, (renderer) => {
-              var url = `${this.baseUrl}/content/${this.route.slugs.parent}/${this.post.slug}.${renderer}`;
-              promises.push(this.loadFile.bind(this, url, renderer));
-            });
-            if (this.post.slug !== _.snakeCase(this.post.title).replace(/_/g, '-')) {
-              _.each(renderers, (renderer) => {
-                var url = `${this.baseUrl}/content/${this.route.slugs.parent}/${_.snakeCase(this.post.title).replace(/_/g, '-')}.${renderer}`;
-                promises.push(this.loadFile.bind(this, url, renderer));
-              });
-            }
-            if (this.post.date && this.post.slug !== this.post.date.format('X')) {
-              _.each(renderers, (renderer) => {
-                var url = `${this.baseUrl}/content/${this.route.slugs.parent}/${this.post.date.format('X')}.${renderer}`;
-                promises.push(this.loadFile.bind(this, url, renderer));
-              });
-            }
           }
-          var promiseChain = Promise.resolve();
-          _.each(promises, (promise) => {
-            promiseChain = promiseChain.then(promise);
+        } else {
+          _.each(renderers, (renderer) => {
+            let url = `${this.baseUrl}/content/${this.route.slugs.parent}/${this.post.slug}.${renderer}`;
+            promises.push(this.loadFile.bind(this, url, renderer));
           });
-          return promiseChain.then(() => {
-            return this.url;
-          });
-        },
+          if (this.post.slug !== _.snakeCase(this.post.title).replace(/_/g, '-')) {
+            _.each(renderers, (renderer) => {
+              let url = `${this.baseUrl}/content/${this.route.slugs.parent}/${_.snakeCase(this.post.title).replace(/_/g, '-')}.${renderer}`;
+              promises.push(this.loadFile.bind(this, url, renderer));
+            });
+          }
+          if (this.post.date && this.post.slug !== this.post.date.format('X')) {
+            _.each(renderers, (renderer) => {
+              let url = `${this.baseUrl}/content/${this.route.slugs.parent}/${this.post.date.format('X')}.${renderer}`;
+              promises.push(this.loadFile.bind(this, url, renderer));
+            });
+          }
+        }
+        let promiseChain = Promise.resolve();
+        _.each(promises, (promise) => {
+          promiseChain = promiseChain.then(promise);
+        });
+        return promiseChain.then(() => {
+          return this.url;
+        });
+      }
 
-        getFeaturedImage: function(featuredImage) {
-          if (featuredImage) {
-            if (_.isString(featuredImage)) {
-              return document.createElement('blogdown-img').getSrc(featuredImage).then((newFeaturedImage) => {
-                if (newFeaturedImage) return newFeaturedImage;
-                return document.createElement('blogdown-img').getSrc(this.content.slug).then((newFeaturedImage) => {
-                  if (newFeaturedImage) return newFeaturedImage;
-                  if (this.content.slug !== _.snakeCase(this.content.title).replace('_', '-')) {
-                    var src = _.snakeCase(this.content.title).replace('_', '-');
-                    return document.createElement('blogdown-img').getSrc(src);
-                  } else {
-                    return false;
-                  }
-                });
-              });
-            } else {
+      getFeaturedImage(featuredImage) {
+        if (featuredImage) {
+          if (_.isString(featuredImage)) {
+            return document.createElement('blogdown-img').getSrc(featuredImage).then((newFeaturedImage) => {
+              if (newFeaturedImage) return newFeaturedImage;
               return document.createElement('blogdown-img').getSrc(this.content.slug).then((newFeaturedImage) => {
                 if (newFeaturedImage) return newFeaturedImage;
                 if (this.content.slug !== _.snakeCase(this.content.title).replace('_', '-')) {
-                  var src = _.snakeCase(this.content.title).replace('_', '-');
+                  let src = _.snakeCase(this.content.title).replace('_', '-');
                   return document.createElement('blogdown-img').getSrc(src);
                 } else {
                   return false;
                 }
               });
-            }
+            });
           } else {
-            return Promise.resolve(featuredImage);
+            return document.createElement('blogdown-img').getSrc(this.content.slug).then((newFeaturedImage) => {
+              if (newFeaturedImage) return newFeaturedImage;
+              if (this.content.slug !== _.snakeCase(this.content.title).replace('_', '-')) {
+                let src = _.snakeCase(this.content.title).replace('_', '-');
+                return document.createElement('blogdown-img').getSrc(src);
+              } else {
+                return false;
+              }
+            });
           }
-        },
-
-        loadFile: function(url, renderer) {
-          url = url + '?' + moment().format('X');
-          if (this.urlKnown) return Promise.resolve();
-          return fetch(url).then((res) => {
-            if (res.status === 404) return null;
-            return res.text();
-          }).then((body) => {
-            if (body) {
-              this.set('body', body);
-              this.set('url', url);
-              this.set('renderer', renderer);
-              this.set('urlKnown', true);
-            }
-          });
+        } else {
+          return Promise.resolve(featuredImage);
         }
-      });
-    })();
+      }
+
+      loadFile(url, renderer) {
+        url = url + '?' + moment().format('X');
+        if (this.urlKnown) return Promise.resolve();
+        return fetch(url).then((res) => {
+          if (res.status === 404) return null;
+          return res.text();
+        }).then((body) => {
+          if (body) {
+            this.set('body', body);
+            this.set('url', url);
+            this.set('renderer', renderer);
+            this.set('urlKnown', true);
+          }
+        });
+      }
+    }
+    Polymer(BlogdownRender);
   </script>
 </dom-module>

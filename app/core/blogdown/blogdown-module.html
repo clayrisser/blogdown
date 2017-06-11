@@ -1,13 +1,12 @@
 <dom-module id="blogdown-module">
   <script>
-    (function() {
-      'use strict';
-      Polymer({
-        is: 'blogdown-module',
+    class BlogdownModule {
+      beforeRegister() {
+        this.is = 'blogdown-module';
 
-        behaviors: [ ReduxBehavior ],
+        this.behaviors = [ ReduxBehavior ];
 
-        properties: {
+        this.properties = {
           baseUrl: {
             type: String,
             statePath: 'meta.baseUrl'
@@ -23,79 +22,80 @@
             type: Boolean,
             value: false
           }
-        },
+        };
+      }
 
-        attached: function() {
-          this.createElement();
-        },
+      attached() {
+        this.createElement();
+      }
 
-        createModule: function() {
-          var mod = document.createElement('mod-' + this.name);
-          var properties = [];
-          _.each(this, (value, key) => {
-            if (key.substring(0, 4) === 'prop') {
-              mod[key.substring(4, key.length)] = value;
-            }
-          });
-          return this.loadElement(this.name, this.format).then(() => {
-            Polymer.dom(this.root).appendChild(mod);
-            return mod;
-          });
-        },
+      createModule() {
+        let mod = document.createElement('mod-' + this.name);
+        let properties = [];
+        _.each(this, (value, key) => {
+          if (key.substring(0, 4) === 'prop') {
+            mod[key.substring(4, key.length)] = value;
+          }
+        });
+        return this.loadElement(this.name, this.format).then(() => {
+          Polymer.dom(this.root).appendChild(mod);
+          return mod;
+        });
+      }
 
-        loadElement: function(name, format) {
-          return this.setFormat(name, format).then(() => {
-            name = this.name;
-            format = this.format;
-            return;
-          }).then(() => {
-            return new Promise((resolve, reject) => {
-              this.importHref('../content/modules/' + name + '.' + format, () => {
-                app.log.info('modules/' + name + '.' + format + ' was imported.');
-                resolve();
-              }, (err) => {
-                app.log.error(name + '.' + format + ' import failed to load');
-                resolve();
-              });
+      loadElement(name, format) {
+        return this.setFormat(name, format).then(() => {
+          name = this.name;
+          format = this.format;
+          return;
+        }).then(() => {
+          return new Promise((resolve, reject) => {
+            this.importHref('../content/modules/' + name + '.' + format, () => {
+              app.log.info('modules/' + name + '.' + format + ' was imported.');
+              resolve();
+            }, (err) => {
+              app.log.error(name + '.' + format + ' import failed to load');
+              resolve();
             });
           });
-        },
+        });
+      }
 
-        setFormat: function(name, format) {
-          var formats = [format];
-          _.each([
-            'mod.html',
-            'mod'
-          ], (_format) => {
-            if (_format !== format) formats.push(_format);
-          });
-          var promises = [];
-          _.each(formats, (format) => {
-            var url = this.baseUrl + '/content/modules/' + name + '.' + format;
-            promises.push(this.getFile.bind(this, url, format, name));
-          });
-          var promiseChain = Promise.resolve();
-          _.each(promises, (promise) => {
-            promiseChain = promiseChain.then(promise);
-          });
-          return promiseChain;
-        },
+      setFormat(name, format) {
+        let formats = [format];
+        _.each([
+          'mod.html',
+          'mod'
+        ], (_format) => {
+          if (_format !== format) formats.push(_format);
+        });
+        let promises = [];
+        _.each(formats, (format) => {
+          let url = this.baseUrl + '/content/modules/' + name + '.' + format;
+          promises.push(this.getFile.bind(this, url, format, name));
+        });
+        let promiseChain = Promise.resolve();
+        _.each(promises, (promise) => {
+          promiseChain = promiseChain.then(promise);
+        });
+        return promiseChain;
+      }
 
-        getFile: function(url, format, fileName) {
-          if (this.fileKnown) return Promise.resolve();
-          return fetch(url).then((res) => {
-            if (res.status === 404) return '';
-            if (res.status >= 200 && res.status < 400) {
-              this.set('fileKnown', true);
-              this.set('format', format);
-              return res.text();
-            }
-            var err = new Error('Error getting file');
-            err.res = res;
-            throw err;
-          });
-        }
-      });
-    })();
+      getFile(url, format, fileName) {
+        if (this.fileKnown) return Promise.resolve();
+        return fetch(url).then((res) => {
+          if (res.status === 404) return '';
+          if (res.status >= 200 && res.status < 400) {
+            this.set('fileKnown', true);
+            this.set('format', format);
+            return res.text();
+          }
+          let err = new Error('Error getting file');
+          err.res = res;
+          throw err;
+        });
+      }
+    }
+    Polymer(BlogdownModule);
   </script>
 </dom-module>
