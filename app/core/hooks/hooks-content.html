@@ -1,35 +1,37 @@
 <dom-module id="hooks-content">
   <script>
-    (function() {
-      'use strict';
-      Polymer({
-        is: 'hooks-content',
+    class HooksContent {
+      beforeRegister() {
+        this.is = 'hooks-content';
+      }
 
-        behaviors: [ BlogdownHooks ],
+      get behaviors() {
+        return [ BlogdownHooks ];
+      }
 
-        registerHooks: function() {
-          return {
-            pageReady: this.pageReady.bind(this),
-            postsReady: this.postsReady.bind(this),
-            postReady: this.postReady.bind(this),
-            pageAttached: this.pageAttached.bind(this),
-            postsAttached: this.postsAttached.bind(this),
-            postAttached: this.postAttached.bind(this)
-          }
-        },
+      registerHooks() {
+        return {
+          pageReady: this.pageReady.bind(this),
+          postsReady: this.postsReady.bind(this),
+          postReady: this.postReady.bind(this),
+          pageAttached: this.pageAttached.bind(this),
+          postsAttached: this.postsAttached.bind(this),
+          postAttached: this.postAttached.bind(this)
+        }
+      }
 
-        pageReady: function(cx) {},
+      pageReady(cx) {}
 
-        postsReady: function(cx) {},
+      postsReady(cx) {}
 
-        postReady: function(cx) {},
+      postReady(cx) {}
 
-        pageAttached: function(cx) {},
+      pageAttached(cx) {}
 
-        postsAttached: function(cx) {},
+      postsAttached(cx) {}
 
-        postAttached: function(cx) {}
-      });
-    })();
+      postAttached(cx) {}
+    }
+    Polymer(HooksContent);
   </script>
 </dom-module>

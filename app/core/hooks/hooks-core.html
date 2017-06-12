@@ -1,16 +1,10 @@
 <dom-module id="hooks-core">
   <script>
-    (function() {
-      'use strict';
-      Polymer({
-        is: 'hooks-core',
+    class HooksCore {
+      beforeRegister() {
+        this.is = 'hooks-core';
 
-        behaviors: [
-          ReduxBehavior,
-          BlogdownHooks
-        ],
-
-        properties: {
+        this.properties = {
           settings: {
             type: Object,
             statePath: 'settings'
@@ -35,63 +29,71 @@
             type: Object,
             statePath: 'meta'
           }
-        },
+        };
+      }
 
-        registerHooks: function() {
-          return {
-            settingsRegistered: this.settingsRegistered.bind(this),
-            globalsRegistered: this.globalsRegistered.bind(this),
-            baseUrlSet: this.baseUrlSet.bind(this),
-            authorsRegistered: this.authorsRegistered.bind(this),
-            pagesRegistered: this.pagesRegistered.bind(this),
-            taxonomiesRegistered: this.taxonomiesRegistered.bind(this),
-            styleImported: this.styleImported.bind(this),
-            themeImported: this.themeImported.bind(this),
-            appLoaded: this.appLoaded.bind(this)
-          }
-        },
+      get behaviors() {
+        return [
+          ReduxBehavior,
+          BlogdownHooks
+        ]
+      }
 
-        settingsRegistered: function(cx) {
-          app.log.info('state.settings =>');
-          app.log.info(this.settings);
-        },
-
-        globalsRegistered: function(cx) {},
-
-        baseUrlSet: function(cx) {
-          app.log.info('state.meta.baseUrl =>');
-          app.log.info(this.meta.baseUrl);
-        },
-
-        authorsRegistered: function(cx) {
-          app.log.info('state.authors =>');
-          app.log.info(this.authors);
-        },
-
-        pagesRegistered: function(cx) {
-          app.log.info('state.pages =>');
-          app.log.info(this.pages);
-        },
-
-        taxonomiesRegistered: function(cx) {
-          app.log.info('state.taxonomies =>');
-          app.log.info(this.taxonomies);
-        },
-
-        styleImported: function(cx) {},
-
-        themeImported: function(cx) {},
-
-        appLoaded: function(cx) {
-          var slugs = this.route.slugs ? this.route.slugs : {};
-          var parent = '/' + (slugs.parent ? slugs.parent : '');
-          var child = slugs.child ? '/' + slugs.child : '';
-          app.go.to(parent + child);
-          this.dispatch({ type: APP_LOADED });
-          document.getElementById('loading').innerHTML = '';
-          app.log.info(this.settings.title + ' loaded');
+      registerHooks() {
+        return {
+          settingsRegistered: this.settingsRegistered.bind(this),
+          globalsRegistered: this.globalsRegistered.bind(this),
+          baseUrlSet: this.baseUrlSet.bind(this),
+          authorsRegistered: this.authorsRegistered.bind(this),
+          pagesRegistered: this.pagesRegistered.bind(this),
+          taxonomiesRegistered: this.taxonomiesRegistered.bind(this),
+          styleImported: this.styleImported.bind(this),
+          themeImported: this.themeImported.bind(this),
+          appLoaded: this.appLoaded.bind(this)
         }
-      });
-    })();
+      }
+
+      settingsRegistered(cx) {
+        app.log.info('state.settings =>');
+        app.log.info(this.settings);
+      }
+
+      globalsRegistered(cx) {}
+
+      baseUrlSet(cx) {
+        app.log.info('state.meta.baseUrl =>');
+        app.log.info(this.meta.baseUrl);
+      }
+
+      authorsRegistered(cx) {
+        app.log.info('state.authors =>');
+        app.log.info(this.authors);
+      }
+
+      pagesRegistered(cx) {
+        app.log.info('state.pages =>');
+        app.log.info(this.pages);
+      }
+
+      taxonomiesRegistered(cx) {
+        app.log.info('state.taxonomies =>');
+        app.log.info(this.taxonomies);
+      }
+
+      styleImported(cx) {}
+
+      themeImported(cx) {}
+
+      appLoaded(cx) {
+        let slugs = this.route.slugs ? this.route.slugs : {};
+        let parent = '/' + (slugs.parent ? slugs.parent : '');
+        let child = slugs.child ? '/' + slugs.child : '';
+        app.go.to(parent + child);
+        this.dispatch({ type: APP_LOADED });
+        document.getElementById('loading').innerHTML = '';
+        app.log.info(this.settings.title + ' loaded');
+      }
+    }
+    Polymer(HooksCore);
   </script>
 </dom-module>
