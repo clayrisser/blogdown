@@ -1,13 +1,10 @@
 <dom-module id="boot-settings">
   <script>
-    (function() {
-      'use strict';
-      Polymer({
-        is: 'boot-settings',
+    class BootSettings {
+      beforeRegister() {
+        this.is = 'boot-settings';
 
-        behaviors: [ ReduxBehavior ],
-
-        actions: {
+        this.actions = {
           loadSettings: () => {
             return function(dispatch) {
               return fetch('../../../content/settings.json?' + moment().format('X')).then((res) => {
@@ -33,37 +30,42 @@
               });
             }
           }
-        },
-
-        init: function() {
-          console.log('loading settings . . .');
-          return new Promise((resolve, reject) => {
-            this.resolve = resolve;
-            this.reject = reject;
-            this.dispatch('loadSettings');
-          });
-        },
-
-        getLogLevel: function(debug) {
-          if (typeof debug === 'number') return debug;
-          switch(debug) {
-            case 'silent':
-              return 0;
-            case 'error':
-              return 1;
-            case 'warn':
-              return 2;
-            case 'info':
-              return 3;
-            case 'debug':
-              return 4;
-            case 'silly':
-              return 5;
-            default:
-              return 3;
-          }
         }
-      });
-    })();
+      }
+
+      get behaviors() {
+        return [ ReduxBehavior ];
+      }
+
+      init() {
+        console.log('loading settings . . .');
+        return new Promise((resolve, reject) => {
+          this.resolve = resolve;
+          this.reject = reject;
+          this.dispatch('loadSettings');
+        });
+      }
+
+      getLogLevel(debug) {
+        if (typeof debug === 'number') return debug;
+        switch(debug) {
+          case 'silent':
+            return 0;
+          case 'error':
+            return 1;
+          case 'warn':
+            return 2;
+          case 'info':
+            return 3;
+          case 'debug':
+            return 4;
+          case 'silly':
+            return 5;
+          default:
+            return 3;
+        }
+      }
+    }
+    Polymer(BootSettings);
   </script>
 </dom-module>

@@ -24,7 +24,8 @@
     "run-sequence": "^1.0.2"
   },
   "scripts": {
-    "start": "gulp serve",
+    "start": "node ./node_modules/gulp/bin/gulp serve",
+    "dist": "node ./node_modules/gulp/bin/gulp",
     "scripts": "node ./node_modules/babel-cli/bin/babel/node"
   },
   "engines": {

@@ -4,8 +4,6 @@
       beforeRegister() {
         this.is = 'blogdown-module';
 
-        this.behaviors = [ ReduxBehavior ];
-
         this.properties = {
           baseUrl: {
             type: String,
@@ -23,6 +21,10 @@
             value: false
           }
         };
+      }
+
+      get behaviors() {
+        return [ ReduxBehavior ];
       }
 
       attached() {

@@ -17,8 +17,6 @@
       beforeRegister() {
         this.is = 'blogdown-content';
 
-        this.behaviors = [ ReduxBehavior ];
-
         this.properties = {
           route: {
             type: Object,
@@ -58,6 +56,10 @@
             statePath: 'meta'
           }
         };
+      }
+
+      get behaviors() {
+        return [ ReduxBehavior ];
       }
 
       routeChanged() {

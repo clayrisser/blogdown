@@ -6,8 +6,6 @@
       beforeRegister() {
         this.is = 'blogdown-render';
 
-        this.behaviors = [ ReduxBehavior ];
-
         this.properties = {
           settings: {
             type: Object,
@@ -44,6 +42,10 @@
             type: Object
           }
         };
+      }
+
+      get behaviors() {
+        return [ ReduxBehavior ];
       }
 
       ready() {

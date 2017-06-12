@@ -1,13 +1,10 @@
 <dom-module id="boot-meta">
   <script>
-    (function() {
-      'use strict';
-      Polymer({
-        is: 'boot-meta',
+    class BootMeta {
+      beforeRegister() {
+        this.is = 'boot-meta';
 
-        behaviors: [ ReduxBehavior ],
-
-        actions: {
+        this.actions = {
           setBaseUrl: (baseUrl) => {
             return (dispatch) => {
               dispatch({
@@ -17,24 +14,29 @@
               return app.runHook('baseUrlSet');
             }
           }
-        },
-
-        init: function() {
-          var promises = [this.setBaseUrl()];
-          return Promise.all(promises);
-        },
-
-        setBaseUrl: function() {
-          var matches = window.location.href.match(/[\w\d\.:\/\\]+(?=\/#!)/g);
-          var baseUrl = window.location.href;
-          if (matches) {
-            baseUrl = matches[0];
-          } else {
-            if (baseUrl[baseUrl.length - 1] === '/') baseUrl = baseUrl.substring(0, baseUrl.length - 1);
-          }
-          return this.dispatch('setBaseUrl', baseUrl);
         }
-      });
-    })();
+      }
+
+      get behaviors() {
+        return [ ReduxBehavior ];
+      }
+
+      init() {
+        let promises = [this.setBaseUrl()];
+        return Promise.all(promises);
+      }
+
+      setBaseUrl() {
+        let matches = window.location.href.match(/[\w\d\.:\/\\]+(?=\/#!)/g);
+        let baseUrl = window.location.href;
+        if (matches) {
+          baseUrl = matches[0];
+        } else {
+          if (baseUrl[baseUrl.length - 1] === '/') baseUrl = baseUrl.substring(0, baseUrl.length - 1);
+        }
+        return this.dispatch('setBaseUrl', baseUrl);
+      }
+    }
+    Polymer(BootMeta);
   </script>
 </dom-module>

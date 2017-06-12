@@ -1,20 +1,28 @@
 <dom-module id="boot-taxonomies">
   <script>
-    (function() {
-      'use strict';
-      Polymer({
-        is: 'boot-taxonomies',
+    class BootTaxonomies {
+      beforeRegister() {
+        this.is = 'boot-taxonomies';
 
-        behaviors: [ ReduxBehavior ],
+        this.properties = {
+          baseUrl: {
+            type: String,
+            statePath: 'meta.baseUrl'
+          },
+          settings: {
+            type: Object,
+            statePath: 'settings'
+          }
+        };
 
-        actions: {
+        this.actions = {
           loadTaxonomies: function() {
             return (dispatch) => {
-              var promises = _.map(this.settings.taxonomies, (taxonomy) => {
+              let promises = _.map(this.settings.taxonomies, (taxonomy) => {
                 return this.loadTaxonomy(taxonomy);
               });
               return Promise.all(promises).then((taxonomiesMeta) => {
-                var taxonomies = {};
+                let taxonomies = {};
                 _.each(taxonomiesMeta, (taxonomy) => {
                   taxonomies[taxonomy.name] = taxonomy.posts;
                 });
@@ -31,88 +39,82 @@
               });
             };
           }
-        },
+        };
+      }
 
-        properties: {
-          baseUrl: {
-            type: String,
-            statePath: 'meta.baseUrl'
-          },
-          settings: {
-            type: Object,
-            statePath: 'settings'
-          }
-        },
+      get behaviors() {
+        return [ ReduxBehavior ];
+      }
 
-        init: function() {
-          app.log.debug('loading taxonomies . . .');
-          return new Promise((resolve, reject) => {
-            this.resolve = resolve;
-            this.reject = reject;
-            this.dispatch('loadTaxonomies');
+      init() {
+        app.log.debug('loading taxonomies . . .');
+        return new Promise((resolve, reject) => {
+          this.resolve = resolve;
+          this.reject = reject;
+          this.dispatch('loadTaxonomies');
+        });
+      }
+
+      loadTaxonomy(taxonomy) {
+        return fetch('../../../content/' + taxonomy.name + '.json?' + moment().format('X'))
+          .then((res) => {
+            return res.json();
+          }).then((body) => {
+            return this.getTaxonomyMeta(taxonomy, body);
           });
-        },
+      }
 
-        loadTaxonomy: function(taxonomy) {
-          return fetch('../../../content/' + taxonomy.name + '.json?' + moment().format('X'))
-            .then((res) => {
-              return res.json();
-            }).then((body) => {
-              return this.getTaxonomyMeta(taxonomy, body);
-            });
-        },
-
-        getTaxonomyMeta: function(taxonomy, posts) {
-          var taxonomyPosts = [];
-          _.each(posts, (post) => {
-            var date = false;
-            if (post.date) {
-              if (typeof post.date === 'number') {
-                date = moment.unix(post.date);
-              } else {
+      getTaxonomyMeta(taxonomy, posts) {
+        let taxonomyPosts = [];
+        _.each(posts, (post) => {
+          let date = false;
+          if (post.date) {
+            if (typeof post.date === 'number') {
+              date = moment.unix(post.date);
+            } else {
                 date = moment(new Date(post.date));
-              }
             }
-            var title = false;
-            if (post.title) {
-              title = post.title;
-            } else if (post.author) {
-              title = _.startCase(taxonomy.singularForm.replace('-', ' '));
-            } else if (date) {
-              title = _.startCase(taxonomy.singularForm.replace('-', ' ')) + ' on ' + date.format(this.settings.dateFormat);
-            }
-            var slug = post.slug;
-            if (!slug) {
-              if (date && this.settings.permlinkMode === 'date') {
-                slug = date.format('X');
-              } else {
-                slug = _.snakeCase(title).replace('_', '-');
-              }
-            }
-            var featuredImage = post.featuredImage ? post.featuredImage : false;
-            var postMeta = {
-              title: title,
-              slug: slug,
-              date: date,
-              author: post.author ? post.author : false,
-              featuredImage: featuredImage,
-              description: post.description ? post.description : '',
-              format: post.format ? post.format : 'md',
-              taxonomy: taxonomy
-            };
-            _.each(post, (value, key) => {
-              if (!_.includes(_.keys(postMeta), key)) {
-                postMeta[key] = value;
-              }
-            });
-            taxonomyPosts.push(postMeta);
-          });
-          return {
-            name: taxonomy.name,
-            posts: taxonomyPosts
           }
+          let title = false;
+          if (post.title) {
+            title = post.title;
+          } else if (post.author) {
+            title = _.startCase(taxonomy.singularForm.replace('-', ' '));
+          } else if (date) {
+            title = _.startCase(taxonomy.singularForm.replace('-', ' ')) + ' on ' + date.format(this.settings.dateFormat);
+          }
+          let slug = post.slug;
+          if (!slug) {
+            if (date && this.settings.permlinkMode === 'date') {
+              slug = date.format('X');
+            } else {
+              slug = _.snakeCase(title).replace('_', '-');
+            }
+          }
+          let featuredImage = post.featuredImage ? post.featuredImage : false;
+          let postMeta = {
+            title: title,
+            slug: slug,
+            date: date,
+            author: post.author ? post.author : false,
+            featuredImage: featuredImage,
+            description: post.description ? post.description : '',
+            format: post.format ? post.format : 'md',
+            taxonomy: taxonomy
+          };
+          _.each(post, (value, key) => {
+            if (!_.includes(_.keys(postMeta), key)) {
+              postMeta[key] = value;
+            }
+          });
+          taxonomyPosts.push(postMeta);
+        });
+        return {
+          name: taxonomy.name,
+          posts: taxonomyPosts
         }
-      });
-    })();
+      }
+    }
+    Polymer(BootTaxonomies);
   </script>
 </dom-module>

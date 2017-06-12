@@ -1,13 +1,17 @@
 <dom-module id="boot-pages">
   <script>
-    (function() {
-      'use strict';
-      Polymer({
-        is: 'boot-pages',
+    class BootPages {
+      beforeRegister() {
+        this.is = 'boot-pages';
 
-        behaviors: [ ReduxBehavior ],
+        this.properties = {
+          settings: {
+            type: Object,
+            statePath: 'settings'
+          }
+        }
 
-        actions: {
+        this.actions = {
           loadPages: function() {
             return (dispatch) => {
               return fetch('../../../content/pages.json?' + moment().format('X'))
@@ -26,92 +30,90 @@
                 });
             };
           }
-        },
+        };
+      }
 
-        properties: {
-          settings: {
-            type: Object,
-            statePath: 'settings'
+      get behaviors() {
+        return [ ReduxBehavior ];
+      }
+
+      init() {
+        app.log.debug('registering pages . . .');
+        return new Promise((resolve, reject) => {
+          this.resolve = resolve;
+          this.reject = reject;
+          this.dispatch('loadPages');
+        });
+      }
+
+      getPages(pages) {
+        let pagesMeta = [];
+        let overriddenTaxonomies = [];
+        let loadedHome = false;
+        let loaded404 = false;
+        _.each(pages, (page) => {
+          if (page.format === 'dyn') page.format = 'dyn.html';
+          let slug = page.slug ? page.slug : _.snakeCase(page.title).replace('_', '-');
+          switch(slug) {
+            case 'home':
+              loadedHome = true;
+              if (!page.title) page.title = this.settings.title;
+              if (page.addToMenu === undefined) page.addToMenu = false;
+              break;
+            case '404':
+              loaded404 = true;
+              if (page.addToMenu === undefined) page.addToMenu = false;
+              break;
           }
-        },
-
-        init: function() {
-          app.log.debug('registering pages . . .');
-          return new Promise((resolve, reject) => {
-            this.resolve = resolve;
-            this.reject = reject;
-            this.dispatch('loadPages');
-          });
-        },
-
-        getPages: function(pages) {
-          var pagesMeta = [];
-          var overriddenTaxonomies = [];
-          var loadedHome = false;
-          var loaded404 = false;
-          _.each(pages, (page) => {
-            if (page.format === 'dyn') page.format = 'dyn.html';
-            var slug = page.slug ? page.slug : _.snakeCase(page.title).replace('_', '-');
-            switch(slug) {
-              case 'home':
-                loadedHome = true;
-                if (!page.title) page.title = this.settings.title;
-                if (page.addToMenu === undefined) page.addToMenu = false;
-                break;
-              case '404':
-                loaded404 = true;
-                if (page.addToMenu === undefined) page.addToMenu = false;
-                break;
+          let title = page.title ? page.title : _.startCase(page.slug.replace('-', ' '));
+          let addToMenu = page.addToMenu !== undefined ? page.addToMenu : true;
+          let pageMeta = {
+            title: title,
+            slug: slug,
+            addToMenu: addToMenu
+          };
+          _.each(page, (value, key) => {
+            if (!_.includes(_.keys(pageMeta), key)) {
+              pageMeta[key] = value;
             }
-            var title = page.title ? page.title : _.startCase(page.slug.replace('-', ' '));
-            var addToMenu = page.addToMenu !== undefined ? page.addToMenu : true;
-            var pageMeta = {
-              title: title,
-              slug: slug,
-              addToMenu: addToMenu
-            };
-            _.each(page, (value, key) => {
-              if (!_.includes(_.keys(pageMeta), key)) {
-                pageMeta[key] = value;
-              }
+          });
+          if (_.includes(this.settings.taxonomies, page.slug)) {
+            pageMeta.taxonomy = true;
+            overriddenTaxonomies.push(page.slug);
+          } else {
+            pageMeta.format = page.format ? page.format : 'md';
+          }
+          pagesMeta.push(pageMeta);
+        });
+        _.each(this.settings.taxonomies, (taxonomy) => {
+          if (!_.includes(overriddenTaxonomies, taxonomy)) {
+            pagesMeta.push({
+              title: _.startCase(taxonomy.name.replace('-', ' ')),
+              slug: taxonomy.name,
+              addToMenu: true,
+              taxonomy: true
             });
-            if (_.includes(this.settings.taxonomies, page.slug)) {
-              pageMeta.taxonomy = true;
-              overriddenTaxonomies.push(page.slug);
-            } else {
-              pageMeta.format = page.format ? page.format : 'md';
-            }
-            pagesMeta.push(pageMeta);
-          });
-          _.each(this.settings.taxonomies, (taxonomy) => {
-            if (!_.includes(overriddenTaxonomies, taxonomy)) {
-              pagesMeta.push({
-                title: _.startCase(taxonomy.name.replace('-', ' ')),
-                slug: taxonomy.name,
-                addToMenu: true,
-                taxonomy: true
-              });
-            }
-          });
-          if (!loadedHome) {
-              pagesMeta.push({
-                title: this.settings.title,
-                slug: 'home',
-                addToMenu: false,
-                format: 'md'
-              });
           }
-          if (!loaded404) {
-              pagesMeta.push({
-                title: 'Page Not Found',
-                slug: '404',
-                addToMenu: false,
-                format: 'md'
-              });
-          }
-          return pagesMeta;
+        });
+        if (!loadedHome) {
+          pagesMeta.push({
+            title: this.settings.title,
+            slug: 'home',
+            addToMenu: false,
+            format: 'md'
+          });
         }
-      });
-    })();
+        if (!loaded404) {
+          pagesMeta.push({
+            title: 'Page Not Found',
+            slug: '404',
+            addToMenu: false,
+            format: 'md'
+          });
+        }
+        return pagesMeta;
+      }
+    }
+    Polymer(BootPages);
   </script>
 </dom-module>

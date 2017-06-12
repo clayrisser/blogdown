@@ -11,14 +11,16 @@
       beforeRegister() {
         this.is = 'blogdown-theme';
 
-        this.behaviors = [ ReduxBehavior ];
-
         this.properties = {
           appLoaded: {
             type: Boolean,
             statePath: 'meta.appLoaded'
           }
         };
+      }
+
+      get behaviors() {
+        return [ ReduxBehavior ];
       }
     }
     Polymer(BlogdownTheme);

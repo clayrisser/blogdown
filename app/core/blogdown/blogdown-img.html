@@ -17,8 +17,6 @@
       beforeRegister() {
         this.is = 'blogdown-img';
 
-        this.behaviors = [ ReduxBehavior ];
-
         this.properties = {
           baseUrl: {
             type: String,
@@ -66,6 +64,10 @@
             type: String
           }
         };
+      }
+
+      get behaviors() {
+        return [ ReduxBehavior ];
       }
 
       attached() {
