@@ -17,7 +17,7 @@
     }
   };
 
-  let store = Redux.createStore(reducer, Redux.applyMiddleware(ReduxThunk.default));
+  const store = Redux.createStore(reducer, Redux.applyMiddleware(ReduxThunk.default));
   const ReduxBehavior = PolymerRedux(store);
 
 </script>

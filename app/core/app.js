@@ -1,5 +1,3 @@
-'use strict';
-
 class App {
 
   app = document.getElementById('app');
@@ -33,7 +31,7 @@ class App {
   }
 
   boot(bootSteps) {
-    let promises = [];
+    const promises = [];
     _.each(bootSteps, (bootStep) => {
       promises.push(this.runBootStep.bind(this, bootStep));
     });
@@ -54,7 +52,7 @@ class App {
       return res;
     });
   }
-};
+}
 
 ((document) => {
   new App();

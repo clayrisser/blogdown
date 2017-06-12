@@ -59,7 +59,7 @@
       }
 
       get behaviors() {
-        return [ ReduxBehavior ];
+        return [ReduxBehavior];
       }
 
       routeChanged() {
@@ -74,10 +74,13 @@
         this.set('isPosts', false);
         this.set('isPost', false);
         window.setTimeout(() => {
-          switch(this.route.type) {
+          switch (this.route.type) {
             case 'parent':
-              this.set('page', _.find(this.pages, {slug: this.route.slugs.parent}));
-              if (!this.page) return this.render404();
+              this.set('page', _.find(this.pages, { slug: this.route.slugs.parent }));
+              if (!this.page) {
+                this.render404();
+                return;
+              }
               if (this.page.taxonomy) {
                 this.set('posts', this.taxonomies[this.route.slugs.parent]);
                 this.set('isPosts', true);
@@ -86,8 +89,11 @@
               }
               break;
             default:
-              this.set('post', _.find(this.taxonomies[this.route.slugs.parent], {slug: this.route.slugs.child}));
-              if (!this.post) return this.render404();
+              this.set('post', _.find(this.taxonomies[this.route.slugs.parent], { slug: this.route.slugs.child }));
+              if (!this.post) {
+                this.render404();
+                return;
+              }
               this.set('isPost', true);
               break;
           }
@@ -109,7 +115,7 @@
           });
           this.set('is404', true);
         }
-        this.set('page', _.find(this.pages, {slug: '404'}));
+        this.set('page', _.find(this.pages, { slug: '404' }));
         this.set('isPage', true);
         this.set('isPosts', false);
         this.set('isPost', false);

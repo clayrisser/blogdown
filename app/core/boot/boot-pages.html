@@ -9,14 +9,14 @@
             type: Object,
             statePath: 'settings'
           }
-        }
+        };
 
         this.actions = {
           loadPages: function() {
             return (dispatch) => {
               return fetch('../../../content/pages.json?' + moment().format('X'))
                 .then(res => res.json()).then((body) => {
-                  var pages = this.getPages(body);
+                  const pages = this.getPages(body);
                   dispatch({
                     type: LOAD_PAGES,
                     pages: pages
@@ -34,7 +34,7 @@
       }
 
       get behaviors() {
-        return [ ReduxBehavior ];
+        return [ReduxBehavior];
       }
 
       init() {
@@ -47,14 +47,14 @@
       }
 
       getPages(pages) {
-        let pagesMeta = [];
-        let overriddenTaxonomies = [];
+        const pagesMeta = [];
+        const overriddenTaxonomies = [];
         let loadedHome = false;
         let loaded404 = false;
         _.each(pages, (page) => {
           if (page.format === 'dyn') page.format = 'dyn.html';
-          let slug = page.slug ? page.slug : _.snakeCase(page.title).replace('_', '-');
-          switch(slug) {
+          const slug = page.slug ? page.slug : _.snakeCase(page.title).replace('_', '-');
+          switch (slug) {
             case 'home':
               loadedHome = true;
               if (!page.title) page.title = this.settings.title;
@@ -65,9 +65,9 @@
               if (page.addToMenu === undefined) page.addToMenu = false;
               break;
           }
-          let title = page.title ? page.title : _.startCase(page.slug.replace('-', ' '));
-          let addToMenu = page.addToMenu !== undefined ? page.addToMenu : true;
-          let pageMeta = {
+          const title = page.title ? page.title : _.startCase(page.slug.replace('-', ' '));
+          const addToMenu = page.addToMenu !== undefined ? page.addToMenu : true;
+          const pageMeta = {
             title: title,
             slug: slug,
             addToMenu: addToMenu

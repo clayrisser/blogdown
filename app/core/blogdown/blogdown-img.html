@@ -67,7 +67,7 @@
       }
 
       get behaviors() {
-        return [ ReduxBehavior ];
+        return [ReduxBehavior];
       }
 
       attached() {
@@ -85,29 +85,29 @@
         ];
       }
 
-      getSrc(src) {
-        this.setImageDefaults(src);
+      getSrc(source) {
+        this.setImageDefaults(source);
         let firstFormat = null;
-        let formats = _.remove(this.formats, (format) => {
+        const formats = _.remove(this.formats, (format) => {
           if (this.format !== format) return true;
           firstFormat = this.format;
           return false;
         });
         if (firstFormat) formats.unshift(firstFormat);
-        let promises = [];
+        const promises = [];
         if (this.localSrc) {
           _.each(formats, (format) => {
-            let src = `${this.srcBase}.${format}`;
+            const src = `${this.srcBase}.${format}`;
             promises.push(this.loadFile.bind(this, src, format));
           });
           if (this.route.type === 'parent') {
             _.each(formats, (format) => {
-              let src = `${this.baseUrl}/content/pages/${this.filename}.${format}`
+              const src = `${this.baseUrl}/content/pages/${this.filename}.${format}`;
               promises.push(this.loadFile.bind(this, src, format));
             });
           } else {
             _.each(formats, (format) => {
-              let src = `${this.baseUrl}/content/${this.route.slugs.parent}/${this.filename}.${format}`
+              const src = `${this.baseUrl}/content/${this.route.slugs.parent}/${this.filename}.${format}`;
               promises.push(this.loadFile.bind(this, src, format));
             });
           }
@@ -129,13 +129,13 @@
           src = (src[0] === '/' ? '' : '/') + src;
           if ((src.match(/\//g) || []).length <= 1) src = `/assets${src}`;
           src = `${this.baseUrl}/content${src}`;
-          let matches = src.match(/\/[^\/$#]+/g);
+          matches = src.match(/\/[^\/$#]+/g);
           let format = 'png';
           let unknownFormat = false;
           if (matches && matches.length > 0) {
             matches = matches[matches.length - 1].match(/\..+/g);
             if (matches && matches.length > 0) {
-              let _format = matches[0].replace('.', '');
+              const _format = matches[0].replace('.', '');
               if (_.includes(this.formats, _format)) {
                 format = _format;
               } else {

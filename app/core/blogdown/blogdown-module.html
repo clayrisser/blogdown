@@ -24,7 +24,7 @@
       }
 
       get behaviors() {
-        return [ ReduxBehavior ];
+        return [ReduxBehavior];
       }
 
       attached() {
@@ -32,8 +32,8 @@
       }
 
       createModule() {
-        let mod = document.createElement('mod-' + this.name);
-        let properties = [];
+        const mod = document.createElement('mod-' + this.name);
+        const properties = [];
         _.each(this, (value, key) => {
           if (key.substring(0, 4) === 'prop') {
             mod[key.substring(4, key.length)] = value;
@@ -64,17 +64,17 @@
       }
 
       setFormat(name, format) {
-        let formats = [format];
+        const formats = [format];
         _.each([
           'mod.html',
           'mod'
         ], (_format) => {
           if (_format !== format) formats.push(_format);
         });
-        let promises = [];
-        _.each(formats, (format) => {
-          let url = this.baseUrl + '/content/modules/' + name + '.' + format;
-          promises.push(this.getFile.bind(this, url, format, name));
+        const promises = [];
+        _.each(formats, (_format) => {
+          const url = this.baseUrl + '/content/modules/' + name + '.' + _format;
+          promises.push(this.getFile.bind(this, url, _format, name));
         });
         let promiseChain = Promise.resolve();
         _.each(promises, (promise) => {
@@ -92,7 +92,7 @@
             this.set('format', format);
             return res.text();
           }
-          let err = new Error('Error getting file');
+          const err = new Error('Error getting file');
           err.res = res;
           throw err;
         });

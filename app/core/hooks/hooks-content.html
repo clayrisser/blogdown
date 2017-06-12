@@ -6,7 +6,7 @@
       }
 
       get behaviors() {
-        return [ BlogdownHooks ];
+        return [BlogdownHooks];
       }
 
       registerHooks() {
@@ -17,7 +17,7 @@
           pageAttached: this.pageAttached.bind(this),
           postsAttached: this.postsAttached.bind(this),
           postAttached: this.postAttached.bind(this)
-        }
+        };
       }
 
       pageReady(cx) {}

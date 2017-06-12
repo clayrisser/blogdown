@@ -36,7 +36,7 @@
         return [
           ReduxBehavior,
           BlogdownHooks
-        ]
+        ];
       }
 
       registerHooks() {
@@ -50,7 +50,7 @@
           styleImported: this.styleImported.bind(this),
           themeImported: this.themeImported.bind(this),
           appLoaded: this.appLoaded.bind(this)
-        }
+        };
       }
 
       settingsRegistered(cx) {
@@ -85,9 +85,9 @@
       themeImported(cx) {}
 
       appLoaded(cx) {
-        let slugs = this.route.slugs ? this.route.slugs : {};
-        let parent = '/' + (slugs.parent ? slugs.parent : '');
-        let child = slugs.child ? '/' + slugs.child : '';
+        const slugs = this.route.slugs ? this.route.slugs : {};
+        const parent = '/' + (slugs.parent ? slugs.parent : '');
+        const child = slugs.child ? '/' + slugs.child : '';
         app.go.to(parent + child);
         this.dispatch({ type: APP_LOADED });
         document.getElementById('loading').innerHTML = '';

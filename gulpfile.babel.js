@@ -42,6 +42,9 @@ gulp.task('babel', (cb) => {
   ]).pipe($.if('*.html', $.crisper({
     scriptInHead: false
   })))
+    .pipe($.if('*.js', $.eslint()))
+    .pipe($.if('*.js', $.eslint.format()))
+    .pipe($.if('*.js', $.eslint.failAfterError()))
     .pipe($.sourcemaps.init())
     .pipe($.if('*.js', $.babel({
       presets: [

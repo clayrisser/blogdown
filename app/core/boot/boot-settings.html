@@ -10,13 +10,16 @@
               return fetch('../../../content/settings.json?' + moment().format('X')).then((res) => {
                 return res.json();
               }).then((body) => {
-                var settings = {};
+                const settings = {};
                 _.each(body, (setting, key) => {
-                  if (key === 'logLevel') return settings[key] = {
-                    name: setting,
-                    value: this.getLogLevel(setting)
-                  };
-                  return settings[key] = setting;
+                  if (key === 'logLevel') {
+                    settings[key] = {
+                      name: setting,
+                      value: this.getLogLevel(setting)
+                    };
+                    return;
+                  }
+                  settings[key] = setting;
                 });
                 dispatch({
                   type: LOAD_SETTINGS,
@@ -28,13 +31,13 @@
                 this.reject(err);
                 throw err;
               });
-            }
+            };
           }
-        }
+        };
       }
 
       get behaviors() {
-        return [ ReduxBehavior ];
+        return [ReduxBehavior];
       }
 
       init() {
@@ -48,7 +51,7 @@
 
       getLogLevel(debug) {
         if (typeof debug === 'number') return debug;
-        switch(debug) {
+        switch (debug) {
           case 'silent':
             return 0;
           case 'error':

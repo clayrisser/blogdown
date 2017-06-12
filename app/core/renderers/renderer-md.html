@@ -31,12 +31,12 @@
       }
 
       sanitizeBody(body) {
-        let promises = _.map(body.match(/]\(\/[^\)]+\)/g), (match) => {
-          let src = match.replace('](/', '/').replace(')', '');
-          return document.createElement('blogdown-img').getSrc(src).then((src) => {
+        const promises = _.map(body.match(/]\(\/[^\)]+\)/g), (match) => {
+          const src = match.replace('](/', '/').replace(')', '');
+          return document.createElement('blogdown-img').getSrc(src).then((updatedSrc) => {
             return {
               relative: match,
-              absolute: `](${src})`
+              absolute: `](${updatedSrc})`
             };
           });
         });

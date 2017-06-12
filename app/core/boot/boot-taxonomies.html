@@ -18,11 +18,11 @@
         this.actions = {
           loadTaxonomies: function() {
             return (dispatch) => {
-              let promises = _.map(this.settings.taxonomies, (taxonomy) => {
+              const promises = _.map(this.settings.taxonomies, (taxonomy) => {
                 return this.loadTaxonomy(taxonomy);
               });
               return Promise.all(promises).then((taxonomiesMeta) => {
-                let taxonomies = {};
+                const taxonomies = {};
                 _.each(taxonomiesMeta, (taxonomy) => {
                   taxonomies[taxonomy.name] = taxonomy.posts;
                 });
@@ -43,7 +43,7 @@
       }
 
       get behaviors() {
-        return [ ReduxBehavior ];
+        return [ReduxBehavior];
       }
 
       init() {
@@ -65,7 +65,7 @@
       }
 
       getTaxonomyMeta(taxonomy, posts) {
-        let taxonomyPosts = [];
+        const taxonomyPosts = [];
         _.each(posts, (post) => {
           let date = false;
           if (post.date) {
@@ -81,7 +81,8 @@
           } else if (post.author) {
             title = _.startCase(taxonomy.singularForm.replace('-', ' '));
           } else if (date) {
-            title = _.startCase(taxonomy.singularForm.replace('-', ' ')) + ' on ' + date.format(this.settings.dateFormat);
+            title = _.startCase(taxonomy.singularForm.replace('-', ' ')) + ' on '
+                  + date.format(this.settings.dateFormat);
           }
           let slug = post.slug;
           if (!slug) {
@@ -91,8 +92,8 @@
               slug = _.snakeCase(title).replace('_', '-');
             }
           }
-          let featuredImage = post.featuredImage ? post.featuredImage : false;
-          let postMeta = {
+          const featuredImage = post.featuredImage ? post.featuredImage : false;
+          const postMeta = {
             title: title,
             slug: slug,
             date: date,
@@ -112,7 +113,7 @@
         return {
           name: taxonomy.name,
           posts: taxonomyPosts
-        }
+        };
       }
     }
     Polymer(BootTaxonomies);

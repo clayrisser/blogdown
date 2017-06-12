@@ -45,7 +45,7 @@
       }
 
       get behaviors() {
-        return [ ReduxBehavior ];
+        return [ReduxBehavior];
       }
 
       ready() {
@@ -56,7 +56,7 @@
             return url;
           });
         }).then((url) => {
-          let renderer = document.createElement(this.settings.renderers[this.renderer]);
+          const renderer = document.createElement(this.settings.renderers[this.renderer]);
           renderer.content = this.content;
           renderer.url = this.url;
           renderer.body = this.body;
@@ -66,38 +66,39 @@
 
       getUrl(content) {
         let firstRenderer = null;
-        let renderers = _.remove(_.keys(this.settings.renderers), (renderer) => {
+        const renderers = _.remove(_.keys(this.settings.renderers), (renderer) => {
           if (this.content.format !== renderer) return true;
           firstRenderer = renderer;
           return false;
         });
         if (firstRenderer) renderers.unshift(firstRenderer);
-        let promises = [];
+        const promises = [];
         if (this.page) {
           _.each(renderers, (renderer) => {
-            let url = `${this.baseUrl}/content/pages/${this.page.slug}.${renderer}`;
+            const url = `${this.baseUrl}/content/pages/${this.page.slug}.${renderer}`;
             promises.push(this.loadFile.bind(this, url, renderer));
           });
           if (this.page.slug !== _.snakeCase(this.page.title).replace(/_/g, '-')) {
             _.each(renderers, (renderer) => {
-              let url = `${this.baseUrl}/content/pages/${_.snakeCase(this.page.title).replace(/_/g, '-')}.${renderer}`;
+              const url = `${this.baseUrl}/content/pages/${_.snakeCase(this.page.title).replace(/_/g, '-')}.${renderer}`;
               promises.push(this.loadFile.bind(this, url, renderer));
             });
           }
         } else {
           _.each(renderers, (renderer) => {
-            let url = `${this.baseUrl}/content/${this.route.slugs.parent}/${this.post.slug}.${renderer}`;
+            const url = `${this.baseUrl}/content/${this.route.slugs.parent}/${this.post.slug}.${renderer}`;
             promises.push(this.loadFile.bind(this, url, renderer));
           });
           if (this.post.slug !== _.snakeCase(this.post.title).replace(/_/g, '-')) {
             _.each(renderers, (renderer) => {
-              let url = `${this.baseUrl}/content/${this.route.slugs.parent}/${_.snakeCase(this.post.title).replace(/_/g, '-')}.${renderer}`;
+              const url = `${this.baseUrl}/content/${this.route.slugs.parent}/`
+                        + `${_.snakeCase(this.post.title).replace(/_/g, '-')}.${renderer}`;
               promises.push(this.loadFile.bind(this, url, renderer));
             });
           }
           if (this.post.date && this.post.slug !== this.post.date.format('X')) {
             _.each(renderers, (renderer) => {
-              let url = `${this.baseUrl}/content/${this.route.slugs.parent}/${this.post.date.format('X')}.${renderer}`;
+              const url = `${this.baseUrl}/content/${this.route.slugs.parent}/${this.post.date.format('X')}.${renderer}`;
               promises.push(this.loadFile.bind(this, url, renderer));
             });
           }
@@ -116,30 +117,26 @@
           if (_.isString(featuredImage)) {
             return document.createElement('blogdown-img').getSrc(featuredImage).then((newFeaturedImage) => {
               if (newFeaturedImage) return newFeaturedImage;
-              return document.createElement('blogdown-img').getSrc(this.content.slug).then((newFeaturedImage) => {
-                if (newFeaturedImage) return newFeaturedImage;
+              return document.createElement('blogdown-img').getSrc(this.content.slug).then((newFeaturedImage2) => {
+                if (newFeaturedImage2) return newFeaturedImage2;
                 if (this.content.slug !== _.snakeCase(this.content.title).replace('_', '-')) {
-                  let src = _.snakeCase(this.content.title).replace('_', '-');
+                  const src = _.snakeCase(this.content.title).replace('_', '-');
                   return document.createElement('blogdown-img').getSrc(src);
-                } else {
-                  return false;
                 }
+                return false;
               });
             });
-          } else {
-            return document.createElement('blogdown-img').getSrc(this.content.slug).then((newFeaturedImage) => {
-              if (newFeaturedImage) return newFeaturedImage;
-              if (this.content.slug !== _.snakeCase(this.content.title).replace('_', '-')) {
-                let src = _.snakeCase(this.content.title).replace('_', '-');
-                return document.createElement('blogdown-img').getSrc(src);
-              } else {
-                return false;
-              }
-            });
           }
-        } else {
-          return Promise.resolve(featuredImage);
+          return document.createElement('blogdown-img').getSrc(this.content.slug).then((newFeaturedImage) => {
+            if (newFeaturedImage) return newFeaturedImage;
+            if (this.content.slug !== _.snakeCase(this.content.title).replace('_', '-')) {
+              const src = _.snakeCase(this.content.title).replace('_', '-');
+              return document.createElement('blogdown-img').getSrc(src);
+            }
+            return false;
+          });
         }
+        return Promise.resolve(featuredImage);
       }
 
       loadFile(url, renderer) {
