@@ -12,42 +12,42 @@
 
   </template>
   <script>
-    (function() {
-      'use strict';
-      Polymer({
-        is: 'renderer-md',
+    class RendererMd {
+      beforeRegister() {
+        this.is = 'renderer-md';
 
-        properties: {
+        this.properties = {
           renderer: {
             type: 'string',
             value: 'md'
           }
-        },
+        };
+      }
 
-        attached: function() {
-          this.sanitizeBody(this.body).then((sanitizedBody) => {
-            this.set('sanitizedBody', sanitizedBody);
-          });
-        },
+      attached() {
+        this.sanitizeBody(this.body).then((sanitizedBody) => {
+          this.set('sanitizedBody', sanitizedBody);
+        });
+      }
 
-        sanitizeBody: function(body) {
-          var promises = _.map(body.match(/]\(\/[^\)]+\)/g), (match) => {
-            var src = match.replace('](/', '/').replace(')', '');
-            return document.createElement('blogdown-img').getSrc(src).then((src) => {
-              return {
-                relative: match,
-                absolute: `](${src})`
-              };
-            });
+      sanitizeBody(body) {
+        let promises = _.map(body.match(/]\(\/[^\)]+\)/g), (match) => {
+          let src = match.replace('](/', '/').replace(')', '');
+          return document.createElement('blogdown-img').getSrc(src).then((src) => {
+            return {
+              relative: match,
+              absolute: `](${src})`
+            };
           });
-          return Promise.all(promises).then((sources) => {
-            _.each(sources, (source) => {
-              body = body.replace(source.relative, source.absolute);
-            });
-            return body;
+        });
+        return Promise.all(promises).then((sources) => {
+          _.each(sources, (source) => {
+            body = body.replace(source.relative, source.absolute);
           });
-        }
-      });
-    })();
+          return body;
+        });
+      }
+    }
+    Polymer(RendererMd);
   </script>
 </dom-module>

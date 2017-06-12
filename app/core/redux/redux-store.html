@@ -1,5 +1,3 @@
-<link rel="import" href="redux-reducer.html">
-
 <script>
 
   const initialState = {
@@ -19,7 +17,7 @@
     }
   };
 
-  var store = Redux.createStore(reducer, Redux.applyMiddleware(ReduxThunk.default));
+  let store = Redux.createStore(reducer, Redux.applyMiddleware(ReduxThunk.default));
   const ReduxBehavior = PolymerRedux(store);
 
 </script>
