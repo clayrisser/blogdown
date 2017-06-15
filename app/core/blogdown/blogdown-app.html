@@ -1,0 +1,22 @@
+<dom-module id="blogdown-app">
+  <template>
+
+    <blogdown-theme
+        id="rootPage"
+        narrow="{{narrow}}"
+        loading="[[loading]]"
+        progress="[[progress]]"
+        page-title="[[pageTitle]]"
+        route-data="[[routeData]]">
+    </blogdown-theme>
+
+  </template>
+  <script>
+    class BlogdownApp {
+      beforeRegister() {
+        this.is = 'blogdown-app';
+      }
+    }
+    Polymer(BlogdownApp);
+  </script>
+</dom-module>

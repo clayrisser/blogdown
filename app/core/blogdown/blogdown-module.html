@@ -12,13 +12,10 @@
           name: {
             type: String
           },
-          format: {
-            type: String,
-            value: 'mod.html'
-          },
-          fileKnown: {
+          elementRegistered: {
             type: Boolean,
-            value: false
+            value: false,
+            observer: 'handleElementRegistered'
           }
         };
       }
@@ -27,74 +24,86 @@
         return [ReduxState];
       }
 
+      ready() {
+        this.format = 'mod.html';
+        this.srcKnown = false;
+        this.body = '';
+        this.src = '';
+        this.formats = [
+          'mod.html',
+          'mod'
+        ];
+      }
+
       attached() {
-        this.createElement();
+        this.registerModule();
       }
 
-      createModule() {
-        const mod = document.createElement('mod-' + this.name);
-        const properties = [];
-        _.each(this, (value, key) => {
-          if (key.substring(0, 4) === 'prop') {
-            mod[key.substring(4, key.length)] = value;
-          }
-        });
-        return this.loadElement(this.name, this.format).then(() => {
-          Polymer.dom(this.root).appendChild(mod);
-          return mod;
-        });
-      }
-
-      loadElement(name, format) {
-        return this.setFormat(name, format).then(() => {
-          name = this.name;
-          format = this.format;
-          return;
-        }).then(() => {
-          return new Promise((resolve, reject) => {
-            this.importHref('../content/modules/' + name + '.' + format, () => {
-              app.log.info('modules/' + name + '.' + format + ' was imported.');
-              resolve();
-            }, (err) => {
-              app.log.error(name + '.' + format + ' import failed to load');
-              resolve();
-            });
+      getElement() {
+        if (this.registered) {
+          return Promise.resolve(this.element);
+        }
+        return new Promise((resolve, reject) => {
+          this.addEventListener('elementRegistered', (e) => {
+            return resolve(this.element);
           });
         });
       }
 
-      setFormat(name, format) {
-        const formats = [format];
-        _.each([
-          'mod.html',
-          'mod'
-        ], (_format) => {
-          if (_format !== format) formats.push(_format);
+      handleElementRegistered() {
+        this.dispatchEvent(new CustomEvent('elementRegistered'));
+      }
+
+      registerModule() {
+        return this.getSrc().then((src) => {
+          return new Promise((resolve, reject) => {
+            this.importHref(src, resolve, reject);
+          });
+        }).then(() => {
+          this.element = document.createElement('mod-' + this.name);
+          _.each(this, (value, key) => {
+            if (key.substr(0, 4) === 'prop') {
+              this.element[key.substr(4, key.length)] = value;
+            }
+          });
+          Polymer.dom(this.root).appendChild(this.element);
+          this.set('elementRegistered', true);
         });
+      }
+
+      getSrc() {
+        let firstFormat = null;
+        const formats = _.remove(this.formats, (format) => {
+          if (this.format !== format) return true;
+          firstFormat = this.format;
+          return false;
+        });
+        if (firstFormat) formats.unshift(firstFormat);
         const promises = [];
-        _.each(formats, (_format) => {
-          const url = this.baseUrl + '/content/modules/' + name + '.' + _format;
-          promises.push(this.getFile.bind(this, url, _format, name));
+        _.each(formats, (format) => {
+          const src = `${this.baseUrl}/content/modules/${this.name}.${format}`;
+          promises.push(this.loadFile.bind(this, src, format));
         });
         let promiseChain = Promise.resolve();
         _.each(promises, (promise) => {
           promiseChain = promiseChain.then(promise);
         });
-        return promiseChain;
+        return promiseChain.then(() => this.src);
       }
 
-      getFile(url, format, fileName) {
-        if (this.fileKnown) return Promise.resolve();
-        return fetch(url).then((res) => {
-          if (res.status === 404) return '';
-          if (res.status >= 200 && res.status < 400) {
-            this.set('fileKnown', true);
+      loadFile(src, format) {
+        src = `${src}?${moment().format('X')}`;
+        if (this.srcKnown) return Promise.resolve();
+        return fetch(src).then((res) => {
+          if (res.status === 404) return null;
+          return res.text();
+        }).then((body) => {
+          if (body) {
+            this.set('body', body);
+            this.set('src', src);
             this.set('format', format);
-            return res.text();
+            this.set('srcKnown', true);
           }
-          const err = new Error('Error getting file');
-          err.res = res;
-          throw err;
         });
       }
     }

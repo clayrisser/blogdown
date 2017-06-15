@@ -24,7 +24,8 @@ class App {
       'pages',
       'taxonomies',
       'style',
-      'theme'
+      'theme',
+      'app'
     ]).then(() => {
       this.app.runHook('appLoaded');
     });

@@ -19,6 +19,7 @@
     "polymer": "^1.8.0",
     "promise-polyfill": "^6.0.2",
     "polymer-redux": "^0.4.0",
+    "babel-polyfill": "https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.23.0/polyfill.js",
     "redux": "https://cdnjs.cloudflare.com/ajax/libs/redux/3.6.0/redux.js",
     "redux-thunk": "https://cdnjs.cloudflare.com/ajax/libs/redux-thunk/2.1.0/redux-thunk.js",
     "juicy-html": "^1.1.0"

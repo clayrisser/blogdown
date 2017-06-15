@@ -38,14 +38,7 @@
 
     <template is="dom-bind" id="app">
 
-      <blogdown-theme
-          id="rootPage"
-          narrow="{{narrow}}"
-          loading="[[loading]]"
-          progress="[[progress]]"
-          page-title="[[pageTitle]]"
-          route-data="[[routeData]]">
-      </blogdown-theme>
+      <app-root></app-root>
 
       <paper-toast id="toast" text="[[message]]" duration="[[settings.toastDuration]]">
         <span class="toast-hide-button" role="button" tabindex="0" onclick="app.$.toast.hide()">Ok</span>

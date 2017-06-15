@@ -48,9 +48,10 @@ gulp.task('babel', (cb) => {
     .pipe($.sourcemaps.init())
     .pipe($.if('*.js', $.babel({
       presets: [
-        'es2015',
+        ['es2015', { modules: false }],
         'stage-2'
-      ]
+      ],
+      plugins: ['babel-plugin-transform-async-to-generator']
     })))
     .pipe($.sourcemaps.write())
     .pipe(gulp.dest('./.tmp/core/'))
