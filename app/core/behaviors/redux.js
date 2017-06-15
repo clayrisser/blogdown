@@ -19,4 +19,15 @@ const ReduxActions = {
   }
 };
 
-const ReduxBehavior = PolymerRedux(store);
+const ReduxReducer = {
+  ready: () => {
+    const reducer = this.registerReducer();
+    _.each(reducer.constants, (constant) => {
+      constant = _.toUpper(constant);
+      window[constant] = constant;
+    });
+    injectAsyncReducer(reducer.name, reducer.reducer);
+  }
+};
+
+const ReduxState = PolymerRedux(store);

@@ -17,7 +17,10 @@
       Polymer({
         is: 'mod-disqus',
 
-        behaviors: [ ReduxBehavior, BlogdownHooks ],
+        behaviors: [
+          ReduxState,
+          BlogdownHooks
+        ],
 
         properties: {
           renderer: {
@@ -67,6 +70,23 @@
               console.log('hahahaha taking over');
             }
           };
+        },
+
+        registerReducer: function() {
+          return {
+            name: 'blah',
+            constants: [
+              'WOW'
+            ],
+            reducer: (state = {}, action) => {
+              switch (action.type) {
+                case WOW:
+                  return _.clone(action.payload);
+                default:
+                  return state;
+              }
+            }
+          }
         },
 
         attached: function() {
