@@ -26,12 +26,12 @@
       }
       store.dispatch({
         type: CHANGE_ROUTE,
-        route: route
+        payload: route
       });
       if (state.meta.selectedMenuItem !== selectedMenuItem) {
         store.dispatch({
           type: UPDATE_SELECTED_MENU_ITEM,
-          selectedMenuItem: selectedMenuItem
+          payload: selectedMenuItem
         });
       }
     }
@@ -41,15 +41,6 @@
     });
 
     page('/', (req) => {
-      changeRoute({
-        type: 'parent',
-        slugs: {
-          parent: 'home'
-        }
-      });
-    });
-
-    page(state.meta.baseUrl, (req) => {
       changeRoute({
         type: 'parent',
         slugs: {

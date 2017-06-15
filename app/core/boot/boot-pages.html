@@ -19,7 +19,7 @@
                   const pages = this.getPages(body);
                   dispatch({
                     type: LOAD_PAGES,
-                    pages: pages
+                    payload: pages
                   });
                   this.resolve(pages);
                   app.runHook('pagesRegistered');

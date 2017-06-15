@@ -28,7 +28,7 @@
                 });
                 dispatch({
                   type: LOAD_TAXONOMIES,
-                  taxonomies: taxonomies
+                  payload: taxonomies
                 });
                 app.runHook('taxonomiesRegistered', taxonomies);
                 this.resolve(taxonomies);

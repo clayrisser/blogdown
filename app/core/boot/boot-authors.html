@@ -13,7 +13,7 @@
                 }).then((body) => {
                   dispatch({
                     type: LOAD_AUTHORS,
-                    authors: body
+                    payload: body
                   });
                   app.log.info('authors =>');
                   app.log.info(store.getState().authors);

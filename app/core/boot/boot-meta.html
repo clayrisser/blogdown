@@ -9,7 +9,7 @@
             return (dispatch) => {
               dispatch({
                 type: SET_BASE_URL,
-                baseUrl: baseUrl
+                payload: baseUrl
               });
               return app.runHook('baseUrlSet');
             };
