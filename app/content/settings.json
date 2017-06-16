@@ -1,13 +1,10 @@
 {
   "title": "Jams Portfolio",
   "dateFormat": "MMMM D, YYYY",
-  "easterEggs": true,
   "debug": false,
-  "ajaxTimeout": "10000",
-  "toastDuration": "5000",
   "theme": "blogdown2017",
-  "permlinkMode": "title",
   "style": "default",
+  "permlinkMode": "title",
   "socialAccounts": {
     "facebook": "https://www.facebook.com/jamrizzi",
     "twitter": "https://twitter.com/jamrizzi",
