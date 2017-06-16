@@ -7,7 +7,7 @@ FROM alpine:3.5
 
 MAINTAINER Jam Risser (jamrizzi)
 
-EXPOSE 5000
+EXPOSE 8081
 
 WORKDIR /app/
 
@@ -23,21 +23,21 @@ RUN apk add --no-cache \
         nasm \
         nodejs-current \
         optipng
-RUN npm install -g yarn && \
-    yarn global add bower \
-    gulp && \
+RUN npm install -g bower && \
     mkdir -p /run/nginx
 
-COPY ./.bowerrc /app/.tmp/.bowerrc
-COPY ./bower.json /app/.tmp/bower.json
-COPY ./package.json /app/.tmp/package.json
-RUN cd /app/.tmp/ && yarn install && bower install
+COPY ./.bowerrc /app/
+COPY ./bower.json /app/
+COPY ./package.json /app/
+RUN npm install && bower install
 COPY ./deployment/nginx.conf /etc/nginx/conf.d/default.conf
-COPY ./ /app/.tmp/
-RUN ln -sf /usr/bin/optipng /app/.tmp/node_modules/optipng-bin/vendor/optipng && \
-    cd /app/.tmp/ && gulp && \
-    mv /app/.tmp/dist/* /app/ && rm -rf /app/.tmp/ && \
+COPY ./ /app/
+RUN ln -sf /usr/bin/optipng /app/node_modules/optipng-bin/vendor/optipng && \
+    npm run dist && \
+    mv /app/dist/ /dist/ && \
+    rm -rf /app/ && \
+    mv /dist/ /app/ && \
     chown -R nobody:nobody /app/ && \
-    apk del build-dependencies
+    apk del build-deps
 
 ENTRYPOINT ["/sbin/tini", "--", "/usr/sbin/nginx", "-g", "daemon off;"]

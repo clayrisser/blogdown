@@ -32,7 +32,13 @@
     "start": "node ./node_modules/gulp/bin/gulp serve",
     "dist": "node ./node_modules/gulp/bin/gulp",
     "serve": "node ./node_modules/gulp/bin/gulp serve",
-    "clean": "node ./node_modules/gulp/bin/gulp clean"
+    "clean": "node ./node_modules/gulp/bin/gulp clean",
+    "build": "docker build -t thingdown/blogdown -f ./deployment/Dockerfile ./",
+    "push": "docker push thingdown/blogdown",
+    "pull": "docker pull thingdown/blogdown",
+    "run": "docker run --name some-blogdown --rm -p 8081:8081 thingdown/blogdown",
+    "ssh": "docker run --name some-blogdown --rm -it --entrypoint /bin/sh thingdown/blogdown",
+    "essh": "docker exec some-blogdown /bin/sh"
   },
   "engines": {
     "node": ">=0.10.0"
