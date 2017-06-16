@@ -27,7 +27,7 @@ class App {
       'theme',
       'app'
     ]).then(() => {
-      this.app.runHook('appLoaded');
+      this.app.runHook('bootFinished');
     });
   }
 

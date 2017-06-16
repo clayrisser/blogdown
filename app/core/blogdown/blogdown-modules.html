@@ -12,12 +12,20 @@
         this.is = 'blogdown-modules';
       }
 
-      attached() {
-        if (!app._renderers) app._renderers = {};
-        _.each(this.$.modules.children, async (module) => {
+      ready() {
+        const coreRenderers = {
+          md: 'renderer-md'
+        };
+        if (!app._renderers) app._renderers = _.clone(coreRenderers);
+      }
+
+      async attached() {
+        await Promise.all(_.map(this.$.modules.children, async (module) => {
           const element = await module.getElement();
           if (element.renderer) app._renderers[element.renderer] = element.is;
-        });
+          return Promise.resolve();
+        }));
+        app.runHook('modulesRegistered');
       }
     }
     Polymer(BlogdownModules);

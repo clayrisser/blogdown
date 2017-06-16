@@ -26,8 +26,5 @@
       "singularForm": "showcase",
       "disqus": false
     }
-  ],
-  "renderers": {
-    "md": "renderer-md"
-  }
+  ]
 }

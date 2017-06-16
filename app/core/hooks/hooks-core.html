@@ -39,6 +39,11 @@
         ];
       }
 
+      ready() {
+        this.bootFinished = false;
+        this.modulesRegistered = false;
+      }
+
       registerHooks() {
         return {
           settingsRegistered: this.settingsRegistered.bind(this),
@@ -49,6 +54,8 @@
           taxonomiesRegistered: this.taxonomiesRegistered.bind(this),
           styleImported: this.styleImported.bind(this),
           themeImported: this.themeImported.bind(this),
+          bootFinished: this.bootFinished.bind(this),
+          modulesRegistered: this.modulesRegistered.bind(this),
           appLoaded: this.appLoaded.bind(this)
         };
       }
@@ -83,6 +90,18 @@
       styleImported(cx) {}
 
       themeImported(cx) {}
+
+      modulesRegistered(cx) {
+        app.log.info('renderers =>');
+        app.log.info(app._renderers);
+        this.set('modulesRegistered', true);
+        if (this.bootFinished) app.runHook('appLoaded');
+      }
+
+      bootFinished() {
+        this.set('bootFinished', true);
+        if (this.modulesRegistered) app.runHook('appLoaded');
+      }
 
       appLoaded(cx) {
         const slugs = this.route.slugs ? this.route.slugs : {};

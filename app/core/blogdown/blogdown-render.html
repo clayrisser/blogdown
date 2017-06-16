@@ -7,10 +7,6 @@
         this.is = 'blogdown-render';
 
         this.properties = {
-          settings: {
-            type: Object,
-            statePath: 'settings'
-          },
           route: {
             type: Object,
             statePath: 'route'
@@ -56,7 +52,7 @@
             return url;
           });
         }).then((url) => {
-          const renderer = document.createElement(this.settings.renderers[this.renderer]);
+          const renderer = document.createElement(app._renderers[this.renderer]);
           renderer.content = this.content;
           renderer.url = this.url;
           renderer.body = this.body;
@@ -66,7 +62,7 @@
 
       getUrl(content) {
         let firstRenderer = null;
-        const renderers = _.remove(_.keys(this.settings.renderers), (renderer) => {
+        const renderers = _.remove(_.keys(app._renderers), (renderer) => {
           if (this.content.format !== renderer) return true;
           firstRenderer = renderer;
           return false;
