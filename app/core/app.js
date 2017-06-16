@@ -1,15 +1,49 @@
 class App {
 
-  app = document.getElementById('app');
+  log = {
+    error: function(err) {
+      if (store.getState().settings.logLevel.value === 1) {
+        if (err.message) {
+          console.log(err.message);
+          return;
+        }
+      }
+      if (store.getState().settings.logLevel.value > 1) {
+        console.error(err);
+        return;
+      }
+    },
+    warn: function(err) {
+      if (store.getState().settings.logLevel.value === 2) {
+        if (err.message) {
+          console.log(err.message);
+          return;
+        }
+      }
+      if (store.getState().settings.logLevel.value > 2) {
+        console.warn(err);
+        return;
+      }
+    },
+    info: function(info) {
+      if (store.getState().settings.logLevel.value >= 3) console.info(info);
+    },
+    debug: function(info) {
+      if (store.getState().settings.logLevel.value >= 4) console.debug(info);
+    },
+    silly: function(info) {
+      if (store.getState().settings.logLevel.value >= 5) console.log(info);
+    }
+  };
 
-  constructor() {
-    this.app.addEventListener('dom-change', () => {
-      this.domReady();
-    });
-    window.addEventListener('WebComponentsReady', () => {
-      this.webComponentsReady();
-    });
-  }
+  go = {
+    to: function(route) {
+      page.redirect(route);
+    },
+    back: function() {
+      window.history.back();
+    }
+  };
 
   domReady() {
     console.info('DOM Ready');
@@ -18,7 +52,6 @@ class App {
   webComponentsReady() {
     this.boot([
       'settings',
-      'globals',
       'meta',
       'authors',
       'pages',
@@ -27,8 +60,20 @@ class App {
       'theme',
       'app'
     ]).then(() => {
-      this.app.runHook('bootFinished');
+      this.runHook('bootFinished');
     });
+  }
+
+  runHook(hookName, cx) {
+    this.log.info(`⥽: ${hookName}`);
+    if (!app._hooks) app._hooks = {};
+    const promises = _.map(app._hooks[hookName], (hookInstance, key) => {
+      if (typeof hookInstance.then === 'function') return hookInstance(cx);
+      return new Promise((resolve, reject) => {
+        return resolve(hookInstance(cx));
+      });
+    });
+    return Promise.all(promises);
   }
 
   boot(bootSteps) {
@@ -56,5 +101,20 @@ class App {
 }
 
 ((document) => {
-  new App();
+  const app = document.getElementById('app');
+  const _app = new App();
+  _.each(_.keys(_app), (key) => {
+    app[key] = _app[key];
+  });
+  _.each(Object.getOwnPropertyNames(Object.getPrototypeOf(_app)), (key) => {
+    if (key !== 'constructor') {
+      app[key] = App.prototype[key];
+    }
+  });
+  app.addEventListener('dom-change', () => {
+    app.domReady();
+  });
+  window.addEventListener('WebComponentsReady', () => {
+    app.webComponentsReady();
+  });
 })(document);

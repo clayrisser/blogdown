@@ -15,9 +15,8 @@
                     type: LOAD_AUTHORS,
                     payload: body
                   });
-                  app.log.info('authors =>');
-                  app.log.info(store.getState().authors);
                   this.resolve(body);
+                  app.runHook('authorsRegistered');
                   return body;
                 }).catch((err) => {
                   this.reject(err);
@@ -37,7 +36,6 @@
           this.resolve = resolve;
           this.reject = reject;
           this.dispatch('loadAuthors');
-          app.runHook('authorsRegistered');
         });
       }
     }

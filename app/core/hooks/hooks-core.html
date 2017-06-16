@@ -47,7 +47,6 @@
       registerHooks() {
         return {
           settingsRegistered: this.settingsRegistered.bind(this),
-          globalsRegistered: this.globalsRegistered.bind(this),
           baseUrlSet: this.baseUrlSet.bind(this),
           authorsRegistered: this.authorsRegistered.bind(this),
           pagesRegistered: this.pagesRegistered.bind(this),
@@ -65,8 +64,6 @@
         app.log.info('state.settings =>');
         app.log.info(this.settings);
       }
-
-      globalsRegistered(cx) {}
 
       baseUrlSet(cx) {
         app.log.info('state.meta.baseUrl =>');
