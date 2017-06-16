@@ -1,4 +1,4 @@
-_reducers.pages = (state = [], action) => {
+app._reducers.pages = (state = [], action) => {
   switch (action.type) {
   case LOAD_PAGES:
     return _.flatten([[], state, action.payload]);

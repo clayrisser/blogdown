@@ -31,7 +31,8 @@
   "scripts": {
     "start": "node ./node_modules/gulp/bin/gulp serve",
     "dist": "node ./node_modules/gulp/bin/gulp",
-    "scripts": "node ./node_modules/babel-cli/bin/babel/node"
+    "serve": "node ./node_modules/gulp/bin/gulp serve",
+    "clean": "node ./node_modules/gulp/bin/gulp clean"
   },
   "engines": {
     "node": ">=0.10.0"

@@ -1,4 +1,4 @@
-_reducers.route = (state = {}, action) => {
+app._reducers.route = (state = {}, action) => {
   switch (action.type) {
   case CHANGE_ROUTE:
     return _.clone(action.payload);

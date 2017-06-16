@@ -1,4 +1,4 @@
-_reducers.meta = (state = {}, action) => {
+app._reducers.meta = (state = {}, action) => {
   switch (action.type) {
   case APP_LOADED:
     return _.assign({}, state, {

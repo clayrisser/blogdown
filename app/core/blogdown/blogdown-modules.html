@@ -12,13 +12,6 @@
         this.is = 'blogdown-modules';
       }
 
-      ready() {
-        const coreRenderers = {
-          md: 'renderer-md'
-        };
-        if (!app._renderers) app._renderers = _.clone(coreRenderers);
-      }
-
       async attached() {
         await Promise.all(_.map(this.$.modules.children, async (module) => {
           const element = await module.getElement();

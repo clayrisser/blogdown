@@ -17,12 +17,12 @@ const initialState = {
 
 const createReducer = (asyncReducers) => {
   return Redux.combineReducers({
-    authors: _reducers.authors,
-    meta: _reducers.meta,
-    pages: _reducers.pages,
-    route: _reducers.route,
-    settings: _reducers.settings,
-    taxonomies: _reducers.taxonomies,
+    authors: app._reducers.authors,
+    meta: app._reducers.meta,
+    pages: app._reducers.pages,
+    route: app._reducers.route,
+    settings: app._reducers.settings,
+    taxonomies: app._reducers.taxonomies,
     ...asyncReducers
   });
 };

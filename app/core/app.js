@@ -4,7 +4,13 @@ class App {
 
   log = Logdown({ prefix: 'blogdown' });
 
-  _hooks = {}
+  _hooks = {};
+
+  _reducers = {};
+
+  _renderers = {
+    md: 'renderer-md'
+  };
 
   go = {
     to: function(route) {
@@ -35,7 +41,7 @@ class App {
       'taxonomies',
       'style',
       'theme',
-      'app'
+      'root'
     ]).then(() => {
       this.runHook('bootFinished');
     });
