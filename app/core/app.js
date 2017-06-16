@@ -1,40 +1,10 @@
 class App {
 
-  log = {
-    error: function(err) {
-      if (store.getState().settings.logLevel.value === 1) {
-        if (err.message) {
-          console.log(err.message);
-          return;
-        }
-      }
-      if (store.getState().settings.logLevel.value > 1) {
-        console.error(err);
-        return;
-      }
-    },
-    warn: function(err) {
-      if (store.getState().settings.logLevel.value === 2) {
-        if (err.message) {
-          console.log(err.message);
-          return;
-        }
-      }
-      if (store.getState().settings.logLevel.value > 2) {
-        console.warn(err);
-        return;
-      }
-    },
-    info: function(info) {
-      if (store.getState().settings.logLevel.value >= 3) console.info(info);
-    },
-    debug: function(info) {
-      if (store.getState().settings.logLevel.value >= 4) console.debug(info);
-    },
-    silly: function(info) {
-      if (store.getState().settings.logLevel.value >= 5) console.log(info);
-    }
-  };
+  hookLogger = Logdown({ prefix: '⥽' });
+
+  log = Logdown({ prefix: 'blogdown' });
+
+  _hooks = {}
 
   go = {
     to: function(route) {
@@ -45,8 +15,15 @@ class App {
     }
   };
 
+  constructor() {
+    if (typeof process !== 'undefined'
+        && process.env && process.env.NODE_ENV === 'production') {
+      Logdown.disable('*');
+    }
+  }
+
   domReady() {
-    console.info('DOM Ready');
+    this.log.info('DOM Ready');
   }
 
   webComponentsReady() {
@@ -65,9 +42,8 @@ class App {
   }
 
   runHook(hookName, cx) {
-    this.log.info(`⥽: ${hookName}`);
-    if (!app._hooks) app._hooks = {};
-    const promises = _.map(app._hooks[hookName], (hookInstance, key) => {
+    this.hookLogger.info(`${hookName}`);
+    const promises = _.map(this._hooks[hookName], (hookInstance, key) => {
       if (typeof hookInstance.then === 'function') return hookInstance(cx);
       return new Promise((resolve, reject) => {
         return resolve(hookInstance(cx));
@@ -88,7 +64,7 @@ class App {
     return promiseChain.then((res) => {
       return res;
     }).catch((err) => {
-      console.error(err);
+      this.log.error(err);
     });
   }
 

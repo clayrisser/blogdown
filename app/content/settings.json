@@ -1,8 +1,8 @@
 {
   "title": "Jams Portfolio",
   "dateFormat": "MMMM D, YYYY",
-  "logLevel": "silly",
   "easterEggs": true,
+  "debug": false,
   "ajaxTimeout": "10000",
   "toastDuration": "5000",
   "theme": "blogdown2017",

@@ -61,28 +61,26 @@
 
       settingsRegistered(cx) {
         document.title = this.settings.title;
-        app.log.info('state.settings =>');
-        app.log.info(this.settings);
+        app.log.info('state.settings =>', this.settings);
+        if (this.settings.debug) {
+          Logdown.enable('*');
+        }
       }
 
       baseUrlSet(cx) {
-        app.log.info('state.meta.baseUrl =>');
-        app.log.info(this.meta.baseUrl);
+        app.log.info('state.meta.baseUrl =>', this.meta.baseUrl);
       }
 
       authorsRegistered(cx) {
-        app.log.info('state.authors =>');
-        app.log.info(this.authors);
+        app.log.info('state.authors =>', this.authors);
       }
 
       pagesRegistered(cx) {
-        app.log.info('state.pages =>');
-        app.log.info(this.pages);
+        app.log.info('state.pages =>', this.pages);
       }
 
       taxonomiesRegistered(cx) {
-        app.log.info('state.taxonomies =>');
-        app.log.info(this.taxonomies);
+        app.log.info('state.taxonomies =>', this.taxonomies);
       }
 
       styleImported(cx) {}
@@ -90,8 +88,7 @@
       themeImported(cx) {}
 
       modulesRegistered(cx) {
-        app.log.info('renderers =>');
-        app.log.info(app._renderers);
+        app.log.info('renderers =>', app._renderers);
         this.set('modulesRegistered', true);
         if (this.bootFinished) app.runHook('appLoaded');
       }
