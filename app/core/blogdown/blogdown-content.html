@@ -1,14 +1,28 @@
 <dom-module id="blogdown-content">
   <template>
 
-    <template id="page" id="sheep" is="dom-if" if="[[isPage]]" restamp>
-      <theme-page page="[[page]]"></theme-page>
+    <template is="dom-if" if="[[isDisplayFullscreen]]" restamp>
+      <template is="dom-if" if="[[isPage]]" restamp>
+        <blogdown-render page="[[page]]"></blogdown-render>
+      </template>
     </template>
-    <template id="posts" is="dom-if" if="[[isPosts]]" restamp>
-      <theme-posts page="[[page]]" posts="[[posts]]"></theme-posts>
+
+    <template is="dom-if" if="[[isDisplayViewport]]" restamp>
+      <template is="dom-if" if="[[isPage]]" restamp>
+        <blogdown-render page="[[page]]"></blogdown-render>
+      </template>
     </template>
-    <template is="dom-if" if="[[isPost]]" restamp>
-      <theme-post id="post" post="[[post]]"></theme-post>
+
+    <template is="dom-if" if="[[isDisplayTheme]]" restamp>
+      <template is="dom-if" if="[[isPage]]" restamp>
+        <theme-page page="[[page]]"></theme-page>
+      </template>
+      <template is="dom-if" if="[[isPosts]]" restamp>
+        <theme-posts page="[[page]]" posts="[[posts]]"></theme-posts>
+      </template>
+      <template is="dom-if" if="[[isPost]]" restamp>
+        <theme-post id="post" post="[[post]]"></theme-post>
+      </template>
     </template>
 
   </template>
@@ -54,6 +68,15 @@
           meta: {
             type: Object,
             statePath: 'meta'
+          },
+          display: {
+            type: String,
+            value: 'theme'
+          },
+          isDisplayFullscreen: {
+            type: Boolean,
+            value: false,
+            notify: true
           }
         };
       }
@@ -70,6 +93,9 @@
       }
 
       rerender() {
+        this.set('isDisplayFullscreen', false);
+        this.set('isDisplayViewport', false);
+        this.set('isDisplayTheme', false);
         this.set('isPage', false);
         this.set('isPosts', false);
         this.set('isPost', false);
@@ -98,7 +124,18 @@
               break;
           }
           this.set('is404', false);
-          app.runHook('routeChanged', this.route);
+          if (this.display === 'fullscreen') {
+            if (this.page && this.page.display === 'fullscreen') {
+              this.set('isDisplayFullscreen', true);
+            }
+          } else {
+            if (this.page && this.page.display === 'viewport') {
+              this.set('isDisplayViewport', true);
+            } else if (this.page && this.page.display === 'theme') {
+              this.set('isDisplayTheme', true);
+            }
+            app.runHook('routeChanged', this.route);
+          }
         }, 0);
       }
 

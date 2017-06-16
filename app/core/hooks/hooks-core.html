@@ -61,6 +61,7 @@
       }
 
       settingsRegistered(cx) {
+        document.title = this.settings.title;
         app.log.info('state.settings =>');
         app.log.info(this.settings);
       }

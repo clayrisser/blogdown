@@ -5,12 +5,15 @@
     "format": "dyn"
   },
   {
-    "title": "Ha"
+    "title": "Ha",
+    "format": "wow",
+    "display": "viewport"
   },
   {
     "title": "Resume",
     "slug": "resume",
     "addToMenu": true,
-    "format": "md"
+    "format": "md",
+    "display": "fullscreen"
   }
 ]

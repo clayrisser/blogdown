@@ -70,7 +70,8 @@
           const pageMeta = {
             title: title,
             slug: slug,
-            addToMenu: addToMenu
+            addToMenu: addToMenu,
+            display: page.display ? page.display : 'theme'
           };
           _.each(page, (value, key) => {
             if (!_.includes(_.keys(pageMeta), key)) {
@@ -91,7 +92,8 @@
               title: _.startCase(taxonomy.name.replace('-', ' ')),
               slug: taxonomy.name,
               addToMenu: true,
-              taxonomy: true
+              taxonomy: true,
+              display: 'theme'
             });
           }
         });
@@ -100,6 +102,7 @@
             title: this.settings.title,
             slug: 'home',
             addToMenu: false,
+            display: 'theme',
             format: 'md'
           });
         }
@@ -108,6 +111,7 @@
             title: 'Page Not Found',
             slug: '404',
             addToMenu: false,
+            display: 'theme',
             format: 'md'
           });
         }
