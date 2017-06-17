@@ -1,6 +1,6 @@
 [
   {
-    "title": "BlogDowns",
+    "title": "BlogDownsalkds",
     "date": "feb 12, 2017",
     "status": "published",
     "featuredImage": "bob",
@@ -13,7 +13,8 @@
     "date": "aug 15, 2016",
     "status": "published",
     "featuredImage": "screenshot-3",
-    "author": "jamrizzi"
+    "author": "jamrizzi",
+    "description": "deskterm is an awesome blogging platform"
   },
   {
     "title": "NestedPop",

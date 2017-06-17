@@ -4,42 +4,53 @@
       paper-card {
         --paper-card-background-color: var(--paper-menu-background-color);
       }
+      .card-content {
+        padding: 0px !important;
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .card-actions a, .feature-image a, .title {
+        text-decoration: none;
+        color: inherit;
+      }
+      .card-body {
+        padding: 16px;
+        flex: 2;
+        min-width: 200px;
+      }
+      .card-heading {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 16px;
+      }
+      .featured-image {
+        flex: 1;
+      }
+      .featured-image .image {
+        min-height: 156px;
+        min-width: 156px;
+        background-size: cover;
+        background-repeat: no-repeat;
+        -webkit-box-shadow: inset 0px 0px 0px 9999px rgba(0,0,0,0.25);
+        -moz-box-shadow: inset 0px 0px 0px 9999px rgba(0,0,0,0.25);
+        box-shadow: inset 0px 0px 0px 9999px rgba(0,0,0,0.25);
+      }
       .post {
         width: 100%;
         margin-bottom: 20px;
       }
-      .featured-image .post {
-        @apply(--layout-horizontal);
+      .meta {
+        margin-left: auto;
+        text-align: right;
       }
-      .heading {
-        margin-top: 10px;
+      .title h2 {
+        margin: 0px;
       }
-      a {
-        text-decoration: none;
-        color: inherit;
+      .title {
+        margin-right: 10px;
       }
       .header {
         padding: 0px 20px 10px 20px;
-      }
-      .featured-image .content {
-        @apply(--layout-flex);
-        float: left;
-      }
-      .featured-image .image {
-        width: 33.4%;
-      }
-      .featured-image .image .background {
-        position: absolute;
-        height: 100%;
-        left: 66.6%;
-        right: 0px;
-        background-size: cover;
-      }
-      .featured-image .image .mask {
-        width: 100%;
-        height: 100%;
-        background-color: black;
-        opacity: .2;
       }
     </style>
     <style is="custom-style" include="iron-flex iron-flex-alignment"></style>
@@ -50,22 +61,26 @@
 
     <template is="dom-repeat" items="[[posts]]" as="post" restamp>
       <paper-card class="post" elevation="3">
-        <div class="card-content">
-          <div class="layout horizontal justified">
-            <div>
-              <a href="/[[page.slug]]/[[post.slug]]">
-                <h2 class="heading">
+        <div class="card-content" style="flex-direction:row[[flexDirection(index)]]">
+          <template is="dom-if" if="[[post.featuredImage]]">
+            <a class="featured-image" href="/[[page.slug]]/[[post.slug]]">
+              <div class="image" style="background-image:url('[[post.featuredImage]]')"></div>
+            </a>
+          </template>
+          <div class="card-body">
+            <div class="card-heading">
+              <a class="title" href="/[[page.slug]]/[[post.slug]]">
+                <h2>
                   [[post.title]]
                 </h2>
               </a>
-              [[post.featuredImage]]
+              <div class="meta">
+                <div style="font-weight:bold">[[_getDate(post.date)]]</div>
+                <div>[[_getAuthorDisplayName(post.author)]]</div>
+              </div>
             </div>
-            <div style="text-align:right">
-              <div style="font-weight:bold">[[_getDate(post.date)]]</div>
-              <div>[[_getAuthorDisplayName(post.author)]]</div>
-            </div>
+            <div>[[post.description]]</div>
           </div>
-          <div>[[post.description]]</div>
         </div>
         <div class="card-actions">
           <a href="/[[page.slug]]/[[post.slug]]">
@@ -111,6 +126,10 @@
           for (var i = 0; i < this.posts.length; i++) {
             var post = this.posts[i];
           }
+        },
+
+        flexDirection: function(i) {
+          return i % 2 === 0 ? '-reverse' : '';
         },
 
         _getAuthorDisplayName: function(author) {

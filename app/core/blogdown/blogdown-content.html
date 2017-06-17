@@ -124,7 +124,7 @@
                   this.set('posts', posts);
                   this.set('isPosts', true);
                   _.map(this.taxonomies[this.route.slugs.parent], async (post, i) => {
-                    await new Promise(resolve => window.setTimeout(resolve, 1000 * i));
+                    await new Promise(resolve => window.setTimeout(resolve, 100 * i));
                     const featuredImage = await this.getFeaturedImage(post.featuredImage, post);
                     this.set(`posts.${i}.featuredImage`, featuredImage);
                   });
