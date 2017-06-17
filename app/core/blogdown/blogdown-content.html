@@ -108,8 +108,27 @@
                 return;
               }
               if (this.page.taxonomy) {
-                this.set('posts', _.clone(this.taxonomies[this.route.slugs.parent]));
-                this.set('isPosts', true);
+                if (this.display !== 'fullscreen') {
+                  const posts = [];
+                  _.each(this.taxonomies[this.route.slugs.parent], (post) => {
+                    const obj = {};
+                    _.each(post, (item, key) => {
+                      if (key === 'featuredImage') {
+                        obj.featuredImage = false;
+                      } else {
+                        obj[key] = item;
+                      }
+                    });
+                    posts.push(obj);
+                  });
+                  this.set('posts', posts);
+                  this.set('isPosts', true);
+                  _.map(this.taxonomies[this.route.slugs.parent], async (post, i) => {
+                    await new Promise(resolve => window.setTimeout(resolve, 1000 * i));
+                    const featuredImage = await this.getFeaturedImage(post.featuredImage, post);
+                    this.set(`posts.${i}.featuredImage`, featuredImage);
+                  });
+                }
               } else {
                 this.set('isPage', true);
               }
@@ -123,7 +142,7 @@
                 return;
               }
               if (this.post.featuredImage) {
-                this.post.featuredImage = await this.getFeaturedImage(this.post.featuredImage);
+                this.post.featuredImage = await this.getFeaturedImage(this.post.featuredImage, this.post);
               }
               this.set('isPost', true);
               break;
@@ -163,25 +182,25 @@
         this.set('isPost', false);
       }
 
-      getFeaturedImage(featuredImage) {
+      getFeaturedImage(featuredImage, post) {
         if (featuredImage) {
           if (_.isString(featuredImage)) {
             return app.getImageSrc(featuredImage).then((newFeaturedImage) => {
               if (newFeaturedImage) return newFeaturedImage;
-              return app.getImageSrc(this.post.slug).then((newFeaturedImage2) => {
+              return app.getImageSrc(post.slug).then((newFeaturedImage2) => {
                 if (newFeaturedImage2) return newFeaturedImage2;
-                if (this.post.slug !== _.snakeCase(this.post.title).replace('_', '-')) {
-                  const src = _.snakeCase(this.post.title).replace('_', '-');
+                if (post.slug !== _.snakeCase(post.title).replace('_', '-')) {
+                  const src = _.snakeCase(post.title).replace('_', '-');
                   return app.getImageSrc(src);
                 }
                 return false;
               });
             });
           }
-          return app.getImageSrc(this.post.slug).then((newFeaturedImage) => {
+          return app.getImageSrc(post.slug).then((newFeaturedImage) => {
             if (newFeaturedImage) return newFeaturedImage;
-            if (this.post.slug !== _.snakeCase(this.post.title).replace('_', '-')) {
-              const src = _.snakeCase(this.post.title).replace('_', '-');
+            if (post.slug !== _.snakeCase(post.title).replace('_', '-')) {
+              const src = _.snakeCase(post.title).replace('_', '-');
               return app.getImageSrc(src);
             }
             return false;

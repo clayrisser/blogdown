@@ -19,21 +19,21 @@
     "title": "NestedPop",
     "date": "oct 17, 2016",
     "status": "published",
-    "featuredImage": false,
+    "featuredImage": "screenshot-2",
     "author": "jamrizzi"
   },
   {
     "title": "ReactGantt",
     "date": "jul 27, 2016",
     "status": "published",
-    "featuredImage": false,
+    "featuredImage": true,
     "author": "jamrizzi"
   },
   {
     "title": "Rizzi Guestbook",
     "date": "feb 17, 2014",
     "status": "published",
-    "featuredImage": false,
+    "featuredImage": true,
     "author": "jamrizzi"
   }
 ]
