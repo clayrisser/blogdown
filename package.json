@@ -31,7 +31,7 @@
   "scripts": {
     "start": "node ./node_modules/gulp/bin/gulp serve",
     "dist": "node ./node_modules/gulp/bin/gulp",
-    "serve": "node ./node_modules/gulp/bin/gulp serve",
+    "serve": "node ./node_modules/gulp/bin/gulp serve:dist",
     "clean": "node ./node_modules/gulp/bin/gulp clean",
     "build": "docker build -t thingdown/blogdown -f ./deployment/Dockerfile ./",
     "push": "docker push thingdown/blogdown",

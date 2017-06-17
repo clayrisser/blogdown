@@ -1,4 +1,4 @@
-app._reducers.meta = (state = {}, action) => {
+app._reducers.meta = (state = initialState.meta, action) => {
   switch (action.type) {
   case APP_LOADED:
     return _.assign({}, state, {
@@ -6,7 +6,7 @@ app._reducers.meta = (state = {}, action) => {
     });
   case START_LOADING:
     return _.assign({}, state, {
-      loading: _.clone(state.loading).push(action.payload)
+      loading: _.concat(state.loading, [action.payload])
     });
   case FINISH_LOADING:
     return _.assign({}, state, {
@@ -18,7 +18,7 @@ app._reducers.meta = (state = {}, action) => {
     return _.assign({}, state, {
       progress: action.payload
     });
-  case UPDATE_NARROW:
+  case IS_NARROW:
     return _.assign({}, state, {
       narrow: action.payload
     });

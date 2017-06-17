@@ -5,6 +5,10 @@
         this.is = 'boot-theme';
 
         this.properties = {
+          baseUrl: {
+            type: String,
+            statePath: 'meta.baseUrl'
+          },
           theme: {
             type: Object,
             statePath: 'settings.theme'
@@ -24,12 +28,24 @@
       }
 
       importTheme() {
-        return this.importHrefPromise('../../../content/themes/' + this.theme + '/theme-body.html').then(() => {
-          return this.importHrefPromise('../../../content/themes/' + this.theme + '/theme-page.html');
+        return this.importHrefPromise(
+          `${this.baseUrl}/content/themes/${this.theme}/theme-body.html`
+          + `?${moment().format('x')}`
+        ).then(() => {
+          return this.importHrefPromise(
+            `${this.baseUrl}/content/themes/${this.theme}/theme-page.html`
+            + `?${moment().format('x')}`
+          );
         }).then(() => {
-          return this.importHrefPromise('../../../content/themes/' + this.theme + '/theme-posts.html');
+          return this.importHrefPromise(
+            `${this.baseUrl}/content/themes/${this.theme}/theme-posts.html`
+            + `?${moment().format('x')}`
+          );
         }).then(() => {
-          return this.importHrefPromise('../../../content/themes/' + this.theme + '/theme-post.html');
+          return this.importHrefPromise(
+            `${this.baseUrl}/content/themes/${this.theme}/theme-post.html`
+            + `?${moment().format('x')}`
+          );
         });
       }
 

@@ -186,7 +186,7 @@ gulp.task('serve', ['babel'], (cb) => {
   gulp.watch(['./app/**/*'], reload);
 });
 
-gulp.task('serve', ['default'], (cb) => {
+gulp.task('serve:dist', ['default'], (cb) => {
   browserSync({
     port: 8081,
     notify: false,
