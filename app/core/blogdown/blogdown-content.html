@@ -124,18 +124,20 @@
               break;
           }
           this.set('is404', false);
+
           if (this.display === 'fullscreen') {
-            if (this.page && this.page.display === 'fullscreen') {
+            if (this.isPage && this.page.display === 'fullscreen') {
               this.set('isDisplayFullscreen', true);
             }
           } else {
-            if (this.page && this.page.display === 'viewport') {
+            if (this.isPage && this.page.display === 'viewport') {
               this.set('isDisplayViewport', true);
-            } else if (this.page && this.page.display === 'theme') {
+            } else {
               this.set('isDisplayTheme', true);
             }
             app.runHook('routeChanged', this.route);
           }
+
         }, 0);
       }
 
