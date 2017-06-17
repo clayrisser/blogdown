@@ -111,7 +111,7 @@
                 hidden=[[!narrow]]>
             </paper-icon-button>
           </div>
-          <a href="/">[[settings.title]]</a>
+          <a href="/" on-click="closeDrawer">[[settings.title]]</a>
         </div>
         <div class="social-accounts">
           <template is="dom-repeat" items=[[socialAccounts]] as="socialAccount">
@@ -160,10 +160,6 @@
           type: [],
           statePath: 'pages'
         },
-        narrow: {
-          type: Boolean,
-          observer: 'narrowChanged'
-        },
         settings: {
           type: Object,
           statePath: 'settings'
@@ -171,13 +167,17 @@
         meta: {
           type: Object,
           statePath: 'meta'
+        },
+        narrow: {
+          type: Boolean,
+          observer: 'narrowChanged'
         }
       },
 
       ready: function() {
-        this.indeterminateLoading = true;
-        this.socialAccounts = [];
-        this.menuItems = [];
+        this.set('indeterminateLoading', true);
+        this.set('socialAccounts', []);
+        this.set('menuItems', []);
         this.loadMenuItems();
         this.loadSocialAccounts();
       },

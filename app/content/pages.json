@@ -2,7 +2,8 @@
   {
     "slug": "home",
     "addToMenu": false,
-    "format": "dyn"
+    "format": "dyn",
+    "featuredImage": "screenshot-1"
   },
   {
     "title": "Ha",

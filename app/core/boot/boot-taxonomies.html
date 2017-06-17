@@ -92,13 +92,12 @@
               slug = _.snakeCase(title).replace('_', '-');
             }
           }
-          const featuredImage = post.featuredImage ? post.featuredImage : false;
           const postMeta = {
             title: title,
             slug: slug,
             date: date,
             author: post.author ? post.author : false,
-            featuredImage: featuredImage,
+            featuredImage: post.featuredImage ? post.featuredImage : false,
             description: post.description ? post.description : '',
             format: post.format ? post.format : 'md',
             taxonomy: taxonomy

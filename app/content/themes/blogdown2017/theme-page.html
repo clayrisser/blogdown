@@ -3,6 +3,8 @@
     <style>
       .header {
         padding: 0px 20px 20px 20px;
+        position: relative;
+        z-index: 0;
       }
       .content {
         width: 100%;
@@ -10,11 +12,43 @@
       paper-card {
         --paper-card-background-color: var(--paper-menu-background-color);
       }
+      .featured-image-header {
+        color: #ffffff;
+        text-shadow: #000000 0px 0px 12px;
+      }
+      .featured-image {
+        width: calc(100% + 40px);
+        margin: -20px -20px 0px -20px;
+        height: 56vh;
+        -webkit-box-shadow: inset 0px -200px 102px -125px rgba(255,255,255,1);
+        -moz-box-shadow: inset 0px -200px 102px -125px rgba(255,255,255,1);
+        box-shadow: inset 0px -200px 102px -125px rgba(255,255,255,1);
+        position: fixed;
+        background-size: cover;
+        background-repeat: no-repeat;
+      }
     </style>
 
-    <div class="header">
-      <h1>[[page.title]]</h1>
-    </div>
+    <template is="dom-if" if="[[page.featuredImage]]" restamp>
+      <div class="featured-image" style="background-image:url('[[page.featuredImage]]')"></div>
+      <div class="header featured-image-header">
+        <div class="layout horizontal justified">
+          <div>
+            <h1>[[page.title]]</h1>
+          </div>
+        </div>
+      </div>
+    </template>
+    <template is="dom-if" if="[[!page.featuredImage]]">
+      <div class="header">
+        <div class="layout horizontal justified">
+          <div>
+            <h1>[[page.title]]</h1>
+          </div>
+        </div>
+      </div>
+    </template>
+
     <paper-card class="content" elevation="3">
       <div class="card-content">
         <blogdown-render page="[[page]]"></blogdown-render>

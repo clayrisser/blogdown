@@ -1,7 +1,15 @@
 const BlogdownBody = {};
 
 const BlogdownPage = {
+  properties: {
+    page: {
+      type: Object,
+      value: {},
+      observer: '_pageChanged'
+    }
+  },
   ready: function() {
+    this.set('isReady', true);
     app.runHook('pageReady', {
       page: this.page
     });
@@ -10,11 +18,31 @@ const BlogdownPage = {
     app.runHook('pageAttached', {
       page: this.page
     });
+    this._safeRerender();
+  },
+  _pageChanged: function() {
+    if (this.isReady) this._safeRerender();
+  },
+  _safeRerender() {
+    if (this.rerender) this.rerender();
   }
 };
 
 const BlogdownPosts = {
+  properties: {
+    page: {
+      type: Object,
+      value: {},
+      observer: '_pageChanged'
+    },
+    posts: {
+      type: Array,
+      value: [],
+      observer: '_postsChanged'
+    }
+  },
   ready: function() {
+    this.set('isReady', true);
     app.runHook('postsReady', {
       page: this.page,
       posts: this.posts
@@ -25,6 +53,18 @@ const BlogdownPosts = {
       page: this.page,
       posts: this.posts
     });
+  },
+  _pageChanged: function() {
+    this._safeRerender();
+  },
+  _postsChanged: function() {
+    this._safeRestamp();
+  },
+  _safeRerender: function() {
+    if (this.rerender) this.rerender();
+  },
+  _safeRestamp: function() {
+    if (this.restamp) this.restamp();
   }
 };
 
@@ -33,11 +73,11 @@ const BlogdownPost = {
     post: {
       type: Object,
       value: {},
-      observer: 'postChanged'
+      observer: '_postChanged'
     }
   },
   ready: function() {
-    this.isReady = true;
+    this.set('isReady', true);
     app.runHook('postReady', {
       post: this.post
     });
@@ -46,10 +86,13 @@ const BlogdownPost = {
     app.runHook('postAttached', {
       post: this.post
     });
-    this.rerender();
+    this._safeRerender();
   },
-  postChanged: function() {
-    if (this.isReady) this.rerender();
+  _postChanged: function() {
+    if (this.isReady) this._safeRerender();
+  },
+  _safeRerender: function() {
+    if (this.rerender) this.rerender();
   }
 };
 

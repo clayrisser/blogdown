@@ -45,26 +45,6 @@
             type: Object,
             statePath: 'taxonomies'
           },
-          isParent: {
-            type: Boolean,
-            value: false
-          },
-          isChild: {
-            type: Boolean,
-            value: false
-          },
-          page: {
-            type: Object,
-            value: null
-          },
-          post: {
-            type: Object,
-            value: null
-          },
-          is404: {
-            type: Boolean,
-            value: false
-          },
           meta: {
             type: Object,
             statePath: 'meta'
@@ -79,6 +59,14 @@
             notify: true
           }
         };
+      }
+
+      ready() {
+        this.isParent = false;
+        this.isChild = false;
+        this.page = null;
+        this.post = null;
+        this.is404 = false;
       }
 
       get behaviors() {
@@ -130,6 +118,10 @@
                   });
                 }
               } else {
+                if (this.display !== 'fullscreen' && this.page.featuredImage) {
+                  const featuredImage = await this.getFeaturedImage(this.page.featuredImage, this.page);
+                  this.set('page.featuredImage', featuredImage);
+                }
                 this.set('isPage', true);
               }
               break;
@@ -141,8 +133,9 @@
                 this.render404();
                 return;
               }
-              if (this.post.featuredImage) {
-                this.post.featuredImage = await this.getFeaturedImage(this.post.featuredImage, this.post);
+              if (this.display !== 'fullscreen' && this.post.featuredImage) {
+                const featuredImage = await this.getFeaturedImage(this.post.featuredImage, this.post);
+                this.set('post.featuredImage', featuredImage);
               }
               this.set('isPost', true);
               break;
@@ -182,25 +175,25 @@
         this.set('isPost', false);
       }
 
-      getFeaturedImage(featuredImage, post) {
+      getFeaturedImage(featuredImage, content) {
         if (featuredImage) {
           if (_.isString(featuredImage)) {
             return app.getImageSrc(featuredImage).then((newFeaturedImage) => {
               if (newFeaturedImage) return newFeaturedImage;
-              return app.getImageSrc(post.slug).then((newFeaturedImage2) => {
+              return app.getImageSrc(content.slug).then((newFeaturedImage2) => {
                 if (newFeaturedImage2) return newFeaturedImage2;
-                if (post.slug !== _.snakeCase(post.title).replace('_', '-')) {
-                  const src = _.snakeCase(post.title).replace('_', '-');
+                if (content.slug !== _.snakeCase(content.title).replace('_', '-')) {
+                  const src = _.snakeCase(content.title).replace('_', '-');
                   return app.getImageSrc(src);
                 }
                 return false;
               });
             });
           }
-          return app.getImageSrc(post.slug).then((newFeaturedImage) => {
+          return app.getImageSrc(content.slug).then((newFeaturedImage) => {
             if (newFeaturedImage) return newFeaturedImage;
-            if (post.slug !== _.snakeCase(post.title).replace('_', '-')) {
-              const src = _.snakeCase(post.title).replace('_', '-');
+            if (content.slug !== _.snakeCase(content.title).replace('_', '-')) {
+              const src = _.snakeCase(content.title).replace('_', '-');
               return app.getImageSrc(src);
             }
             return false;

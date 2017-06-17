@@ -75,8 +75,8 @@
                 </h2>
               </a>
               <div class="meta">
-                <div style="font-weight:bold">[[_getDate(post.date)]]</div>
-                <div>[[_getAuthorDisplayName(post.author)]]</div>
+                <div style="font-weight:bold">[[getDate(post.date)]]</div>
+                <div>[[getAuthorDisplayName(post.author)]]</div>
               </div>
             </div>
             <div>[[post.description]]</div>
@@ -103,15 +103,6 @@
         ],
 
         properties: {
-          page: {
-            type: Object,
-            value: {}
-          },
-          posts: {
-            type: Array,
-            value: [],
-            observer: 'postsChanged'
-          },
           authors: {
             type: Object,
             statePath: 'authors'
@@ -122,21 +113,15 @@
           }
         },
 
-        postsChanged: function() {
-          for (var i = 0; i < this.posts.length; i++) {
-            var post = this.posts[i];
-          }
-        },
-
         flexDirection: function(i) {
           return i % 2 === 0 ? '-reverse' : '';
         },
 
-        _getAuthorDisplayName: function(author) {
+        getAuthorDisplayName: function(author) {
           return author ? this.authors[author].displayName : '';
         },
 
-        _getDate: function(date) {
+        getDate: function(date) {
           return date ? date.format(this.settings.dateFormat) : '';
         }
       });

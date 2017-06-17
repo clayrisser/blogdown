@@ -71,7 +71,8 @@
             title: title,
             slug: slug,
             addToMenu: addToMenu,
-            display: page.display ? page.display : 'theme'
+            display: page.display ? page.display : 'theme',
+            featuredImage: page.featuredImage ? page.featuredImage : false
           };
           _.each(page, (value, key) => {
             if (!_.includes(_.keys(pageMeta), key)) {
@@ -103,6 +104,7 @@
             slug: 'home',
             addToMenu: false,
             display: 'theme',
+            featuredImage: false,
             format: 'md'
           });
         }
@@ -112,6 +114,7 @@
             slug: '404',
             addToMenu: false,
             display: 'theme',
+            featuredImage: false,
             format: 'md'
           });
         }
