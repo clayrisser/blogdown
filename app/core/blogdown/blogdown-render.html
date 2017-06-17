@@ -47,11 +47,6 @@
       ready() {
         this.page ? this.set('content', this.page) : this.set('content', this.post);
         this.getUrl(this.content).then((url) => {
-          return this.getFeaturedImage(this.content.featuredImage).then((featuredImage) => {
-            this.content.featuredImage = featuredImage;
-            return url;
-          });
-        }).then((url) => {
           const renderer = document.createElement(app._renderers[this.renderer]);
           renderer.content = this.content;
           renderer.url = this.url;
@@ -106,33 +101,6 @@
         return promiseChain.then(() => {
           return this.url;
         });
-      }
-
-      getFeaturedImage(featuredImage) {
-        if (featuredImage) {
-          if (_.isString(featuredImage)) {
-            return document.createElement('blogdown-img').getSrc(featuredImage).then((newFeaturedImage) => {
-              if (newFeaturedImage) return newFeaturedImage;
-              return document.createElement('blogdown-img').getSrc(this.content.slug).then((newFeaturedImage2) => {
-                if (newFeaturedImage2) return newFeaturedImage2;
-                if (this.content.slug !== _.snakeCase(this.content.title).replace('_', '-')) {
-                  const src = _.snakeCase(this.content.title).replace('_', '-');
-                  return document.createElement('blogdown-img').getSrc(src);
-                }
-                return false;
-              });
-            });
-          }
-          return document.createElement('blogdown-img').getSrc(this.content.slug).then((newFeaturedImage) => {
-            if (newFeaturedImage) return newFeaturedImage;
-            if (this.content.slug !== _.snakeCase(this.content.title).replace('_', '-')) {
-              const src = _.snakeCase(this.content.title).replace('_', '-');
-              return document.createElement('blogdown-img').getSrc(src);
-            }
-            return false;
-          });
-        }
-        return Promise.resolve(featuredImage);
       }
 
       loadFile(url, renderer) {

@@ -58,6 +58,10 @@ class App {
     return Promise.all(promises);
   }
 
+  getImageSrc(src) {
+    return document.createElement('blogdown-img').getSrc(src);
+  }
+
   boot(bootSteps) {
     const promises = [];
     _.each(bootSteps, (bootStep) => {

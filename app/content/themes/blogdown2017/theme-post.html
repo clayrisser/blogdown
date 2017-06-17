@@ -4,38 +4,17 @@
       paper-card {
         --paper-card-background-color: var(--paper-menu-background-color);
       }
-      .featured-image .image {
-        position: absolute;
-        left: 0px;
-        right: 0px;
-        margin-top: -20px;
-      }
-      .featured-image .image .background {
-        position: fixed;
-        width: 100%;
-        height: calc(15vw + 100px);
-        background-size: cover;
-      }
-      .featured-image .image .mask {
-        position: fixed;
-        width: 100%;
-        height: calc(15vw + 100px);
-        background-color: black;
-        opacity: .2;
-      }
-      .featured-image .spacer {
-        height: calc(15vw - 100px);
-      }
       .header {
-        padding: 0px 20px 10px 20px;
+        padding: 0px 20px 20px 20px;
+        position: relative;
+        z-index: 0;
       }
-      .featured-image .header {
+      .featured-image-header {
         color: #ffffff;
         text-shadow: #000000 0px 0px 12px;
       }
       .content {
         width: 100%;
-        margin: 0px 0px 20px 0px;
       }
       .meta {
         margin: 20px 5px 5px 5px;
@@ -43,78 +22,90 @@
       .meta div {
         margin: 0px 5px 5px 5px;
       }
+      .featured-image {
+        width: calc(100% + 40px);
+        margin: -20px -20px 0px -20px;
+        height: 56vh;
+        -webkit-box-shadow: inset 0px -200px 102px -125px rgba(255,255,255,1);
+        -moz-box-shadow: inset 0px -200px 102px -125px rgba(255,255,255,1);
+        box-shadow: inset 0px -200px 102px -125px rgba(255,255,255,1);
+        position: fixed;
+        background-size: cover;
+        background-repeat: no-repeat;
+      }
     </style>
     <style is="custom-style" include="iron-flex iron-flex-alignment"></style>
 
-    <div class="header">
-      <div class="layout horizontal justified">
-        <div>
-          <h1>[[post.title]]</h1>
-        </div>
-        <div class="meta" style="text-align:right;font-size:18px">
-          <div style="font-weight:bold">[[date]]</div>
-          <div>[[author.displayName]]</div>
+    <template is="dom-if" if="[[featuredImage]]" restamp>
+      <div class="featured-image" style="background-image:url('[[featuredImage]]')"></div>
+      <div class="header featured-image-header">
+        <div class="layout horizontal justified">
+          <div>
+            <h1>[[post.title]]</h1>
+          </div>
+          <div class="meta" style="text-align:right;font-size:18px">
+            <div style="font-weight:bold">[[date]]</div>
+            <div>[[author.displayName]]</div>
+          </div>
         </div>
       </div>
-    </div>
+    </template>
+    <template is="dom-if" if="[[!featuredImage]]">
+      <div class="header">
+        <div class="layout horizontal justified">
+          <div>
+            <h1>[[post.title]]</h1>
+          </div>
+          <div class="meta" style="text-align:right;font-size:18px">
+            <div style="font-weight:bold">[[date]]</div>
+            <div>[[author.displayName]]</div>
+          </div>
+        </div>
+      </div>
+    </template>
     <paper-card class="content" elevation="3">
       <div class="card-content">
         <blogdown-render post="[[post]]"></blogdown-render>
       </div>
     </paper-card>
 
-    <template is="dom-if" if="[[post.taxonomy.disqus]]">
-      <paper-card class="content" elevation="3">
-        <div class="card-content">
-          <load-module name="disqus" propPost="[[post]]"></load-module>
-        </div>
-      </paper-card>
-    </template>
+    <!-- <template is="dom-if" if="[[post.taxonomy.disqus]]"> -->
+    <!-- <paper-card class="content" elevation="3"> -->
+    <!-- <div class="card-content"> -->
+    <!-- <load-module name="disqus" propPost="[[post]]"></load-module> -->
+    <!-- </div> -->
+    <!-- </paper-card> -->
+    <!-- </template> -->
 
   </template>
   <script>
-    (function() {
-      'use strict';
-      Polymer({
-        is: 'theme-post',
+    Polymer({
+      is: 'theme-post',
 
-        behaviors: [
-          BlogdownPost,
-          ReduxState
-        ],
+      behaviors: [
+        BlogdownPost,
+        ReduxState
+      ],
 
-        properties: {
-          post: {
-            type: Object,
-            value: {}
-          },
-          authors: {
-            type: Object,
-            statePath: 'authors'
-          },
-          settings: {
-            type: Object,
-            statePath: 'settings'
-          },
-          author: {
-            type: Object,
-            value: {}
-          },
-          date: {
-            type: String,
-            value: ''
-          },
-          disqusProperties: {
-            type: Object,
-            value: {}
-          }
+      properties: {
+        authors: {
+          type: Object,
+          statePath: 'authors'
         },
-
-        ready: function() {
-          if (this.post.author) this.set('author', this.authors[this.post.author]);
-          if (this.post.date) this.set('date', this.post.date.format(this.settings.dateFormat));
+        settings: {
+          type: Object,
+          statePath: 'settings'
         }
-      });
-    })();
+      },
+
+      rerender: function() {
+        this.author = {};
+        this.date = {};
+        this.featuredImage = false;
+        if (this.post.author) this.set('author', this.authors[this.post.author]);
+        if (this.post.date) this.set('date', this.post.date.format(this.settings.dateFormat));
+        if (this.post.featuredImage) this.set('featuredImage', this.post.featuredImage);
+      }
+    });
   </script>
 </dom-module>

@@ -71,6 +71,7 @@
       }
 
       attached() {
+        this.set('isAttached', true);
         this.getSrc(this.src).then((src) => {
           if (this.srcKnown) this.set('imageReady', true);
         });
@@ -119,7 +120,10 @@
           promiseChain = promiseChain.then(promise);
         });
         return promiseChain.then(() => {
-          return this.src;
+          if (this.src) {
+            return this.src;
+          }
+          return false;
         });
       }
 
@@ -162,7 +166,11 @@
           this.set('srcBase', srcBase);
           this.set('filename', filename);
           this.set('format', format);
-          this.set('src', `${srcBase}.${format}`);
+          if (this.isAttached) {
+            this.set('src', `${srcBase}.${format}`);
+          } else {
+            this.set('src', null);
+          }
         }
       }
 

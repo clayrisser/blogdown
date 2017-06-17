@@ -11,6 +11,7 @@
 
       registerHooks() {
         return {
+          routeChanged: this.routeChanged.bind(this),
           pageReady: this.pageReady.bind(this),
           postsReady: this.postsReady.bind(this),
           postReady: this.postReady.bind(this),
@@ -18,6 +19,10 @@
           postsAttached: this.postsAttached.bind(this),
           postAttached: this.postAttached.bind(this)
         };
+      }
+
+      routeChanged(cx) {
+        app.log.info('route =>', cx);
       }
 
       pageReady(cx) {}

@@ -99,32 +99,36 @@
         this.set('isPage', false);
         this.set('isPosts', false);
         this.set('isPost', false);
-        window.setTimeout(() => {
+        window.setTimeout(async () => {
           switch (this.route.type) {
             case 'parent':
-              this.set('page', _.find(this.pages, { slug: this.route.slugs.parent }));
+              this.set('page', _.clone(_.find(this.pages, { slug: this.route.slugs.parent })));
               if (!this.page) {
                 this.render404();
                 return;
               }
               if (this.page.taxonomy) {
-                this.set('posts', this.taxonomies[this.route.slugs.parent]);
+                this.set('posts', _.clone(this.taxonomies[this.route.slugs.parent]));
                 this.set('isPosts', true);
               } else {
                 this.set('isPage', true);
               }
               break;
             default:
-              this.set('post', _.find(this.taxonomies[this.route.slugs.parent], { slug: this.route.slugs.child }));
+              this.set('post', _.clone(_.find(this.taxonomies[this.route.slugs.parent], {
+                slug: this.route.slugs.child
+              })));
               if (!this.post) {
                 this.render404();
                 return;
+              }
+              if (this.post.featuredImage) {
+                this.post.featuredImage = await this.getFeaturedImage(this.post.featuredImage);
               }
               this.set('isPost', true);
               break;
           }
           this.set('is404', false);
-
           if (this.display === 'fullscreen') {
             if (this.isPage && this.page.display === 'fullscreen') {
               this.set('isDisplayFullscreen', true);
@@ -137,7 +141,6 @@
             }
             app.runHook('routeChanged', this.route);
           }
-
         }, 0);
       }
 
@@ -154,10 +157,37 @@
           });
           this.set('is404', true);
         }
-        this.set('page', _.find(this.pages, { slug: '404' }));
+        this.set('page', _.clone(_.find(this.pages, { slug: '404' })));
         this.set('isPage', true);
         this.set('isPosts', false);
         this.set('isPost', false);
+      }
+
+      getFeaturedImage(featuredImage) {
+        if (featuredImage) {
+          if (_.isString(featuredImage)) {
+            return app.getImageSrc(featuredImage).then((newFeaturedImage) => {
+              if (newFeaturedImage) return newFeaturedImage;
+              return app.getImageSrc(this.post.slug).then((newFeaturedImage2) => {
+                if (newFeaturedImage2) return newFeaturedImage2;
+                if (this.post.slug !== _.snakeCase(this.post.title).replace('_', '-')) {
+                  const src = _.snakeCase(this.post.title).replace('_', '-');
+                  return app.getImageSrc(src);
+                }
+                return false;
+              });
+            });
+          }
+          return app.getImageSrc(this.post.slug).then((newFeaturedImage) => {
+            if (newFeaturedImage) return newFeaturedImage;
+            if (this.post.slug !== _.snakeCase(this.post.title).replace('_', '-')) {
+              const src = _.snakeCase(this.post.title).replace('_', '-');
+              return app.getImageSrc(src);
+            }
+            return false;
+          });
+        }
+        return Promise.resolve(featuredImage);
       }
     }
     Polymer(BlogdownContent);

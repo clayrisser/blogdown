@@ -2,7 +2,7 @@
   <template>
     <style>
       .header {
-        padding: 0px 20px 10px 20px;
+        padding: 0px 20px 20px 20px;
       }
       .content {
         width: 100%;
@@ -23,20 +23,17 @@
 
   </template>
   <script>
-    (function() {
-      'use strict';
-      Polymer({
-        is: 'theme-page',
+    Polymer({
+      is: 'theme-page',
 
-        behaviors: [ BlogdownPage ],
+      behaviors: [ BlogdownPage ],
 
-        properties: {
-          page: {
-            type: Object,
-            value: {}
-          }
+      properties: {
+        page: {
+          type: Object,
+          value: {}
         }
-      });
-    })();
+      }
+    });
   </script>
 </dom-module>

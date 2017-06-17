@@ -25,11 +25,19 @@ const BlogdownPosts = {
       page: this.page,
       posts: this.posts
     });
-    }
+  }
 };
 
 const BlogdownPost = {
+  properties: {
+    post: {
+      type: Object,
+      value: {},
+      observer: 'postChanged'
+    }
+  },
   ready: function() {
+    this.isReady = true;
     app.runHook('postReady', {
       post: this.post
     });
@@ -38,6 +46,10 @@ const BlogdownPost = {
     app.runHook('postAttached', {
       post: this.post
     });
+    this.rerender();
+  },
+  postChanged: function() {
+    if (this.isReady) this.rerender();
   }
 };
 
