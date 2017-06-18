@@ -23,7 +23,8 @@
     "redux": "https://cdnjs.cloudflare.com/ajax/libs/redux/3.6.0/redux.js",
     "redux-thunk": "https://cdnjs.cloudflare.com/ajax/libs/redux-thunk/2.1.0/redux-thunk.js",
     "juicy-html": "^1.1.0",
-    "logdown": "^2.2.0"
+    "logdown": "^2.2.0",
+    "murmurHash3js": "murmurhash3js#^3.0.0"
   },
   "devDependencies": {
     "web-component-tester": "^5.0.0"

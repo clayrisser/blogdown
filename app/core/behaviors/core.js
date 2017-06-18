@@ -98,7 +98,7 @@ const BlogdownPost = {
 
 const BlogdownHooks = {
   ready: function() {
-    this._hookID = moment().format('x');
+    this._hookID = murmurHash3.x86.hash128(`${this.is}${moment().format('x')}`);
     if (!app._hooks) app._hooks = {};
     _.each(this.registerHooks(), (hook, key) => {
       if (!app._hooks[key]) app._hooks[key] = {};
