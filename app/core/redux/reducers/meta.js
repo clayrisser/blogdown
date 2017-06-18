@@ -26,13 +26,13 @@ app._reducers.meta = (state = initialState.meta, action) => {
     return _.assign({}, state, {
       selectedMenuItem: action.payload
     });
-  case SET_BASE_URL:
-    return _.assign({}, state, {
-      baseUrl: action.payload
-    });
   case SET_HASH_ID:
     return _.assign({}, state, {
       hashId: action.payload
+    });
+  case CACHE_IMAGE:
+    return _.assign({}, state, {
+      cachedImages: _.assign({}, state.cachedImages, action.payload)
     });
   default:
     return state;

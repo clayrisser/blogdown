@@ -4,10 +4,17 @@
       beforeRegister() {
         this.is = 'boot-settings';
 
+        this.properties = {
+          settings: {
+            type: Object,
+            statePath: 'settings'
+          }
+        };
+
         this.actions = {
           loadSettings: () => {
             return function(dispatch) {
-              return fetch('../../../content/settings.json?' + moment().format('X')).then((res) => {
+              return fetch(`${app.baseUrl}/content/settings.json?${app.getTimestamp()}`).then((res) => {
                 return res.json();
               }).then((body) => {
                 const settings = {};

@@ -5,10 +5,6 @@
         this.is = 'boot-theme';
 
         this.properties = {
-          baseUrl: {
-            type: String,
-            statePath: 'meta.baseUrl'
-          },
           theme: {
             type: Object,
             statePath: 'settings.theme'
@@ -29,22 +25,22 @@
 
       importTheme() {
         return this.importHrefPromise(
-          `${this.baseUrl}/content/themes/${this.theme}/theme-body.html`
-          + `?${moment().format('x')}`
+          `${app.baseUrl}/content/themes/${this.theme}/theme-body.html`
+          + `?${app.getTimestamp()}`
         ).then(() => {
           return this.importHrefPromise(
-            `${this.baseUrl}/content/themes/${this.theme}/theme-page.html`
-            + `?${moment().format('x')}`
+            `${app.baseUrl}/content/themes/${this.theme}/theme-page.html`
+            + `?${app.getTimestamp()}`
           );
         }).then(() => {
           return this.importHrefPromise(
-            `${this.baseUrl}/content/themes/${this.theme}/theme-posts.html`
-            + `?${moment().format('x')}`
+            `${app.baseUrl}/content/themes/${this.theme}/theme-posts.html`
+            + `?${app.getTimestamp()}`
           );
         }).then(() => {
           return this.importHrefPromise(
-            `${this.baseUrl}/content/themes/${this.theme}/theme-post.html`
-            + `?${moment().format('x')}`
+            `${app.baseUrl}/content/themes/${this.theme}/theme-post.html`
+            + `?${app.getTimestamp()}`
           );
         });
       }

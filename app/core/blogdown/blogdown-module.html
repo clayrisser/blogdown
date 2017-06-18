@@ -81,7 +81,7 @@
         if (firstFormat) formats.unshift(firstFormat);
         const promises = [];
         _.each(formats, (format) => {
-          const src = `${this.baseUrl}/content/modules/${this.name}.${format}`;
+          const src = `${app.baseUrl}/content/modules/${this.name}.${format}`;
           promises.push(this.loadFile.bind(this, src, format));
         });
         let promiseChain = Promise.resolve();
@@ -92,7 +92,7 @@
       }
 
       loadFile(src, format) {
-        src = `${src}?${moment().format('X')}`;
+        src = `${src}?${app.getTimestamp()}`;
         if (this.srcKnown) return Promise.resolve();
         return fetch(src).then((res) => {
           if (res.status === 404) return null;

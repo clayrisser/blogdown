@@ -3,18 +3,6 @@
     class BootMeta {
       beforeRegister() {
         this.is = 'boot-meta';
-
-        this.actions = {
-          setBaseUrl: (baseUrl) => {
-            return (dispatch) => {
-              dispatch({
-                type: SET_BASE_URL,
-                payload: baseUrl
-              });
-              return app.runHook('baseUrlSet');
-            };
-          }
-        };
       }
 
       get behaviors() {
@@ -22,19 +10,8 @@
       }
 
       init() {
-        const promises = [this.setBaseUrl()];
+        const promises = [];
         return Promise.all(promises);
-      }
-
-      setBaseUrl() {
-        const matches = window.location.href.match(/[\w\d\.:\/\\]+(?=\/#!)/g);
-        let baseUrl = window.location.href;
-        if (matches) {
-          baseUrl = matches[0];
-        } else {
-          if (baseUrl[baseUrl.length - 1] === '/') baseUrl = baseUrl.substring(0, baseUrl.length - 1);
-        }
-        return this.dispatch('setBaseUrl', baseUrl);
       }
     }
     Polymer(BootMeta);

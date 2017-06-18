@@ -4,10 +4,17 @@
       beforeRegister() {
         this.is = 'boot-authors';
 
+        this.properties = {
+          settings: {
+            type: Object,
+            statePath: 'settings'
+          }
+        };
+
         this.actions = {
           loadAuthors: () => {
             return function(dispatch) {
-              return fetch('../../../content/authors.json')
+              return fetch(`${app.baseUrl}/content/authors.json?${app.getTimestamp()}`)
                 .then((res) => {
                   return res.json();
                 }).then((body) => {

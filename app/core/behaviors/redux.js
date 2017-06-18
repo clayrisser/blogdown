@@ -15,6 +15,22 @@ const ReduxActions = {
           payload: actionType
         });
       };
+    },
+    patchPage: (page) => {
+      return (dispatch) => {
+        dispatch({
+          type: PATCH_PAGE,
+          payload: page
+        });
+      };
+    },
+    patchPost: (taxonomy, post) => {
+      return (dispatch) => {
+        dispatch({
+          type: PATCH_POST,
+          payload: { taxonomy, post }
+        });
+      };
     }
   }
 };

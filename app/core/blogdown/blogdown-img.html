@@ -103,12 +103,12 @@
           });
           if (this.route.type === 'parent') {
             _.each(formats, (format) => {
-              const src = `${this.baseUrl}/content/pages/${this.filename}.${format}`;
+              const src = `${app.baseUrl}/content/pages/${this.filename}.${format}`;
               promises.push(this.loadFile.bind(this, src, format));
             });
           } else {
             _.each(formats, (format) => {
-              const src = `${this.baseUrl}/content/${this.route.slugs.parent}/${this.filename}.${format}`;
+              const src = `${app.baseUrl}/content/${this.route.slugs.parent}/${this.filename}.${format}`;
               promises.push(this.loadFile.bind(this, src, format));
             });
           }
@@ -132,7 +132,7 @@
         if (!matches || matches.length <= 0) {
           src = (src[0] === '/' ? '' : '/') + src;
           if ((src.match(/\//g) || []).length <= 1) src = `/assets${src}`;
-          src = `${this.baseUrl}/content${src}`;
+          src = `${app.baseUrl}/content${src}`;
           matches = src.match(/\/[^\/$#]+/g);
           let format = 'png';
           let unknownFormat = false;
@@ -175,7 +175,7 @@
       }
 
       loadFile(src, format) {
-        src = `${src}?${moment().format('X')}`;
+        src = `${src}?${app.getTimestamp()}`;
         if (this.srcKnown) return Promise.resolve();
         return fetch(src).then((res) => {
           if (res.status === 404) return null;

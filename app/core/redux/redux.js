@@ -11,7 +11,8 @@ const initialState = {
     narrow: false,
     selectedMenuItem: -1,
     baseUrl: '',
-    hashId: ''
+    hashId: '',
+    cachedImages: []
   }
 };
 

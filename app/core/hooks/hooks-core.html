@@ -47,7 +47,6 @@
       registerHooks() {
         return {
           settingsRegistered: this.settingsRegistered.bind(this),
-          baseUrlSet: this.baseUrlSet.bind(this),
           authorsRegistered: this.authorsRegistered.bind(this),
           pagesRegistered: this.pagesRegistered.bind(this),
           taxonomiesRegistered: this.taxonomiesRegistered.bind(this),
@@ -65,10 +64,6 @@
         if (this.settings.debug) {
           Logdown.enable('*');
         }
-      }
-
-      baseUrlSet(cx) {
-        app.log.info('state.meta.baseUrl =>', this.meta.baseUrl);
       }
 
       authorsRegistered(cx) {

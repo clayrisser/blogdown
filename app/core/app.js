@@ -12,6 +12,10 @@ class App {
     md: 'renderer-md'
   };
 
+  _timestamp = moment().format('x');
+
+  baseUrl = '';
+
   go = {
     to: function(route) {
       page.redirect(route);
@@ -22,10 +26,15 @@ class App {
   };
 
   constructor() {
+    this.baseUrl = this.getBaseUrl();
     if (typeof process !== 'undefined'
         && process.env && process.env.NODE_ENV === 'production') {
       Logdown.disable('*');
     }
+  }
+
+  getTimestamp() {
+    return this._timestamp;
   }
 
   domReady() {
@@ -59,13 +68,20 @@ class App {
   }
 
   getImageSrc(src) {
-    return document.createElement('blogdown-img').getSrc(src);
+    const cachedImages = store.getState().meta.cachedImages;
+    if (_.includes(_.keys(cachedImages), src)) {
+      return Promise.resolve(cachedImages[src]);
+    }
+    return document.createElement('blogdown-img').getSrc(src).then((newSrc) => {
+      store.dispatch(this._cacheImage(src, newSrc));
+      return newSrc;
+    });
   }
 
   boot(bootSteps) {
     const promises = [];
     _.each(bootSteps, (bootStep) => {
-      promises.push(this.runBootStep.bind(this, bootStep));
+      promises.push(this._runBootStep.bind(this, bootStep));
     });
     let promiseChain = Promise.resolve();
     _.each(promises, (promise) => {
@@ -78,11 +94,33 @@ class App {
     });
   }
 
-  runBootStep(bootStep) {
+  _runBootStep(bootStep) {
     const bootStepElement = document.createElement('boot-' + bootStep);
     return bootStepElement.init().then((res) => {
       return res;
     });
+  }
+
+  _cacheImage(src, newSrc) {
+    return (dispatch) => {
+      const payload = {};
+      payload[src] = newSrc;
+      dispatch({
+        type: CACHE_IMAGE,
+        payload
+      });
+    };
+  }
+
+  getBaseUrl() {
+    const matches = window.location.href.match(/[\w\d\.:\/\\]+(?=\/#!)/g);
+    let baseUrl = window.location.href;
+    if (matches) {
+      baseUrl = matches[0];
+    } else {
+      if (baseUrl[baseUrl.length - 1] === '/') baseUrl = baseUrl.substring(0, baseUrl.length - 1);
+    }
+    return baseUrl;
   }
 }
 
