@@ -34,6 +34,17 @@ class App {
   }
 
   getTimestamp() {
+    const state = store.getState();
+    let cacheBusting = 'session';
+    if (state && state.settings && state.settings.cacheBusting) {
+      cacheBusting = state.settings.cacheBusting;
+    }
+    switch (cacheBusting) {
+    case 'always':
+      return moment().format('x');
+    case 'never':
+      return moment(murmurHash3.x86.hash32(state.settings.version)).format('x');
+    }
     return this._timestamp;
   }
 

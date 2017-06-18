@@ -1,5 +1,6 @@
 {
   "title": "Jam's Portfolio",
+  "version": "1.0.0",
   "dateFormat": "MMMM D, YYYY",
   "debug": false,
   "theme": "blogdown2017",
@@ -11,6 +12,7 @@
     "google-plus": "https://plus.google.com/+BenjaminRisserJam",
     "github": "https://github.com/jamrizzi"
   },
+  "cacheBusting": "always",
   "disqusShortname": "jamrizzi",
   "taxonomies": [
     {
