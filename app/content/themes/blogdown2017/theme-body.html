@@ -138,10 +138,12 @@
 
       actions: {
         isNarrow: (narrow) => {
-          return {
-            type: IS_NARROW,
-            payload: narrow
-          }
+          return (dispatch) => {
+            dispatch({
+              type: IS_NARROW,
+              payload: narrow
+            });
+          };
         }
       },
 
