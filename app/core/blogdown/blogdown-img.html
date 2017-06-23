@@ -26,10 +26,6 @@
             type: String,
             statePath: 'route'
           },
-          body: {
-            type: Object,
-            value: null
-          },
           url: {
             type: String,
             value: ''
@@ -177,17 +173,15 @@
       loadFile(src, format) {
         src = `${src}?${app.getTimestamp()}`;
         if (this.srcKnown) return Promise.resolve();
-        return fetch(src).then((res) => {
-          if (res.status === 404) return null;
-          return res.blob();
-        }).then((body) => {
-          if (body) {
-            this.set('body', body);
+        const fetcher = binaryFetch(src, (res) => {
+          if (res.status !== 404 && res.status !== 0) {
             this.set('src', src);
             this.set('format', format);
             this.set('srcKnown', true);
           }
+          fetcher.terminate();
         });
+        return fetcher;
       }
     }
     Polymer(BlogdownImg);
