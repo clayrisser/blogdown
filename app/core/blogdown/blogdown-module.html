@@ -25,14 +25,8 @@
       }
 
       ready() {
-        this.format = 'mod.html';
         this.srcKnown = false;
-        this.body = '';
         this.src = '';
-        this.formats = [
-          'mod.html',
-          'mod'
-        ];
       }
 
       attached() {
@@ -56,55 +50,39 @@
 
       registerModule() {
         return this.getSrc().then((src) => {
+          if (!this.srcKnown) return Promise.resolve();
           return new Promise((resolve, reject) => {
             this.importHref(src, resolve, reject);
+          }).then(() => {
+            this.element = document.createElement('mod-' + this.name);
+            _.each(this, (value, key) => {
+              if (key.substr(0, 4) === 'prop') {
+                this.element[key.substr(4, key.length)] = value;
+              }
+            });
+            Polymer.dom(this.root).appendChild(this.element);
+            this.set('elementRegistered', true);
           });
-        }).then(() => {
-          this.element = document.createElement('mod-' + this.name);
-          _.each(this, (value, key) => {
-            if (key.substr(0, 4) === 'prop') {
-              this.element[key.substr(4, key.length)] = value;
-            }
-          });
-          Polymer.dom(this.root).appendChild(this.element);
-          this.set('elementRegistered', true);
         });
       }
 
       getSrc() {
-        let firstFormat = null;
-        const formats = _.remove(this.formats, (format) => {
-          if (this.format !== format) return true;
-          firstFormat = this.format;
-          return false;
+        const src = `${app.baseUrl}/content/modules/${this.name}/module.html`;
+        return this.loadFile(src).then((newSrc) => {
+          return this.src;
         });
-        if (firstFormat) formats.unshift(firstFormat);
-        const promises = [];
-        _.each(formats, (format) => {
-          const src = `${app.baseUrl}/content/modules/${this.name}.${format}`;
-          promises.push(this.loadFile.bind(this, src, format));
-        });
-        let promiseChain = Promise.resolve();
-        _.each(promises, (promise) => {
-          promiseChain = promiseChain.then(promise);
-        });
-        return promiseChain.then(() => this.src);
       }
 
-      loadFile(src, format) {
+      loadFile(src) {
         src = `${src}?${app.getTimestamp()}`;
-        if (this.srcKnown) return Promise.resolve();
-        return fetch(src).then((res) => {
-          if (res.status === 404) return null;
-          return res.text();
-        }).then((body) => {
-          if (body) {
-            this.set('body', body);
+        const fetcher = binaryFetch(src, (res) => {
+          if (res.status !== 404 && res.status !== 0) {
             this.set('src', src);
-            this.set('format', format);
             this.set('srcKnown', true);
           }
+          fetcher.terminate();
         });
+        return fetcher;
       }
     }
     Polymer(BlogdownModule);

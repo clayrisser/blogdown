@@ -28,6 +28,7 @@
           `${app.baseUrl}/content/themes/${this.theme}/theme-body.html`
           + `?${app.getTimestamp()}`
         ).then(() => {
+          if (document.createElement('theme-body')._minified) return Promise.resolve();
           return this.importHrefPromise(
             `${app.baseUrl}/content/themes/${this.theme}/theme-page.html`
             + `?${app.getTimestamp()}`
