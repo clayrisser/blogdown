@@ -24,7 +24,7 @@
     "url-search-params": "https://cdnjs.cloudflare.com/ajax/libs/url-search-params/0.9.0/url-search-params.js",
     "logdown": "^2.2.0",
     "murmurHash3js": "murmurhash3js#^3.0.0",
-    "binary-fetch": "^0.0.45"
+    "binary-fetch": "^0.0.47"
   },
   "devDependencies": {
     "web-component-tester": "^6.0.0"
