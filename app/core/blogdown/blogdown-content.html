@@ -160,7 +160,8 @@
         if (!this.is404) {
           store.dispatch({
             type: CHANGE_ROUTE,
-            route: {
+            payload: {
+              params: this.route.params,
               type: 'parent',
               slugs: {
                 parent: '404'

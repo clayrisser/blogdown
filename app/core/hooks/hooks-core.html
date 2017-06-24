@@ -94,10 +94,11 @@
       }
 
       appLoaded(cx) {
-        const slugs = this.route.slugs ? this.route.slugs : {};
-        const parent = '/' + (slugs.parent ? slugs.parent : '');
-        const child = slugs.child ? '/' + slugs.child : '';
-        app.go.to(parent + child);
+        let location = '/';
+        if (window.location.hash.length > 0) {
+          location = window.location.hash.substr(2, window.location.hash.length - 1);
+        }
+        app.go.to(location);
         this.dispatch({ type: APP_LOADED });
         document.getElementById('loading').innerHTML = '';
         app.log.info(this.settings.title + ' loaded');
