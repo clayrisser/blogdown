@@ -5,9 +5,9 @@
         this.is = 'boot-theme';
 
         this.properties = {
-          theme: {
+          settings: {
             type: Object,
-            statePath: 'settings.theme'
+            statePath: 'settings'
           }
         };
       }
@@ -17,6 +17,8 @@
       }
 
       init() {
+        const theme = this.settings.theme;
+        this.theme = _.isString(theme) ? theme : theme[0];
         return this.importTheme().then(() => {
           app.runHook('themeImported');
           return;

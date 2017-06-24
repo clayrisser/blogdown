@@ -12,6 +12,8 @@ import runSequence from 'run-sequence';
 import { reload } from 'browser-sync';
 
 const $ = gulpLoadPlugins();
+let NODE_ENV = process.env.NODE_ENV ? process.env.NODE_ENV : 'production';
+NODE_ENV = process.argv.includes('--dev') ? 'development' : NODE_ENV;
 const autoprefixerBrowsers = [
   'ie >= 10',
   'ie_mob >= 10',
@@ -82,6 +84,8 @@ gulp.task('vulcanize', ['babel'], (cb) => {
     .pipe($.crisper({
       alwaysWriteScript: true
     }))
+    .pipe($.if('*.js', $.envify({ NODE_ENV })))
+    .pipe($.if('*.js', $.replace('"development" !== \'production\'', 'false')))
     .pipe($.if('*.js', $.uglify().on('error', handleError)))
     .pipe($.if('*.html', $.htmlmin({
       collapseWhitespace: true,

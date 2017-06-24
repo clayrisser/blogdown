@@ -48,6 +48,12 @@ class App {
     return this._timestamp;
   }
 
+  getThemeSettings() {
+    const state = store.getState();
+    const theme = state.settings.theme;
+    return _.isString(theme) ? {} : (theme[1] || {});
+  }
+
   domReady() {
     this.log.info('DOM Ready');
   }
