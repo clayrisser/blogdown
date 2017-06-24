@@ -32,17 +32,17 @@
           return this.importHrefPromise(
             `${app.baseUrl}/content/themes/${this.theme}/theme-page.html`
             + `?${app.getTimestamp()}`
-          );
-        }).then(() => {
-          return this.importHrefPromise(
-            `${app.baseUrl}/content/themes/${this.theme}/theme-posts.html`
-            + `?${app.getTimestamp()}`
-          );
-        }).then(() => {
-          return this.importHrefPromise(
-            `${app.baseUrl}/content/themes/${this.theme}/theme-post.html`
-            + `?${app.getTimestamp()}`
-          );
+          ).then(() => {
+            return this.importHrefPromise(
+              `${app.baseUrl}/content/themes/${this.theme}/theme-posts.html`
+              + `?${app.getTimestamp()}`
+            );
+          }).then(() => {
+            return this.importHrefPromise(
+              `${app.baseUrl}/content/themes/${this.theme}/theme-post.html`
+              + `?${app.getTimestamp()}`
+            );
+          });
         });
       }
 
