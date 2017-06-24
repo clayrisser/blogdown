@@ -3,10 +3,24 @@
     class HooksContent {
       beforeRegister() {
         this.is = 'hooks-content';
+
+        this.properties = {
+          route: {
+            type: Object,
+            statePath: 'route'
+          },
+          settings: {
+            type: Object,
+            statePath: 'settings'
+          }
+        };
       }
 
       get behaviors() {
-        return [BlogdownHooks];
+        return [
+          ReduxState,
+          BlogdownHooks
+        ];
       }
 
       registerHooks() {
@@ -22,6 +36,17 @@
       }
 
       routeChanged(cx) {
+        if (this.route && this.route.params && this.route.params.settings) {
+          try {
+            const querySettings = JSON.parse(this.route.params.settings);
+            this.dispatch({
+              type: LOAD_SETTINGS,
+              payload: _.assign({}, this.settings, querySettings)
+            });
+          } catch (err) {
+            console.warn(err.message);
+          }
+        }
         app.log.info('route =>', cx);
       }
 

@@ -8,6 +8,10 @@
           settings: {
             type: Object,
             statePath: 'settings'
+          },
+          route: {
+            type: Object,
+            statePath: 'route'
           }
         };
 
@@ -19,13 +23,6 @@
               }).then((body) => {
                 const settings = {};
                 _.each(body, (setting, key) => {
-                  if (key === 'logLevel') {
-                    settings[key] = {
-                      name: setting,
-                      value: this.getLogLevel(setting)
-                    };
-                    return;
-                  }
                   settings[key] = setting;
                 });
                 dispatch({
