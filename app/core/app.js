@@ -27,8 +27,7 @@ class App {
 
   constructor() {
     this.baseUrl = this.getBaseUrl();
-    if (typeof process !== 'undefined'
-        && process.env && process.env.NODE_ENV === 'production') {
+    if (process.env.NODE_ENV === 'production') {
       Logdown.disable('*');
     }
   }
