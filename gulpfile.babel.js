@@ -24,6 +24,10 @@ const autoprefixerBrowsers = [
   'bb >= 10'
 ];
 
+function handleError(err) {
+  console.error(err);
+}
+
 gulp.task('default', ['clean'], (cb) => {
   runSequence([
     'vulcanize',
@@ -78,9 +82,7 @@ gulp.task('vulcanize', ['babel'], (cb) => {
     .pipe($.crisper({
       alwaysWriteScript: true
     }))
-    .pipe($.if('*.js', $.uglify({
-      beautify: false
-    })))
+    .pipe($.if('*.js', $.uglify().on('error', handleError)))
     .pipe($.if('*.html', $.htmlmin({
       collapseWhitespace: true,
       collapseInlineTagWhitespace: true,
@@ -96,7 +98,7 @@ gulp.task('vulcanize', ['babel'], (cb) => {
       gulp.src('./.tmp', { read: false })
         .pipe($.clean());
       cb();
-    });
+    }).on('error', handleError);
 });
 
 gulp.task('styles', (cb) => {
@@ -136,9 +138,7 @@ gulp.task('html', (cb) => {
 
 gulp.task('scripts', (cb) => {
   gulp.src('./app/core/bower_components/webcomponentsjs/webcomponents-lite.js')
-    .pipe($.uglify({
-      beautify: false
-    }))
+    .pipe($.uglify().on('error', handleError))
     .pipe(gulp.dest('./dist/core/bower_components/webcomponentsjs/'))
     .on('end', cb);
 });
