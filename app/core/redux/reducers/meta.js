@@ -34,6 +34,10 @@ app._reducers.meta = (state = initialState.meta, action) => {
     return _.assign({}, state, {
       cachedImages: _.assign({}, state.cachedImages, action.payload)
     });
+  case CACHE_FILE:
+    return _.assign({}, state, {
+      cachedFiles: _.assign({}, state.cachedFiles, action.payload)
+    });
   default:
     return state;
   }

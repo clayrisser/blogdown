@@ -6,14 +6,35 @@
       beforeRegister() {
         this.is = 'blogdown-render';
 
+        this.actions = {
+          cacheFile: function(hash, file) {
+            return (dispatch) => {
+              const payload = {};
+              payload[hash] = file;
+              dispatch({
+                type: CACHE_FILE,
+                payload
+              });
+            };
+          }
+        };
+
         this.properties = {
           route: {
             type: Object,
             statePath: 'route'
           },
+          meta: {
+            type: Object,
+            statePath: 'meta'
+          },
           baseUrl: {
             type: String,
             statePath: 'meta.baseUrl'
+          },
+          settings: {
+            type: Object,
+            statePath: 'settings'
           },
           urlKnown: {
             type: Boolean,
@@ -46,11 +67,30 @@
 
       ready() {
         this.page ? this.set('content', this.page) : this.set('content', this.post);
-        this.getUrl(this.content).then((url) => {
+        const cachedFiles = this.meta.cachedFiles;
+        const hash = murmurHash3.x86.hash128(this.content.slug + JSON.stringify(this.content.taxonomy));
+        if (this.settings.cacheBusting !== 'always' && _.includes(_.keys(cachedFiles), hash)) {
+          const cachedFile = cachedFiles[hash];
+          const renderer = document.createElement(app._renderers[cachedFile.renderer]);
+          renderer.content = cachedFile.content;
+          renderer.url = cachedFile.url;
+          renderer.body = cachedFile.body;
+          Polymer.dom(this.root).appendChild(renderer);
+          return Promise.resolve();
+        }
+        return this.getUrl(this.content).then((url) => {
           const renderer = document.createElement(app._renderers[this.renderer]);
           renderer.content = this.content;
           renderer.url = this.url;
           renderer.body = this.body;
+          if (this.settings.cacheBusting !== 'always') {
+            this.dispatch('cacheFile', hash, {
+              content: this.content,
+              url: this.url,
+              body: this.body,
+              renderer: this.renderer
+            });
+          }
           Polymer.dom(this.root).appendChild(renderer);
         });
       }
@@ -66,30 +106,33 @@
         const promises = [];
         if (this.page) {
           _.each(renderers, (renderer) => {
-            const url = `${app.baseUrl}/content/pages/${this.page.slug}.${renderer}`;
+            const url = `${app.baseUrl}/content/pages/${this.page.slug}.${renderer}?${app.getTimestamp()}`;
             promises.push(this.loadFile.bind(this, url, renderer));
           });
           if (this.page.slug !== _.snakeCase(this.page.title).replace(/_/g, '-')) {
             _.each(renderers, (renderer) => {
-              const url = `${app.baseUrl}/content/pages/${_.snakeCase(this.page.title).replace(/_/g, '-')}.${renderer}`;
+              const url = `${app.baseUrl}/content/pages/${_.snakeCase(this.page.title).replace(/_/g, '-')}`
+                        + `.${renderer}?${app.getTimestamp()}`;
               promises.push(this.loadFile.bind(this, url, renderer));
             });
           }
         } else {
           _.each(renderers, (renderer) => {
-            const url = `${app.baseUrl}/content/${this.route.slugs.parent}/${this.post.slug}.${renderer}`;
+            const url = `${app.baseUrl}/content/${this.route.slugs.parent}/`
+                      + `${this.post.slug}.${renderer}?${app.getTimestamp()}`;
             promises.push(this.loadFile.bind(this, url, renderer));
           });
           if (this.post.slug !== _.snakeCase(this.post.title).replace(/_/g, '-')) {
             _.each(renderers, (renderer) => {
               const url = `${app.baseUrl}/content/${this.route.slugs.parent}/`
-                        + `${_.snakeCase(this.post.title).replace(/_/g, '-')}.${renderer}`;
+                        + `${_.snakeCase(this.post.title).replace(/_/g, '-')}.${renderer}?${app.getTimestamp()}`;
               promises.push(this.loadFile.bind(this, url, renderer));
             });
           }
           if (this.post.date && this.post.slug !== this.post.date.format('X')) {
             _.each(renderers, (renderer) => {
-              const url = `${app.baseUrl}/content/${this.route.slugs.parent}/${this.post.date.format('X')}.${renderer}`;
+              const url = `${app.baseUrl}/content/${this.route.slugs.parent}/`
+                        + `${this.post.date.format('X')}.${renderer}?${app.getTimestamp()}`;
               promises.push(this.loadFile.bind(this, url, renderer));
             });
           }

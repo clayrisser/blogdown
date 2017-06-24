@@ -33,7 +33,7 @@
       sanitizeBody(body) {
         const promises = _.map(body.match(/]\(\/[^\)]+\)/g), (match) => {
           const src = match.replace('](/', '/').replace(')', '');
-          return document.createElement('blogdown-img').getSrc(src).then((updatedSrc) => {
+          return app.getImageSrc(src).then((updatedSrc) => {
             return {
               relative: match,
               absolute: `](${updatedSrc})`
