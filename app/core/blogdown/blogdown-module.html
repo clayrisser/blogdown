@@ -75,14 +75,23 @@
 
       loadFile(src) {
         src = `${src}?${app.getTimestamp()}`;
-        const fetcher = binaryFetch(src, (res) => {
-          if (res.status !== 404 && res.status !== 0) {
-            this.set('src', src);
-            this.set('srcKnown', true);
-          }
-          fetcher.terminate();
+        return new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.open('GET', src);
+          xhr.onerror = reject;
+          xhr.onprogress = () => {
+            console.log(xhr.status);
+            if (xhr.status !== 0) {
+              if (xhr.status !== 404) {
+                this.set('src', src);
+                this.set('srcKnown', true);
+              }
+              xhr.abort();
+              resolve();
+            }
+          };
+          xhr.send();
         });
-        return fetcher;
       }
     }
     Polymer(BlogdownModule);

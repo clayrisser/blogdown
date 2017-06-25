@@ -14,7 +14,7 @@
     "title": "Resume",
     "slug": "resume",
     "addToMenu": true,
-    "format": "md",
-    "display": "fullscreen"
+    "format": "pdf",
+    "display": "theme"
   }
 ]

@@ -9,7 +9,8 @@ class App {
   _reducers = {};
 
   _renderers = {
-    md: 'renderer-md'
+    md: 'renderer-md',
+    pdf: 'renderer-pdf'
   };
 
   _timestamp = moment().format('x');
@@ -26,6 +27,7 @@ class App {
   };
 
   constructor() {
+    const process = { env: {} };
     this.baseUrl = this.getBaseUrl();
     if (process.env.NODE_ENV === 'production') {
       Logdown.disable('*');
