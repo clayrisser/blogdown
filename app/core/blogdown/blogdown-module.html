@@ -80,7 +80,6 @@
           xhr.open('GET', src);
           xhr.onerror = reject;
           xhr.onprogress = () => {
-            console.log(xhr.status);
             if (xhr.status !== 0) {
               if (xhr.status !== 404) {
                 this.set('src', src);

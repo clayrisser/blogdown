@@ -26,10 +26,11 @@ RUN apk add --no-cache \
 RUN npm install -g bower && \
     mkdir -p /run/nginx
 
+COPY ./package.json /app/
+RUN npm install
 COPY ./.bowerrc /app/
 COPY ./bower.json /app/
-COPY ./package.json /app/
-RUN npm install && bower install
+RUN bower install
 COPY ./deployment/nginx.conf /etc/nginx/conf.d/default.conf
 COPY ./ /app/
 RUN ln -sf /usr/bin/optipng /app/node_modules/optipng-bin/vendor/optipng && \
