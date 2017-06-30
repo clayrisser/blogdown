@@ -16,6 +16,14 @@ const ReduxActions = {
         });
       };
     },
+    pushNotification: (notification) => {
+      return (dispatch) => {
+        dispatch({
+          PUSH_NOTIFICATION,
+          payload: notification
+        });
+      };
+    },
     patchPage: (page) => {
       return (dispatch) => {
         dispatch({

@@ -4,14 +4,13 @@ const initialState = {
   settings: {},
   taxonomies: {},
   route: {},
+  notifications: [],
   meta: {
     appLoaded: false,
     loading: [],
     progress: -1,
     narrow: false,
     selectedMenuItem: -1,
-    baseUrl: '',
-    hashId: '',
     cachedImages: {},
     cachedFiles: {}
   }
@@ -25,6 +24,7 @@ const createReducer = (asyncReducers) => {
     route: app._reducers.route,
     settings: app._reducers.settings,
     taxonomies: app._reducers.taxonomies,
+    notifications: app._reducers.notifications,
     ...asyncReducers
   });
 };
