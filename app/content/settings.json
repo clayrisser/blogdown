@@ -27,5 +27,8 @@
       "singularForm": "showcase",
       "disqus": false
     }
-  ]
+  ],
+  "modules": {
+    "test": {}
+  }
 }

@@ -55,6 +55,16 @@ class App {
     return _.isString(theme) ? {} : (theme[1] || {});
   }
 
+  getModuleSettings(moduleName) {
+    const matches = moduleName.match(/^mod-/g);
+    if (matches && matches.length > 0) {
+      moduleName = moduleName.substr(4, moduleName.length - 1);
+    }
+    console.log(moduleName);
+    const state = store.getState();
+    return !_.isNil(state.settings.modules) ? state.settings.modules[moduleName] || {} : {};
+  }
+
   domReady() {
     this.log.info('DOM Ready');
   }
