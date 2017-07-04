@@ -1,4 +1,6 @@
-const ReduxActions = {
+const ReduxStateBehavior = PolymerRedux(store);
+
+const ReduxActionsBehavior = {
   actions: {
     startLoading: (actionType) => {
       return (dispatch) => {
@@ -40,18 +42,16 @@ const ReduxActions = {
         });
       };
     }
+  },
+
+  ready: function() {
+    if (this.registerReducer) {
+      const reducer = this.registerReducer();
+      _.each(reducer.constants, (constant) => {
+        constant = _.toUpper(constant);
+        window[constant] = constant;
+      });
+      injectAsyncReducer(reducer.name, reducer.reducer);
+    }
   }
 };
-
-const ReduxReducer = {
-  ready: () => {
-    const reducer = this.registerReducer();
-    _.each(reducer.constants, (constant) => {
-      constant = _.toUpper(constant);
-      window[constant] = constant;
-    });
-    injectAsyncReducer(reducer.name, reducer.reducer);
-  }
-};
-
-const ReduxState = PolymerRedux(store);

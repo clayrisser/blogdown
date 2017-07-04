@@ -1,6 +1,6 @@
-const BlogdownBody = {};
+const BodyBehavior = {};
 
-const BlogdownPage = {
+const PageBehavior = {
   properties: {
     page: {
       type: Object,
@@ -28,7 +28,7 @@ const BlogdownPage = {
   }
 };
 
-const BlogdownPosts = {
+const PostsBehavior = {
   properties: {
     page: {
       type: Object,
@@ -68,7 +68,7 @@ const BlogdownPosts = {
   }
 };
 
-const BlogdownPost = {
+const PostBehavior = {
   properties: {
     post: {
       type: Object,
@@ -96,7 +96,7 @@ const BlogdownPost = {
   }
 };
 
-const BlogdownHooks = {
+const HooksBehavior = {
   ready: function() {
     this._hookID = murmurHash3.x86.hash128(`${this.is}${moment().format('x')}`);
     if (!app._hooks) app._hooks = {};

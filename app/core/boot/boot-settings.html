@@ -42,7 +42,10 @@
       }
 
       get behaviors() {
-        return [ReduxState];
+        return [
+          ReduxActionsBehavior,
+          ReduxStateBehavior
+        ];
       }
 
       init() {
