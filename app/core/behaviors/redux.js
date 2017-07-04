@@ -18,13 +18,16 @@ const ReduxActionsBehavior = {
         });
       };
     },
-    pushNotification: (message, type = 'info') => {
+    pushNotification: (message, type = 'info', link = '', code = 200) => {
       return (dispatch) => {
+        this.logger.notification[type](message);
         dispatch({
-          PUSH_NOTIFICATION,
+          type: PUSH_NOTIFICATION,
           payload: {
             message,
-            type
+            type,
+            link,
+            code
           }
         });
       };

@@ -15,3 +15,10 @@ const PATCH_POST = 'PATCH_POST';
 const CACHE_IMAGE = 'CACHE_IMAGE';
 const CACHE_FILE = 'CACHE_FILE';
 const PUSH_NOTIFICATION = 'PUSH_NOTIFICATION';
+
+class Err extends Error {
+  constructor(message, code = 500) {
+    super(message);
+    this.code = code;
+  }
+}

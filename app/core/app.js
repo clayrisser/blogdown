@@ -1,6 +1,9 @@
 class App {
 
-  hookLogger = Logdown({ prefix: '⥽' });
+  logger = {
+    hook: Logdown({ prefix: '⥽' }),
+    notification: Logdown({ prefix: 'notification' })
+  };
 
   log = Logdown({ prefix: 'blogdown' });
 
@@ -60,7 +63,6 @@ class App {
     if (matches && matches.length > 0) {
       moduleName = moduleName.substr(4, moduleName.length - 1);
     }
-    console.log(moduleName);
     const state = store.getState();
     return !_.isNil(state.settings.modules) ? state.settings.modules[moduleName] || {} : {};
   }
@@ -85,7 +87,7 @@ class App {
   }
 
   runHook(hookName, cx) {
-    this.hookLogger.info(`${hookName}`);
+    this.logger.hook.info(hookName);
     const promises = _.map(this._hooks[hookName], (hookInstance, key) => {
       if (typeof hookInstance.then === 'function') return hookInstance(cx);
       return new Promise((resolve, reject) => {
@@ -108,6 +110,26 @@ class App {
         store.dispatch(this._cacheImage(src, newSrc));
       }
       return newSrc;
+    });
+  }
+
+  handleError(err) {
+    if (_.isNil(err.message)) {
+      err = {
+        message: err,
+        code: 500
+      };
+    }
+    let type = 'error';
+    if (200 <= err.code && err.code < 500) type = 'warn';
+    return store.dispatch({
+      type: PUSH_NOTIFICATION,
+      payload: {
+        message: err.message,
+        type,
+        link: '',
+        code: err.code
+      }
     });
   }
 
