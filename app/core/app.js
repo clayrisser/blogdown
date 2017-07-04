@@ -122,6 +122,11 @@ class App {
     }
     let type = 'error';
     if (200 <= err.code && err.code < 500) type = 'warn';
+    if (type === 'error') {
+      this.logger.notification[type](err);
+    } else {
+      this.logger.notification[type](err.message);
+    }
     return store.dispatch({
       type: PUSH_NOTIFICATION,
       payload: {

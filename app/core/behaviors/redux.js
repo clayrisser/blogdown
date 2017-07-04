@@ -20,7 +20,7 @@ const ReduxActionsBehavior = {
     },
     pushNotification: (message, type = 'info', link = '', code = 200) => {
       return (dispatch) => {
-        this.logger.notification[type](message);
+        app.logger.notification[type](message);
         dispatch({
           type: PUSH_NOTIFICATION,
           payload: {
