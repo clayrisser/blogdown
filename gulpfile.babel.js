@@ -190,6 +190,11 @@ gulp.task('serve', ['babel'], (cb) => {
   gulp.watch(['./app/**/*'], reload);
 });
 
+gulp.task('deploy', ['default'], (cb) => {
+  return gulp.src('./dist/**/*')
+    .pipe($.ghPages());
+});
+
 gulp.task('serve:dist', ['default'], (cb) => {
   browserSync({
     port: 8081,
