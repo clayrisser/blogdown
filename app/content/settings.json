@@ -2,20 +2,21 @@
   "title": "Jam's Portfolio",
   "version": "1.0.0",
   "dateFormat": "MMMM D, YYYY",
-  "debug": false,
-  "theme": ["blogdown2017", {
-    "pageTransition": "scale-up-animation"
-  }],
-  "style": "default",
-  "permlinkMode": "title",
-  "socialAccounts": {
-    "facebook": "https://www.facebook.com/jamrizzi",
-    "twitter": "https://twitter.com/jamrizzi",
-    "google-plus": "https://plus.google.com/+BenjaminRisserJam",
-    "github": "https://github.com/jamrizzi"
-  },
   "cacheBusting": "session",
-  "disqusShortname": "jamrizzi",
+  "debug": false,
+  "hashbang": true,
+  "permlinkMode": "title",
+  "style": "default",
+  "theme": ["blogdown2017", {
+    "pageTransition": "scale-up-animation",
+    "toastDuration": 5000,
+    "socialAccounts": {
+      "facebook": "https://www.facebook.com/jamrizzi",
+      "twitter": "https://twitter.com/jamrizzi",
+      "google-plus": "https://plus.google.com/+BenjaminRisserJam",
+      "github": "https://github.com/jamrizzi"
+    }
+  }],
   "taxonomies": [
     {
       "name": "posts",

@@ -60,10 +60,10 @@
 
       settingsRegistered(cx) {
         document.title = this.settings.title;
-        app.log.info('state.settings =>', this.settings);
         if (this.settings.debug) {
           Logdown.enable('*');
         }
+        app.log.info('state.settings =>', this.settings);
       }
 
       authorsRegistered(cx) {
@@ -94,6 +94,11 @@
       }
 
       appLoaded(cx) {
+        page.base(app.getBaseUrl().replace(/https?:\/\/[^\/]+/, '') + (this.settings.hashbang ? '/' : ''));
+        page({
+          hashbang: this.settings.hashbang,
+          baseUrlInPathname: false
+        });
         let location = '/';
         if (window.location.hash.length > 0) {
           location = window.location.hash.substr(2, window.location.hash.length - 1);

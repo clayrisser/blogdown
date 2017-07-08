@@ -11,7 +11,7 @@
     "lodash": "^4.17.4",
     "molecules": "^1.0.0",
     "moment": "^2.18.1",
-    "page": "^1.7.1",
+    "page": "https://raw.githubusercontent.com/jamrizzi/page.js/master/page.js",
     "paper-elements": "^1.0.7",
     "pdf-object": "^1.0.0",
     "platinum-elements": "^2.0.0",

@@ -3,10 +3,6 @@ class Page {
   isReady = false;
 
   ready() {
-    const state = store.getState();
-    if (window.location.port === '') {
-      page.base(app.baseUrl.replace(/\/$/, ''));
-    }
     page('*', this.middleware.bind(this), (ctx, next) => {
       next();
     });
@@ -41,9 +37,6 @@ class Page {
           parent: '404'
         }
       });
-    });
-    page({
-      hashbang: true
     });
   }
 
