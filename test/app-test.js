@@ -1,7 +1,9 @@
-import { expect } from 'chai';
+import { expect, should } from 'chai';
+
+should();
 
 describe('Mocha', () => {
   it('should be sane', () => {
-    expect(true).to.be.ok;
+    expect().should.be.ok;
   });
 });
