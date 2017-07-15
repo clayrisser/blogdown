@@ -13,7 +13,8 @@ class App {
 
   _renderers = {
     md: 'renderer-md',
-    pdf: 'renderer-pdf'
+    pdf: 'renderer-pdf',
+    html: 'renderer-html'
   };
 
   _timestamp = moment().format('x');

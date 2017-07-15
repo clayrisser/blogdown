@@ -1,0 +1,16 @@
+<dom-module id="page-test">
+  <template>
+
+    <div>[[timestamp]]</div>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'page-test',
+
+      ready: function() {
+        this.set('timestamp', app.getTimestamp());
+      }
+    });
+  </script>
+</dom-module>

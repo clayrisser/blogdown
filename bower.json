@@ -23,7 +23,8 @@
     "url-search-params": "https://cdnjs.cloudflare.com/ajax/libs/url-search-params/0.9.0/url-search-params.js",
     "logdown": "^2.2.0",
     "murmurHash3js": "murmurhash3js#^3.0.0",
-    "webcomponentsjs": "webcomponentsjs-safari-patch#^0.7.26"
+    "webcomponentsjs": "webcomponentsjs-safari-patch#^0.7.26",
+    "juicy-html": "^1.2.0"
   },
   "devDependencies": {
     "web-component-tester": "^6.0.0"
