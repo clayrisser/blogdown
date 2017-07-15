@@ -206,11 +206,8 @@ gulp.task('serve', ['babel'], () => {
 });
 
 gulp.task('deploy', ['default'], () => {
-  return new Promise((resolve, reject) => {
-    gulp.src('./dist/**/*')
-      .pipe($.ghPages())
-      .on('end', resolve).on('error', reject);
-  });
+  return gulp.src('./dist/**/*')
+    .pipe($.ghPages());
 });
 
 gulp.task('serve:dist', ['default'], () => {
