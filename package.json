@@ -1,4 +1,11 @@
 {
+  "name": "blogdown",
+  "version": "1.0.0",
+  "description": "A back-end agnostic, zero compilation, markdown blogging platform",
+  "main": "./app/index.html",
+  "repository": "https://github.com/thingdown/blogdown",
+  "author": "jamrizzi <jam@jamrizzi.com> (https://jamrizzi.com)",
+  "license": "MIT",
   "private": true,
   "devDependencies": {
     "babel-eslint": "^7.2.3",
