@@ -98,19 +98,7 @@ class App {
   }
 
   getImageSrc(src) {
-    const state = store.getState();
-    if (state.settings.cacheBusting !== 'always') {
-      const cachedImages = store.getState().meta.cachedImages;
-      if (_.includes(_.keys(cachedImages), src)) {
-        return Promise.resolve(cachedImages[src]);
-      }
-    }
-    return document.createElement('blogdown-img').getSrc(src).then((newSrc) => {
-      if (state.settings.cacheBusting !== 'always') {
-        store.dispatch(this._cacheImage(src, newSrc));
-      }
-      return newSrc;
-    });
+    return document.createElement('blogdown-img').getSrc(src);
   }
 
   handleError(err) {
@@ -159,17 +147,6 @@ class App {
     return bootStepElement.init().then((res) => {
       return res;
     });
-  }
-
-  _cacheImage(src, newSrc) {
-    return (dispatch) => {
-      const payload = {};
-      payload[src] = newSrc;
-      dispatch({
-        type: CACHE_IMAGE,
-        payload
-      });
-    };
   }
 
   getBaseUrl() {

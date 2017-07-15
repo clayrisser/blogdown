@@ -22,6 +22,14 @@
             type: String,
             statePath: 'meta.baseUrl'
           },
+          settings: {
+            type: Object,
+            statePath: 'settings'
+          },
+          meta: {
+            type: Object,
+            statePath: 'meta'
+          },
           route: {
             type: String,
             statePath: 'route'
@@ -60,6 +68,19 @@
             type: String
           }
         };
+
+        this.actions = {
+          cacheImage: function(src, newSrc) {
+            return (dispatch) => {
+              const payload = {};
+              payload[src] = newSrc;
+              dispatch({
+                type: CACHE_IMAGE,
+                payload
+              });
+            };
+          }
+        };
       }
 
       get behaviors() {
@@ -83,6 +104,17 @@
       }
 
       getSrc(source) {
+        if (this.settings.cacheBusting !== 'always') {
+          const cachedImages = this.meta.cachedImages;
+          if (_.includes(_.keys(cachedImages), source)) {
+            this.set('src', cachedImages[source].src);
+            this.set('format', cachedImages[source].format);
+            this.set('srcBase', cachedImages[source].srcBase);
+            this.set('filename', cachedImages[source].filename);
+            this.set('localSrc', cachedImages[source].localSrc);
+            return Promise.resolve(this.src);
+          }
+        }
         this.setImageDefaults(source);
         let firstFormat = null;
         const formats = _.remove(this.formats, (format) => {
@@ -117,7 +149,25 @@
         });
         return promiseChain.then(() => {
           if (this.src) {
+            if (this.settings.cacheBusting !== 'always') {
+              this.dispatch('cacheImage', source, {
+                src: this.src,
+                format: this.format,
+                srcBase: this.srcBase,
+                filename: this.filename,
+                localSrc: this.localSrc
+              });
+            }
             return this.src;
+          }
+          if (this.settings.cacheBusting !== 'always') {
+            this.dispatch('cacheImage', source, {
+              src: false,
+              format: this.format,
+              srcBase: this.srcBase,
+              filename: this.filename,
+              localSrc: this.localSrc
+            });
           }
           return false;
         });
