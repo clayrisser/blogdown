@@ -16,5 +16,8 @@
     "addToMenu": true,
     "format": "pdf",
     "display": "theme"
+  },
+  {
+    "title": "Test"
   }
 ]
