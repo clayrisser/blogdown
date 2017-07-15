@@ -178,7 +178,8 @@ gulp.task('copy', () => {
 gulp.task('clean', () => {
   return gulp.src([
     './dist',
-    './.tmp'
+    './.tmp',
+    './.publish'
   ], { read: false })
     .pipe($.clean());
 });
