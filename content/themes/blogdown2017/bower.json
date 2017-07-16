@@ -1,11 +1,11 @@
 {
-  "name": "blogdown2017",
+  "name": "blogdown-theme-blogdown2017",
   "homepage": "https://github.com/thingdown/blogdown-theme-blogdown2017",
   "authors": [
     "Jam Risser <jam@jamrizzi.com>"
   ],
   "description": "The official 2017 BlogDown theme",
-  "main": "./theme-body.html",
+  "main": "./src/theme.html",
   "keywords": [
     "blogdown",
     "theme"
@@ -15,7 +15,7 @@
     "**/.*",
     "node_modules",
     "bower_components",
-    "app/core/bower_components",
+    "src/bower_components",
     "test",
     "tests"
   ]
