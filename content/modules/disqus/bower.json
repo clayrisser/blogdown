@@ -1,0 +1,24 @@
+{
+  "name": "blogdown-module-disqus",
+  "homepage": "https://github.com/thingdown/blogdown-module-disqus",
+  "authors": [
+    "Jam Risser <jam@jamrizzi.com>"
+  ],
+  "description": "Disqus commenting for BlogDown",
+  "main": "./src/module.html",
+  "keywords": [
+    "blogdown",
+    "disqus",
+    "comment",
+    "commenting"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "src/bower_components",
+    "test",
+    "tests"
+  ]
+}
