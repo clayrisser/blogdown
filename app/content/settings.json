@@ -21,15 +21,17 @@
     {
       "name": "posts",
       "singularForm": "post",
-      "disqus": true
+      "comment": "disqus"
     },
     {
       "name": "portfolio",
       "singularForm": "showcase",
-      "disqus": false
+      "comment": false
     }
   ],
   "modules": {
-    "test": {}
+    "disqus": {
+      "shortname": "jamrizzi"
+    }
   }
 }
