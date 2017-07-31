@@ -42,5 +42,5 @@ const store = configureStore();
 
 const injectAsyncReducer = (name, asyncReducer) => {
   store.asyncReducers[name] = asyncReducer;
-  store.replaceReducer(createReducer(store.asyncReducer));
+  store.replaceReducer(createReducer(store.asyncReducers));
 };
