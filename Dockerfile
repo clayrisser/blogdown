@@ -34,7 +34,7 @@ RUN bower install
 COPY ./deployment/nginx.conf /etc/nginx/conf.d/default.conf
 COPY ./ /app/
 RUN ln -sf /usr/bin/optipng /app/node_modules/optipng-bin/vendor/optipng && \
-    npm run dist && \
+    npm run build && \
     mv /app/dist/ /dist/ && \
     rm -rf /app/ && \
     mv /dist/ /app/ && \
