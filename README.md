@@ -13,7 +13,7 @@ A back-end agnostic, zero compilation, markdown blogging platform
 | Page Transitions | :heavy_check_mark: | :x:                | :x:                | :x:                |
 | Modular Styles   | :heavy_check_mark: | :x:                | :x:                | :x:                |
 | Custom Rendering | :heavy_check_mark: | :x:                | :heavy_check_mark: | :x:                |
-| Taxonomies       | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                |
+| Taxonomies       | :heavy_check_mark: | :x:                | :heavy_check_mark: | :x:                |
 | No Compilation   | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: |
 | Server Agnostic  | :heavy_check_mark: | :heavy_check_mark: | :x:                | :x:                |
 | No Database      | :heavy_check_mark: | :heavy_check_mark: | :x:                | :x:                |
