@@ -1,23 +1,42 @@
 [
   {
+    "title": "Home",
     "slug": "home",
+    "format": "md",
     "addToMenu": false,
-    "format": "dyn",
-    "featuredImage": "screenshot-1"
+    "display": "theme",
+    "featuredImage": false
   },
   {
-    "title": "Ha",
-    "format": "wow",
-    "display": "viewport"
-  },
-  {
-    "title": "Resume",
-    "slug": "resume",
+    "title": "Markdown Page",
+    "slug": "markdown-page",
+    "format": "md",
     "addToMenu": true,
-    "format": "pdf",
-    "display": "theme"
+    "display": "theme",
+    "featuredImage": false
   },
   {
-    "title": "Test"
+    "title": "HTML Page",
+    "slug": "html-page",
+    "format": "html",
+    "addToMenu": true,
+    "display": "theme",
+    "featuredImage": false
+  },
+  {
+    "title": "PDF Page",
+    "slug": "pdf-page",
+    "format": "pdf",
+    "addToMenu": true,
+    "display": "theme",
+    "featuredImage": false
+  },
+  {
+    "title": "Viewport Example",
+    "slug": "viewport-example",
+    "format": "md",
+    "addToMenu": true,
+    "display": "viewport",
+    "featuredImage": false
   }
 ]
