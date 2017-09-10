@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.1.9 - 2017-09-10
+## [0.1.9] - 2017-09-10
 - Improved release flow
 
 ## [0.1.2] - 2017-02-21
