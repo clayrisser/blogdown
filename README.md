@@ -4,6 +4,8 @@
 
 A back-end agnostic, zero compilation, markdown blogging platform
 
+### [Download](https://github.com/thingdown/blogdown/releases/download/v0.1.9/blogdown.zip)
+
 
 ## Features
 
@@ -24,7 +26,7 @@ A back-end agnostic, zero compilation, markdown blogging platform
 
 ## Installing
 
-1. Unzip the contents from [HERE](https://github.com/thingdown/blogdown/releases/download/v0.1.2/blogdown.zip) on your server
+1. Unzip the contents from [HERE](https://github.com/thingdown/blogdown/releases/download/v0.1.9/blogdown.zip) on your server
 
 2. There is no step two. That's how easy it is to install BlogDown.
 
@@ -32,7 +34,7 @@ A back-end agnostic, zero compilation, markdown blogging platform
 
 ```sh
 mkdir blogdown && cd blogdown
-curl -OL https://github.com/thingdown/blogdown/releases/download/v0.1.0/blogdown.zip
+curl -OL https://github.com/thingdown/blogdown/releases/download/v0.1.9/blogdown.zip
 unzip blogdown.zip && rm blogdown.zip
 python -m SimpleHTTPServer
 ```
@@ -78,6 +80,9 @@ yarn start
 
 
 ## Changelog
+
+0.1.9 (2017-09-10)
+* Improved release flow
 
 0.1.2 (2017-02-21)
 * API finalized

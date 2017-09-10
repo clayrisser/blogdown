@@ -1,6 +1,6 @@
 {
   "name": "blogdown",
-  "version": "1.0.0",
+  "version": "0.1.9",
   "description": "A back-end agnostic, zero compilation, markdown blogging platform",
   "main": "./app/index.html",
   "repository": "https://github.com/thingdown/blogdown",

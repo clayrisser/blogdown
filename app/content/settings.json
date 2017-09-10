@@ -1,6 +1,6 @@
 {
   "title": "BlogDown",
-  "version": "0.1.2",
+  "version": "0.1.9",
   "dateFormat": "MMMM D, YYYY",
   "cacheBusting": "session",
   "debug": false,
