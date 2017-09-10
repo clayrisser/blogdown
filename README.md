@@ -69,7 +69,7 @@ yarn start
 
 ## License
 
-[MIT License](https://github.com/thingdow/blogdown/blob/master/LICENSE)
+[MIT License](https://github.com/thingdown/blogdown/blob/master/LICENSE)
 [Jam Risser]('https://github.com/jamrizzi') &copy; 2017
 
 
@@ -81,4 +81,4 @@ yarn start
 
 ## Changelog
 
-[Changelog](https://github.com/thingdow/blogdown/blob/master/CHANGELOG.md)
+[Changelog](https://github.com/thingdown/blogdown/blob/master/CHANGELOG.md)
