@@ -74,6 +74,7 @@ yarn start
 ## License
 
 [MIT License](https://github.com/thingdow/blogdown/blob/master/LICENSE)
+
 [Jam Risser]('https://github.com/jamrizzi') &copy; 2017
 
 
@@ -105,3 +106,7 @@ yarn start
 
 0.0.0 (2016-03-10)
 * Project started
+
+## Changelog
+
+[Changelog](https://github.com/thingdown/blogdown/blob/master/CHANGELOG.md)
