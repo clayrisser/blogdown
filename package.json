@@ -42,16 +42,10 @@
   },
   "scripts": {
     "start": "node ./node_modules/gulp/bin/gulp serve",
-    "dist": "node ./node_modules/gulp/bin/gulp",
+    "build": "node ./node_modules/gulp/bin/gulp",
     "serve": "node ./node_modules/gulp/bin/gulp serve:dist",
     "clean": "node ./node_modules/gulp/bin/gulp clean",
-    "deploy": "node ./node_modules/gulp/bin/gulp deploy",
-    "build": "docker build -t thingdown/blogdown -f ./Dockerfile ./",
-    "push": "docker push thingdown/blogdown",
-    "pull": "docker pull thingdown/blogdown",
-    "run": "docker run --name some-blogdown --rm -p 8081:8081 thingdown/blogdown",
-    "ssh": "docker run --name some-blogdown --rm -it --entrypoint /bin/sh thingdown/blogdown",
-    "essh": "docker exec some-blogdown /bin/sh",
+    "demo": "node ./node_modules/gulp/bin/gulp demo",
     "test": "node ./node_modules/mocha/bin/mocha --compilers js:babel-core/register ./test/**/*.js"
   },
   "engines": {

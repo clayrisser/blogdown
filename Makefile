@@ -22,13 +22,22 @@ publish: blogdown.zip release
 
 dist: app
 	@echo Building: dist
-	@yarn dist
+	@yarn build
 
 .PHONY: release
 release:
 	@echo Releasing: v$(VERSION)
 	@github-release release --user thingdown --repo blogdown --tag v$(VERSION) --name v$(VERSION) --description "Released $(VERSION)"
 	@github-release upload --replace --user thingdown --repo blogdown --tag v$(VERSION) --name blogdown.zip --file $(CWD)/blogdown.zip
+
+.PHONY: demo
+demo:
+	@echo Releasing: demo
+	@yarn demo
+
+.PHONY: test
+test:
+	@yarn test
 
 blogdown.zip: dist
 	@echo Building: blogdown.zip

@@ -205,7 +205,7 @@ gulp.task('serve', ['babel'], () => {
   gulp.watch(['./app/**/*'], reload);
 });
 
-gulp.task('deploy', ['default'], () => {
+gulp.task('demo', ['default'], () => {
   return gulp.src('./dist/**/*')
     .pipe($.ghPages());
 });
