@@ -1,6 +1,6 @@
 {
-  "title": "Jam's Portfolio",
-  "version": "1.0.0",
+  "title": "BlogDown",
+  "version": "0.1.2",
   "dateFormat": "MMMM D, YYYY",
   "cacheBusting": "session",
   "debug": false,
@@ -21,11 +21,6 @@
     {
       "name": "posts",
       "singularForm": "post",
-      "comment": "disqus"
-    },
-    {
-      "name": "portfolio",
-      "singularForm": "showcase",
       "comment": false
     }
   ],

@@ -7,39 +7,47 @@ A back-end agnostic, zero compilation, markdown blogging platform
 
 ## Features
 
-| Feature | [BlogDown](https://github.com/thingdown/blogdown) | [Jekyll](https://jekyllrb.com/) | [WordPress](https://wordpress.org/) | [Ghost](https://ghost.org/) |
-| ---------------- | :----------------: | :----------------: | :----------------: | :----------------: |
-| Single Page      | :heavy_check_mark: | :x:                | :x:                | :x:                |
-| Page Transitions | :heavy_check_mark: | :x:                | :x:                | :x:                |
-| Modular Styles   | :heavy_check_mark: | :x:                | :x:                | :x:                |
-| Custom Rendering | :heavy_check_mark: | :x:                | :heavy_check_mark: | :x:                |
-| Taxonomies       | :heavy_check_mark: | :x:                | :heavy_check_mark: | :x:                |
-| No Compilation   | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: |
-| Server Agnostic  | :heavy_check_mark: | :heavy_check_mark: | :x:                | :x:                |
-| No Database      | :heavy_check_mark: | :heavy_check_mark: | :x:                | :x:                |
-| Modules/Plugins  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                |
-| Themes           | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| Feature          | [BlogDown](https://github.com/thingdown/blogdown) | [Jekyll](https://jekyllrb.com/) | [WordPress](https://wordpress.org/) | [Ghost](https://ghost.org/) |
+| ---------------- | :-----------------------------------------------: | :-----------------------------: | :---------------------------------: | :-------------------------: |
+| Single Page      | :heavy_check_mark:                                | :x:                             | :x:                                 | :x:                         |
+| Page Transitions | :heavy_check_mark:                                | :x:                             | :x:                                 | :x:                         |
+| Modular Styles   | :heavy_check_mark:                                | :x:                             | :x:                                 | :x:                         |
+| Custom Rendering | :heavy_check_mark:                                | :x:                             | :heavy_check_mark:                  | :x:                         |
+| Taxonomies       | :heavy_check_mark:                                | :x:                             | :heavy_check_mark:                  | :x:                         |
+| No Compilation   | :heavy_check_mark:                                | :x:                             | :heavy_check_mark:                  | :heavy_check_mark:          |
+| Commenting       | :heavy_check_mark:                                | :x:                             | :heavy_check_mark:                  | :heavy_check_mark:          |
+| Server Agnostic  | :heavy_check_mark:                                | :heavy_check_mark:              | :x:                                 | :x:                         |
+| No Database      | :heavy_check_mark:                                | :heavy_check_mark:              | :x:                                 | :x:                         |
+| Modules/Plugins  | :heavy_check_mark:                                | :heavy_check_mark:              | :heavy_check_mark:                  | :x:                         |
+| Themes           | :heavy_check_mark:                                | :heavy_check_mark:              | :heavy_check_mark:                  | :heavy_check_mark:          |
+
 
 ## Installing
-Step 1: Unzip the contents from [HERE](https://github.com/thingdown/blogdown/releases/download/v0.1.0/blogdown.zip) on your server
 
-Step 2: There is no step two. That's how easy it is to install BlogDown.
+1. Unzip the contents from [HERE](https://github.com/thingdown/blogdown/releases/download/v0.1.2/blogdown.zip) on your server
 
-You can easily try the platform locally by spinning up a python server.
+2. There is no step two. That's how easy it is to install BlogDown.
+
+### Try locally
+
 ```
 mkdir blogdown && cd blogdown
 curl -OL https://github.com/thingdown/blogdown/releases/download/v0.1.0/blogdown.zip
 unzip blogdown.zip && rm blogdown.zip
 python -m SimpleHTTPServer
 ```
-Then, just go to [http://localhost:8000](http://localhost:8000) in your browser.
 
-If you want to build the platform yourself, you can run the following.
+Go to [http://localhost:8000](http://localhost:8000)
+
+### Build from source
+
 ```
-git clone git@github.com:jamrizzi/blogdown.git
-npm install && bower install
-gulp serve:dist
+git clone https://github.com/thingdown/blogdown.git
+yarn install # or `npm intall`
+bower install
+yarn start
 ```
+
 
 ## Contributing
 1. Fork it!
@@ -48,11 +56,35 @@ gulp serve:dist
 4. Push to the branch: `git push origin my-new-feature`
 5. Submit a pull request :D
 
-## Built With
-* Polymer
-
-## Authors
-* Jam Risser
 
 ## License
-This project is licensed under the GNU Public License Version 3
+
+[MIT License](https://github.com/thingdow/blogdown/blob/master/LICENSE)
+[Jam Risser]('https://github.com/jamrizzi') &copy; 2017
+
+
+## Credits
+
+* [Jam Risser](https://github.com/jamrizzi) - Author
+* [Polymer](https://www.polymer-project.org/)
+
+
+## Changelog
+
+0.1.2 (2017-02-21)
+* API finalized
+* Under the hood improvements
+* Bug fixes
+
+0.1.1 (2017-02-21)
+* Under the hood improvements
+* Bug fixes
+
+0.1.0 (2017-02-21)
+* Beta release
+
+0.0.1 (2016-04-10)
+* Alpha release
+
+0.0.0 (2016-03-10)
+* Project started
