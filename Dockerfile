@@ -1,5 +1,5 @@
 ############################################################
-# Dockerfile to run BlogDown
+# Dockerfile for thingdown/blogdown
 # Based on Alpine
 ############################################################
 
