@@ -70,6 +70,7 @@ yarn start
 ## License
 
 [MIT License](https://github.com/thingdown/blogdown/blob/master/LICENSE)
+
 [Jam Risser]('https://github.com/jamrizzi') &copy; 2017
 
 
