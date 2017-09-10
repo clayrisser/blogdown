@@ -13,6 +13,17 @@ A back-end agnostic, zero compilation, markdown blogging platform
 * 100% Fontend Processing
 * Markdown, HTML, and PDF posts
 
+| Feature | [BlogDown](https://github.com/thingdown/blogdown) | [Jekyll](https://jekyllrb.com/) | [WordPress](https://wordpress.org/) | [Ghost](https://ghost.org/) |
+| ---------------- | ------------------ | ------------------ | ------------------ | ------------------ |
+| Single Page      | :heavy_check_mark: | :x:                | :x:                | :x:                |
+| Page Transitions | :heavy_check_mark: | :x:                | :x:                | :x:                |
+| Modular Styles   | :heavy_check_mark: | :x:                | :x:                | :x:                |
+| Custom Rendering | :heavy_check_mark: | :x:                | :heavy_check_mark  | :x:                |
+| No Compilation   | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: |
+| Server Agnostic  | :heavy_check_mark: | :heavy_check_mark: | :x:                | :x:                |
+| No Database      | :heavy_check_mark: | :heavy_check_mark: | :x:                | :x:                |
+| Modules/Plugins  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:                |
+
 ## Installing
 Step 1: Unzip the contents from [HERE](https://github.com/thingdown/blogdown/releases/download/v0.1.0/blogdown.zip) on your server
 
