@@ -1,6 +1,5 @@
 'use strict';
 
-import 'babel-polyfill';
 import browserSync from 'browser-sync';
 import fs from 'fs-extra-promise';
 import gulp from 'gulp';
