@@ -113,7 +113,7 @@
         }
         app.go.to(location);
         this.dispatch({ type: APP_LOADED });
-        document.getElementById('loading').innerHTML = '';
+        document.getElementById('loading').remove();
         app.log.info(this.settings.title + ' loaded');
       }
     }
