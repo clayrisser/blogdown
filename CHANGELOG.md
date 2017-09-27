@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.10] - 2017-09-27
+- Baked in some important elements
+
 ## [0.1.9] - 2017-09-10
 - Improved release flow
 

@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 CWD := $(shell pwd)
-VERSION := "0.1.9"
+VERSION := "0.1.10"
 IMAGE := "thingdown/blogdown:latest"
 SOME_CONTAINER := $(shell echo some-$(IMAGE) | sed 's/[^a-zA-Z0-9]//g')
 DOCKERFILE := $(CWD)/Dockerfile
