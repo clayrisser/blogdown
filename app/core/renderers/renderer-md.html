@@ -16,7 +16,7 @@
       }
     </style>
 
-    <marked-element markdown="[[sanitizedBody]]">
+    <marked-element id="md" markdown="[[sanitizedBody]]">
       <div class="markdown-html"></div>
     </marked-element>
 
@@ -34,9 +34,18 @@
         };
       }
 
+      get behaviors() {
+        return [RendererBehavior];
+      }
+
       attached() {
         this.sanitizeBody(this.body).then((sanitizedBody) => {
           this.set('sanitizedBody', sanitizedBody);
+        });
+        Polymer.dom(this.$.md).observeNodes((n) => {
+          app.runHook('rendererRendered', {
+            renderer: this.renderer
+          });
         });
       }
 

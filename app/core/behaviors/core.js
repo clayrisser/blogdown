@@ -111,3 +111,16 @@ const HooksBehavior = {
     });
   }
 };
+
+const RendererBehavior = {
+  ready: function() {
+    app.runHook('rendererReady', {
+      renderer: this.renderer
+    });
+  },
+  attached: function() {
+    app.runHook('rendererAttached', {
+      renderer: this.renderer
+    });
+  }
+};

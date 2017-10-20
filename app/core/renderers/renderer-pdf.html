@@ -3,7 +3,9 @@
     <style>
     </style>
 
-    <pdf-object file="[[url]]"></pdf-object>
+    <div id="pdf">
+      <pdf-object file="[[url]]"></pdf-object>
+    </div>
 
   </template>
   <script>
@@ -17,6 +19,18 @@
             value: 'pdf'
           }
         };
+      }
+
+      get behaviors() {
+        return [RendererBehavior];
+      }
+
+      attached() {
+        Polymer.dom(this.$.pdf).observeNodes((n) => {
+          app.runHook('rendererRendered', {
+            renderer: this.renderer
+          });
+        });
       }
     }
     Polymer(RendererMd);
