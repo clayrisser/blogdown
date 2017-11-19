@@ -9,6 +9,8 @@ MAINTAINER Jam Risser (jamrizzi)
 
 EXPOSE 8081
 
+ENV PRERENDER_SERVICE_URL=http://prerender:3000
+
 WORKDIR /app/
 
 RUN apk add --no-cache \
@@ -26,19 +28,21 @@ RUN apk add --no-cache \
 RUN npm install -g bower && \
     mkdir -p /run/nginx
 
-COPY ./package.json /app/
+COPY ./package.json /app
+COPY ./package-lock.json /app
 RUN npm install
-COPY ./.bowerrc /app/
-COPY ./bower.json /app/
+COPY ./.bowerrc /app
+COPY ./bower.json /app
 RUN bower install
 COPY ./deployment/nginx.conf /etc/nginx/conf.d/default.conf
-COPY ./ /app/
+COPY ./ /app
 RUN ln -sf /usr/bin/optipng /app/node_modules/optipng-bin/vendor/optipng && \
     npm run build && \
-    mv /app/dist/ /dist/ && \
-    rm -rf /app/ && \
-    mv /dist/ /app/ && \
-    chown -R nobody:nobody /app/ && \
+    mv /app/deployment/settings.json /app/dist/content && \
+    mv /app/dist /dist && \
+    rm -rf /app && \
+    mv /dist /app && \
+    chown -R nobody:nobody /app && \
     apk del build-deps
 
 ENTRYPOINT ["/sbin/tini", "--", "/usr/sbin/nginx", "-g", "daemon off;"]

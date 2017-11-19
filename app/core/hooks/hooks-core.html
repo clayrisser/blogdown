@@ -115,6 +115,10 @@
         this.dispatch({ type: APP_LOADED });
         document.getElementById('loading').remove();
         app.log.info(this.settings.title + ' loaded');
+        window.setTimeout(() => {
+          app.log.info('rendered');
+          window.prerenderReady = true;
+        }, 5000);
       }
     }
     Polymer(HooksCore);

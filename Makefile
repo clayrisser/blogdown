@@ -63,7 +63,7 @@ push:
 .PHONY: run
 run:
 	@echo Running: $(IMAGE)
-	@docker run --name $(SOME_CONTAINER) --rm -p 8081:8081 $(IMAGE)
+	@docker run --name $(SOME_CONTAINER) --link some-prerender:prerender --rm -p 8081:8081 $(IMAGE)
 
 .PHONY: ssh
 ssh:

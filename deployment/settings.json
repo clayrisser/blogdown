@@ -1,0 +1,32 @@
+{
+  "title": "BlogDown",
+  "version": "0.1.10",
+  "dateFormat": "MMMM D, YYYY",
+  "cacheBusting": "session",
+  "debug": false,
+  "hashbang": true,
+  "permlinkMode": "title",
+  "style": "default",
+  "theme": ["blogdown2017", {
+    "pageTransition": "scale-up-animation",
+    "toastDuration": 5000,
+    "socialAccounts": {
+      "facebook": "https://www.facebook.com/jamrizzi",
+      "twitter": "https://twitter.com/jamrizzi",
+      "google-plus": "https://plus.google.com/+BenjaminRisserJam",
+      "github": "https://github.com/jamrizzi"
+    }
+  }],
+  "taxonomies": [
+    {
+      "name": "posts",
+      "singularForm": "post",
+      "comment": false
+    }
+  ],
+  "modules": {
+    "disqus": {
+      "shortname": "jamrizzi"
+    }
+  }
+}

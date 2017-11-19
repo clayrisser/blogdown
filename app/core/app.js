@@ -163,6 +163,7 @@ class App {
 }
 
 ((document) => {
+  window.prerenderReady = false;
   const app = document.getElementById('app');
   const _app = new App();
   _.each(_.keys(_app), (key) => {
