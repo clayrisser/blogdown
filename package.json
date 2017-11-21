@@ -42,7 +42,10 @@
   },
   "scripts": {
     "start": "node ./node_modules/gulp/bin/gulp serve",
-    "build": "node ./node_modules/gulp/bin/gulp",
+    "dist": "node ./node_modules/gulp/bin/gulp",
+    "docker:build": "docker build -t thingdown:blogdown:latest -f Dockerfile .",
+    "docker:run": "docker run --name some-blogdown --rm --link some-prerender:prerender -p 8081:8081 thingdown/blogdown:latest",
+    "docker:pull": "docker pull thingdown/blogdown:latest",
     "serve": "node ./node_modules/gulp/bin/gulp serve:dist",
     "clean": "node ./node_modules/gulp/bin/gulp clean",
     "demo": "node ./node_modules/gulp/bin/gulp demo",
