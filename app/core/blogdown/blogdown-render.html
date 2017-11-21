@@ -109,32 +109,32 @@
         const promises = [];
         if (this.page) {
           _.each(renderers, (renderer) => {
-            const url = `${app.baseUrl}/content/pages/${this.page.slug}.${renderer}`;
+            const url = `${app.getContentUrl()}/pages/${this.page.slug}.${renderer}`;
             promises.push(this.loadFile.bind(this, url, renderer));
           });
           if (this.page.slug !== _.snakeCase(this.page.title).replace(/_/g, '-')) {
             _.each(renderers, (renderer) => {
-              const url = `${app.baseUrl}/content/pages/${_.snakeCase(this.page.title).replace(/_/g, '-')}`
+              const url = `${app.getContentUrl()}/pages/${_.snakeCase(this.page.title).replace(/_/g, '-')}`
                         + `.${renderer}`;
               promises.push(this.loadFile.bind(this, url, renderer));
             });
           }
         } else {
           _.each(renderers, (renderer) => {
-            const url = `${app.baseUrl}/content/${this.route.slugs.parent}/`
+            const url = `${app.getContentUrl()}/${this.route.slugs.parent}/`
                       + `${this.post.slug}.${renderer}`;
             promises.push(this.loadFile.bind(this, url, renderer));
           });
           if (this.post.slug !== _.snakeCase(this.post.title).replace(/_/g, '-')) {
             _.each(renderers, (renderer) => {
-              const url = `${app.baseUrl}/content/${this.route.slugs.parent}/`
+              const url = `${app.getContentUrl()}/${this.route.slugs.parent}/`
                         + `${_.snakeCase(this.post.title).replace(/_/g, '-')}.${renderer}`;
               promises.push(this.loadFile.bind(this, url, renderer));
             });
           }
           if (this.post.date && this.post.slug !== this.post.date.format('X')) {
             _.each(renderers, (renderer) => {
-              const url = `${app.baseUrl}/content/${this.route.slugs.parent}/`
+              const url = `${app.getContentUrl()}/${this.route.slugs.parent}/`
                         + `${this.post.date.format('X')}.${renderer}`;
               promises.push(this.loadFile.bind(this, url, renderer));
             });

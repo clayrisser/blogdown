@@ -67,7 +67,7 @@
       }
 
       getSrc() {
-        const src = `${app.baseUrl}/content/modules/${this.name}/module.html`;
+        const src = `${app.getContentUrl()}/modules/${this.name}/module.html`;
         return this.loadFile(src).then((newSrc) => {
           return this.src;
         });

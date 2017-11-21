@@ -7,6 +7,7 @@
   "hashbang": true,
   "permlinkMode": "title",
   "style": "default",
+  "remoteContent": false,
   "theme": ["blogdown2017", {
     "pageTransition": "scale-up-animation",
     "toastDuration": 5000,

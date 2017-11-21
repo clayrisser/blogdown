@@ -14,7 +14,7 @@
         this.actions = {
           loadAuthors: () => {
             return function(dispatch) {
-              return fetch(`${app.baseUrl}/content/authors.json?${app.getTimestamp()}`)
+              return fetch(`${app.getContentUrl()}/authors.json?${app.getTimestamp()}`)
                 .then((res) => {
                   return res.json();
                 }).then((body) => {

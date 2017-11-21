@@ -14,7 +14,7 @@
         this.actions = {
           loadPages: function() {
             return (dispatch) => {
-              return fetch(`${app.baseUrl}/content/pages.json?${app.getTimestamp()}`)
+              return fetch(`${app.getContentUrl()}/pages.json?${app.getTimestamp()}`)
                 .then(res => res.json()).then((body) => {
                   const pages = this.getPages(body);
                   dispatch({

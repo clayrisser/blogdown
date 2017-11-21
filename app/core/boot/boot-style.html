@@ -23,7 +23,7 @@
       importStyle() {
         const style = store.getState().settings.style;
         return new Promise((resolve, reject) => {
-          this.importHref(`${app.baseUrl}/content/styles/${style}.html?${app.getTimestamp()}`, () => {
+          this.importHref(`${app.getContentUrl()}/styles/${style}.html?${app.getTimestamp()}`, () => {
             const message = 'style loaded';
             app.runHook('styleImported');
             this.resolve({

@@ -63,6 +63,10 @@
         if (this.settings.debug) {
           Logdown.enable('*');
         }
+        const { remoteContent } = this.settings;
+        if (remoteContent && remoteContent.length > 0) {
+          app.contentUrl = this.settings.remoteContent;
+        }
         app.log.info('state.settings =>', this.settings);
       }
 

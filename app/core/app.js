@@ -9,6 +9,8 @@ class App {
 
   baseUrl = '';
 
+  contentUrl = '';
+
   _hooks = {};
 
   _reducers = {};
@@ -51,6 +53,12 @@ class App {
       return moment(murmurHash3.x86.hash32(state.settings.version)).format('x');
     }
     return this._timestamp;
+  }
+
+  getContentUrl() {
+    const { contentUrl } = this;
+    if (contentUrl && contentUrl.length > 0) return contentUrl;
+    return `${this.baseUrl}/content`;
   }
 
   getThemeSettings() {

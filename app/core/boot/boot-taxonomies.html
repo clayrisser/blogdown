@@ -55,7 +55,7 @@
       }
 
       loadTaxonomy(taxonomy) {
-        return fetch(`${app.baseUrl}/content/${taxonomy.name}.json?${app.getTimestamp()}`)
+        return fetch(`${app.getContentUrl()}/${taxonomy.name}.json?${app.getTimestamp()}`)
           .then((res) => {
             return res.json();
           }).then((body) => {

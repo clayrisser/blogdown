@@ -18,7 +18,7 @@
         this.actions = {
           loadSettings: () => {
             return function(dispatch) {
-              return fetch(`${app.baseUrl}/content/settings.json?${app.getTimestamp()}`).then((res) => {
+              return fetch(`${app.getContentUrl()}/settings.json?${app.getTimestamp()}`).then((res) => {
                 return res.json();
               }).then((body) => {
                 const settings = {};
