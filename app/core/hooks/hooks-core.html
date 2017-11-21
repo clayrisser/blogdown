@@ -95,21 +95,25 @@
 
       appLoaded(cx) {
         let isRoot = true;
-        const matches = app.getBaseUrl().match(/https?:\/{2}[^#]+/g);
+        const matches = app.baseUrl.match(/.+:\/{2}[^#]+/g);
         if (matches.length > 0) {
           let root = matches[0];
           if (root[root.length - 1] === '/') root = root.substr(0, root.length - 1);
           if (root.split('/').length > 3) isRoot = false;
         }
-        page.base(app.getBaseUrl().replace(/https?:\/\/[^\/]+/, '')
+        page.base(app.getBaseUrl().replace(/.+:\/{2}[^\/]+/, '')
                 + (this.settings.hashbang && !isRoot ? '/' : ''));
         page({
           hashbang: this.settings.hashbang,
           baseUrlInPathname: false
         });
         let location = '/';
-        if (window.location.hash.length > 0) {
-          location = window.location.hash.substr(2, window.location.hash.length - 1);
+        if (this.settings.hashbang) {
+          if (window.location.hash.length > 0) {
+            location = window.location.hash.substr(2, window.location.hash.length - 1);
+          }
+        } else {
+          location = window.location.href.replace(app.baseUrl, '');
         }
         app.go.to(location);
         this.dispatch({ type: APP_LOADED });

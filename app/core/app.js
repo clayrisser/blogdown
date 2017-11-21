@@ -7,6 +7,8 @@ class App {
 
   log = Logdown({ prefix: 'blogdown' });
 
+  baseUrl = '';
+
   _hooks = {};
 
   _reducers = {};
@@ -18,8 +20,6 @@ class App {
   };
 
   _timestamp = moment().format('x');
-
-  baseUrl = '';
 
   go = {
     to: function(route) {
@@ -151,20 +151,25 @@ class App {
   }
 
   getBaseUrl() {
-    const matches = window.location.href.match(/[\w\d\.:\/\\]+(?=\/#!)/g);
-    let baseUrl = window.location.href;
-    if (matches) {
+    var matches = window.location.href.match(/.+:\/{2}.+(?=\/#!)/g);
+    var baseUrl = window.location.href;
+    if (matches && matches.length > 0) {
       baseUrl = matches[0];
     } else {
-      if (baseUrl[baseUrl.length - 1] === '/') baseUrl = baseUrl.substring(0, baseUrl.length - 1);
+      matches = window.location.href.match(/.+:\/{2}[^\/]+/g);
+      if (matches && matches.length > 0) {
+        baseUrl = matches[0];
+      }
     }
+    if (baseUrl[baseUrl.length - 1] === '/') baseUrl = baseUrl.substring(0, baseUrl.length - 1);
     return baseUrl;
   }
 }
 
 ((document) => {
-  window.prerenderReady = false;
   const app = document.getElementById('app');
+  window.prerenderReady = false;
+  let domReady = false;
   const _app = new App();
   _.each(_.keys(_app), (key) => {
     app[key] = _app[key];
@@ -174,10 +179,20 @@ class App {
       app[key] = App.prototype[key];
     }
   });
-  app.addEventListener('dom-change', () => {
-    app.domReady();
-  });
   window.addEventListener('WebComponentsReady', () => {
     app.webComponentsReady();
   });
+  if (document.readyState === 'complete') {
+    if (!domReady) {
+      domReady = true;
+      app.domReady();
+    }
+  } else {
+    app.addEventListener('dom-change', () => {
+      if (!domReady) {
+        domReady = true;
+        app.domReady();
+      }
+    });
+  }
 })(document);
