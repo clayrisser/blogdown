@@ -185,7 +185,7 @@ gulp.task('clean', () => {
 
 gulp.task('serve', ['babel'], () => {
   browserSync({
-    port: 8081,
+    port: 8801,
     notify: false,
     logPrefix: 'BD',
     snippetOptions: {
@@ -212,7 +212,7 @@ gulp.task('demo', ['default'], () => {
 
 gulp.task('serve:dist', ['default'], () => {
   browserSync({
-    port: 8081,
+    port: 8801,
     notify: false,
     logPrefix: 'BD',
     snippetOptions: {

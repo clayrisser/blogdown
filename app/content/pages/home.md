@@ -48,10 +48,10 @@ Go to [http://localhost:8000](http://localhost:8000)
 ### Docker
 
 ```sh
-docker run --name some-blogdown -v /volumes/blogdown-content:/app/content -p 8081:8081 thingdown/blogdown:latest
+docker run --name some-blogdown -v /volumes/blogdown-content:/app/content -p 8801:8801 thingdown/blogdown:latest
 ```
 
-Go to [http://localhost:8081](http://localhost:8081)
+Go to [http://localhost:8801](http://localhost:8801)
 
 ### Build from source
 

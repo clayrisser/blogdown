@@ -1,21 +1,20 @@
 ############################################################
-# Dockerfile for thingdown/blogdown
-# Based on Alpine
+# Image: thingdown/blogdown
+# Base: alpine:3.5
 ############################################################
 
 FROM alpine:3.5
 
 MAINTAINER Jam Risser (jamrizzi)
 
-EXPOSE 8081
+EXPOSE 8801
 
-ENV PRERENDER_SERVICE_URL=http://prerender:3000
+ENV ROOT_URI=http://localhost:8801
 
 WORKDIR /app/
 
 RUN apk add --no-cache \
         nginx \
-        dnsmasq \
         supervisor \
         tini && \
     apk add --no-cache --virtual build-deps \
@@ -36,11 +35,13 @@ RUN npm install
 COPY ./.bowerrc /app
 COPY ./bower.json /app
 RUN bower install
-COPY ./deployment/nginx.conf /etc/nginx/conf.d/default.conf
 COPY ./ /app
 RUN ln -sf /usr/bin/optipng /app/node_modules/optipng-bin/vendor/optipng && \
     mkdir /etc/supervisord && \
+    mkdir /scripts && \
+    mv /app/deployment/nginx.conf /etc/nginx/conf.d/default.conf && \
     mv /app/deployment/supervisord.conf /etc/supervisord/supervisord.conf && \
+    mv /app/deployment/nginx.sh /scripts/nginx.sh && \
     cp -r /app/deployment/app/* /app/app && \
     npm run dist && \
     mv /app/dist /dist && \
