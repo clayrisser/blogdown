@@ -43,9 +43,12 @@
   "scripts": {
     "start": "node ./node_modules/gulp/bin/gulp serve",
     "dist": "node ./node_modules/gulp/bin/gulp",
-    "docker:build": "docker build -t thingdown:blogdown:latest -f Dockerfile .",
+    "docker:build": "docker build -t thingdown/blogdown:latest -f Dockerfile .",
     "docker:run": "docker run --name some-blogdown --rm --link some-prerender:prerender -p 8081:8081 thingdown/blogdown:latest",
     "docker:pull": "docker pull thingdown/blogdown:latest",
+    "docker:ssh": "docker run --name some-blogdown --rm -it --entrypoint=/bin/sh thingdown/blogdown:latest",
+    "docker:essh": "docker exec -it some-blogdown /bin/sh",
+    "docker:push": "docker push thingdown/blogdown:latest",
     "serve": "node ./node_modules/gulp/bin/gulp serve:dist",
     "clean": "node ./node_modules/gulp/bin/gulp clean",
     "demo": "node ./node_modules/gulp/bin/gulp demo",

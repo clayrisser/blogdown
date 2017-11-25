@@ -56,11 +56,26 @@
 
       postReady(cx) {}
 
-      pageAttached(cx) {}
+      pageAttached(cx) {
+        this.prerenderReady();
+      }
 
-      postsAttached(cx) {}
+      postsAttached(cx) {
+        this.prerenderReady();
+      }
 
-      postAttached(cx) {}
+      postAttached(cx) {
+        this.prerenderReady();
+      }
+
+      prerenderReady() {
+        window.setTimeout(() => {
+          if (!window.prerenderReady) {
+            window.dispatchEvent(new Event('prerender-ready'));
+          }
+          window.prerenderReady = true;
+        }, 1000);
+      }
     }
     Polymer(HooksContent);
   </script>
