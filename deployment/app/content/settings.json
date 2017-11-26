@@ -1,5 +1,5 @@
 {
-  "title": "BlogDown",
+  "title": "${TITLE:BlogDown}",
   "version": "0.1.10",
   "dateFormat": "MMMM D, YYYY",
   "cacheBusting": "session",
