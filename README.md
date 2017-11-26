@@ -6,7 +6,7 @@ A back-end agnostic, zero compilation, markdown blogging platform
 
 Please &#9733; this repo if you found it useful &#9733; &#9733; &#9733;
 
-### [Download](https://github.com/thingdown/blogdown/releases/download/v0.1.10/blogdown.zip)
+### [Download](https://github.com/thingdown/blogdown/releases/download/v0.2.0/blogdown.zip)
 ### [Demo](https://thingdown.github.io/blogdown)
 
 
@@ -36,9 +36,8 @@ Please &#9733; this repo if you found it useful &#9733; &#9733; &#9733;
 ### Try locally
 
 ```sh
-mkdir blogdown && cd blogdown
-curl -OL https://github.com/thingdown/blogdown/releases/download/v0.1.10/blogdown.zip
-unzip blogdown.zip && rm blogdown.zip
+curl -OL https://github.com/thingdown/blogdown/releases/download/v0.2.0/blogdown.zip
+unzip blogdown.zip && cd blogdown
 python -m SimpleHTTPServer
 ```
 
