@@ -20,18 +20,30 @@
             return function(dispatch) {
               return fetch(`${app.getContentUrl()}/settings.json?${app.getTimestamp()}`).then((res) => {
                 return res.json();
-              }).then((body) => {
-                const settings = {};
-                _.each(body, (setting, key) => {
-                  settings[key] = setting;
-                });
-                dispatch({
-                  type: LOAD_SETTINGS,
-                  payload: settings
-                });
-                app.runHook('settingsRegistered');
-                this.resolve(settings);
-                return settings;
+              }).then((settings) => {
+                const { remoteContent } = settings;
+                if (remoteContent && remoteContent.length > 0 && remoteContent.toLowerCase() !== 'false') {
+                  return fetch(`${remoteContent}/settings.json?${app.getTimestamp()}`).then((res) => {
+                    return res.json();
+                  }).then((settings) => {
+                    settings.remoteContent = remoteContent;
+                    dispatch({
+                      type: LOAD_SETTINGS,
+                      payload: settings
+                    });
+                    app.runHook('settingsRegistered');
+                    this.resolve(settings);
+                    return settings;
+                  });
+                } else {
+                  dispatch({
+                    type: LOAD_SETTINGS,
+                    payload: settings
+                  });
+                  app.runHook('settingsRegistered');
+                  this.resolve(settings);
+                  return settings;
+                }
               }).catch((err) => {
                 this.reject(err);
                 throw err;

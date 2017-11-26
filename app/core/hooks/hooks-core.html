@@ -64,7 +64,7 @@
           Logdown.enable('*');
         }
         const { remoteContent } = this.settings;
-        if (remoteContent && remoteContent.length > 0) {
+        if (remoteContent && remoteContent.length > 0 && remoteContent.toLowerCase() !== 'false') {
           app.contentUrl = this.settings.remoteContent;
         }
         app.log.info('state.settings =>', this.settings);

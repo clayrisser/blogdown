@@ -7,7 +7,7 @@
   "hashbang": false,
   "permlinkMode": "title",
   "style": "default",
-  "remoteContent": "https://cdn.rawgit.com/jamrizzi/portfolio/d7f159ef/content",
+  "remoteContent": "${REMOTE_CONTENT:https://cdn.rawgit.com/jamrizzi/portfolio/d7f159ef/content}",
   "theme": ["blogdown2017", {
     "pageTransition": "scale-up-animation",
     "toastDuration": 5000,
