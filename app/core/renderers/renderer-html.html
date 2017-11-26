@@ -2,11 +2,11 @@
   <template>
 
     <template is="dom-if" if="[[dynamic]]">
-      <div id="html" id="dynamic"></div>
+      <div id="dynamic"></div>
     </template>
 
     <template is="dom-if" if="[[!dynamic]]">
-      <template id="html" is="juicy-html" content$="[[body]]"></template>
+      <template id="static" is="juicy-html" content$="[[body]]"></template>
     </template>
 
   </template>
@@ -36,7 +36,7 @@
         if (this.dynamic) {
           this.registerDynamicPage(this.url, `page-${this.content.slug}`);
         }
-        Polymer.dom(this.$.html).observeNodes((n) => {
+        Polymer.dom(this.$.dynamic || this.$.static).observeNodes((n) => {
           app.runHook('rendererRendered', {
             renderer: this.renderer
           });
