@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.0] - 2017-11-25
+- Support for prerendering
+- Support for remote content
+- Added rendered hook
+
 ## [0.1.10] - 2017-09-27
 - Baked in some important elements
 

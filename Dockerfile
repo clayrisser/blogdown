@@ -9,25 +9,29 @@ MAINTAINER Jam Risser (jamrizzi)
 
 EXPOSE 8801
 
-ENV ROOT_URI=http://localhost:8801
+ENV ROOT_URI=http://example.com
 
 WORKDIR /app/
 
 RUN apk add --no-cache \
+        dnsmasq \
         nginx \
         supervisor \
         tini && \
     apk add --no-cache --virtual build-deps \
         autoconf \
-        build-base \
         automake \
+        build-base \
+        curl \
         gettext-dev \
         git \
         nasm \
         nodejs-current \
-        optipng
-RUN npm install -g bower && \
-    mkdir -p /run/nginx
+        optipng && \
+    npm install -g bower && \
+    mkdir -p /run/nginx && \
+    curl -L -o /sbin/envstamp https://github.com/jamrizzi/envstamp/releases/download/v0.1.0/envstamp && \
+    chmod +x /sbin/envstamp
 
 COPY ./package.json /app
 COPY ./package-lock.json /app
