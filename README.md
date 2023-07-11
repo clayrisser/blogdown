@@ -4,6 +4,8 @@
 
 A back-end agnostic, zero compilation, markdown blogging platform
 
+![](assets/blogdown.png)
+
 Please &#9733; this repo if you found it useful &#9733; &#9733; &#9733;
 
 ### [Download](https://github.com/thingdown/blogdown/releases/download/v0.2.0/blogdown.zip)
