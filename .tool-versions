@@ -1,0 +1,5 @@
+# The legacy toolchain (gulp 3 / babel 6 / bower) needs node <= 10,
+# which has no native darwin-arm64 build; it runs inside docker
+# (see docker/Dockerfile) instead of being pinned here.
+bats 1.11.1
+shfmt 3.8.0

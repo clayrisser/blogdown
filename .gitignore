@@ -69,3 +69,6 @@ yarn.lock
 # Application
 dist/
 .tmp/
+
+# Make state (see make.mk)
+.make/
