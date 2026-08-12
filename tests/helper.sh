@@ -42,7 +42,7 @@ chrome_dump_dom() {
     --virtual-time-budget=20000 --dump-dom "$2" >"$_dd_out" 2>/dev/null &
   _dd_pid=$!
   _dd_i=0
-  while kill -0 "$_dd_pid" 2>/dev/null && [ "$_dd_i" -lt "${3:-60}" ]; do
+  while kill -0 "$_dd_pid" 2>/dev/null && [ "$_dd_i" -lt "${3:-120}" ]; do
     sleep 1
     _dd_i=$((_dd_i + 1))
   done
