@@ -24,7 +24,9 @@ coverage
 .grunt
 
 # Bower dependency directory (https://bower.io/)
-bower_components
+# NOTE(2026 preservation): app/core/bower_components is vendored (committed)
+# so the app keeps working even if the bower registry or upstream GitHub
+# repos disappear. Do not re-ignore it.
 
 # node-waf configuration
 .lock-wscript

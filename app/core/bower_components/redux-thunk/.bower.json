@@ -1,0 +1,12 @@
+{
+  "name": "redux-thunk",
+  "_cacheHeaders": {
+    "Last-Modified": "Mon, 04 May 2020 16:15:59 GMT",
+    "Content-Length": "800",
+    "Content-Type": "application/javascript; charset=utf-8"
+  },
+  "main": "index.js",
+  "_source": "https://cdnjs.cloudflare.com/ajax/libs/redux-thunk/2.2.0/redux-thunk.js",
+  "_target": "*",
+  "_originalSource": "https://cdnjs.cloudflare.com/ajax/libs/redux-thunk/2.2.0/redux-thunk.js"
+}

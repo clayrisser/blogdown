@@ -1,0 +1,8 @@
+﻿:host {
+  display: inline-block;
+  position: relative;
+}
+
+#files, #upload {
+  float: left;
+}

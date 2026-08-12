@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>fa-awesome Demo</title>
+  <script src="../../webcomponentsjs/webcomponents.js"></script>
+  <script>
+    window.Polymer = window.Polymer || {};
+    window.Polymer.dom = 'shadow';
+  </script>
+  <link rel="import" href="../fa-awesome.html">
+
+  <style is="custom-style">
+    fa-awesome {
+      --fa-awesome-icon-width: 32px;
+      --fa-awesome-icon-height: 32px;
+    }
+  </style>
+</head>
+
+<body>
+  <p>Simple spinning icon:</p>
+  <fa-awesome spin icon="fa:cog"></fa-awesome>
+  <p>Pulse attribute with a label:</p>
+  <fa-awesome pulse icon="fa:spinner">A label for the icon</fa-awesome>
+  <p>Chevron icon with a label on the left side and a size of 80px:</p>
+  <fa-awesome icon="fa:chevron-right" size="80" label-left>Go right</fa-awesome>
+  <p>Icon that appears when added to the page (attributes <i>animated</i> and <i>visible</i> combined):</p>
+  Get in the
+  <fa-awesome icon="fa:car" animated visible>car</fa-awesome> and go!
+  <p>Icon that appears when clicking the botton (attribute <i>animated</i> and public methods <i>show() / hide()</i>):</p>
+  <button>Take the bus -></button>
+  <fa-awesome icon="fa:bus" animated size="32"></fa-awesome>
+
+  <script type="text/javascript">
+    document.querySelector('button').addEventListener('click', function() {
+      var bus = document.querySelector('fa-awesome[icon="fa:bus"]');
+      if (bus.visible) {
+        bus.hide();
+      } else {
+        bus.show();
+      }
+    });
+  </script>
+
+</body>
+
+</html>

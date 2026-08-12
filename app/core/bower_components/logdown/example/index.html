@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Logdown.js</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <style>
+    html {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      height: 100%;
+    }
+
+    h1 {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-weight: 300;
+      text-transform: uppercase;
+      color: #333333;
+      padding: 20px;
+      display: inline-block;
+      border: 2px solid #333333;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      -webkit-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+      text-rendering: optimizelegibility;
+      text-align: center;
+    }
+
+    .demo-is-running {
+      display: none;
+    }
+
+    .fork-on-github {
+      background-color: #999999;
+      color: #FFFFFF;
+      text-transform: uppercase;
+      position: absolute;
+      text-decoration: none;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-weight: 300;
+      padding: 15px;
+      transform: rotate(45deg);
+      width: 300px;
+      top: 75px;
+      right: -65px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1 class="open-devtools">Open your devtools</h1>
+  <h1 class="demo-is-running">Demo is running</h1>
+  <a
+    href="https://github.com/caiogondim/logdown"
+    class="fork-on-github"
+    target="_blank"
+  >
+    Fork me on GitHub
+  </a>
+  <script src="lib/logdown.js"></script>
+  <script src="lib/devtools-detect.js"></script>
+  <script>
+    var demo = new Logdown({prefix: 'demo'})
+
+    function showLogMessages() {
+      var gap = 2000
+      var i = 1
+      var timeout
+
+      demo.log('Initializing demo')
+
+      timeout = i * gap
+      i += 1
+      setTimeout(function() {
+        var log1 = new Logdown({prefix: 'foo:bar'})
+        log1.log('Lorem *ipsum* dolor sit _amet_ foo bar')
+        log1.warn('The method `foo()` is deprecated. You should use `bar()`')
+      }, timeout)
+
+      timeout = i * gap
+      i += 1
+      setTimeout(function() {
+        var log2 = new Logdown({prefix: 'foo:quz'})
+        log2.log('Lorem *ipsum* dolor sit _amet_ foo bar')
+        log2.warn('The method `foo()` is deprecated. You should use `bar()`')
+      }, timeout)
+
+      timeout = i * gap
+      i += 1
+      setTimeout(function() {
+        var log3 = new Logdown({prefix: 'baz'})
+        log3.info('Sit viderer eripuit tincidunt an')
+        log3.error('The method `dolor()` is no longer supported.')
+      }, timeout)
+
+      timeout = i * gap
+      i += 1
+      setTimeout(function() {
+        var log4 = new Logdown({prefix: 'corge'})
+        log4.log('Id ius atqui interpretaris. Usu ea *dolor* alterum labores')
+        log4.warn('Simul *nonumes* qui ei.')
+      }, timeout)
+
+      timeout = i * gap
+      i += 1
+      setTimeout(function() {
+        var log4 = new Logdown({prefix: 'grault'})
+        log4.log('Molestie nominati _recteque_ no eam, qui *ei* putant delicatissi')
+        log4.log('Cum at delenit *apeirian* forensibus')
+      }, timeout)
+
+      timeout = i * gap
+      i += 1
+      setTimeout(function() {
+        var log6 = new Logdown({prefix: 'waldo'})
+        log6.log('Molestie nominati _recteque_ no eam, qui *ei* putant delicatissi', {foo: 1, bar: 2})
+        log6.log('Cum at delenit *apeirian* forensibus', [1, 2, 3, 4, 5])
+      }, timeout)
+
+      timeout = i * gap
+      i += 1
+      setTimeout(function() {
+        demo.log('Demo finished')
+      }, timeout)
+    }
+
+    window.addEventListener('devtoolschange', function() {
+      if (!window.devtools.open) {
+        demo.log('Devtools was open')
+        document.querySelector('.open-devtools').style.display = 'none'
+        document.querySelector('.demo-is-running').style.display = 'block'
+        showLogMessages()
+      }
+    })
+
+  </script>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga')
+
+    ga('create', 'UA-60987420-1', 'auto')
+    ga('send', 'pageview')
+  </script>
+</body>
+</html>

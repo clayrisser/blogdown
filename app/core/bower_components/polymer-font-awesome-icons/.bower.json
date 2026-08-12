@@ -1,0 +1,41 @@
+{
+  "name": "fontawesome-iconset",
+  "version": "4.4.0",
+  "authors": [
+    "Sacha Kyvner <philya@gmail.com>",
+    "Lucas Matías Ciruzzi <lucasmciruzzi@live.com>"
+  ],
+  "description": "Polymer/core-icon compatible iconset based on Font Awesome SVG font",
+  "main": "fa-all.html",
+  "keywords": [
+    "Font Awesome",
+    "Polymer",
+    "Icons",
+    "Icon Set",
+    "web-component",
+    "web-components"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0",
+    "iron-icon": "PolymerElements/iron-icon#^1.0.0",
+    "iron-icons": "PolymerElements/iron-icons#^1.0.0",
+    "iron-iconset-svg": "PolymerElements/iron-iconset-svg#^1.0.0"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/vangware/fontawesome-iconset",
+  "ignore": [
+    "**/.*",
+    "bower_components",
+    "package.json",
+    "update.js"
+  ],
+  "_release": "4.4.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v4.4.0",
+    "commit": "c80cfc8a67cfabdc0180689bba8aad5e6afe4bff"
+  },
+  "_source": "https://github.com/pkaske/font-awesome-polymer-icons.git",
+  "_target": "^4.0.0",
+  "_originalSource": "pkaske/font-awesome-polymer-icons"
+}

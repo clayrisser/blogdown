@@ -1,0 +1,12 @@
+{
+  "name": "babel-polyfill",
+  "_cacheHeaders": {
+    "Last-Modified": "Mon, 04 May 2020 16:06:03 GMT",
+    "Content-Length": "59318",
+    "Content-Type": "application/javascript; charset=utf-8"
+  },
+  "main": "index.js",
+  "_source": "https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.23.0/polyfill.js",
+  "_target": "*",
+  "_originalSource": "https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.23.0/polyfill.js"
+}

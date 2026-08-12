@@ -1,0 +1,129 @@
+<!--
+@license
+Copyright (c) 2016 JamRizzi Technologies. All rights reserved.
+This code may only be used under the GNU General Public License v3.0 style license
+  found at http://www.gnu.org/licenses/gpl-3.0.en.html
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-card/paper-card.html">
+<link rel="import" href="../paper-button/paper-button.html">
+
+<!--
+An embeddable PDF viewer for Polymer.
+
+Example:
+
+    <pdf-object file="http://www.polyu.edu.hk/iaee/files/pdf-sample.pdf"></pdf-object>
+    
+Example - with card enabled and elevation set to 5:
+
+    <pdf-object file="[[pdfUrl]]" elevation="5" card></pdf-object>
+
+Example - with data binding and custom height:
+
+    <pdf-object file="[[pdfUrl]]" height="800px"></pdf-object>
+
+@demo demo/index.html
+-->
+
+<dom-module id="pdf-object">
+  <template>
+
+    <template is="dom-if" if="[[card]]">
+      <paper-card heading="[[heading]]" elevation="[[elevation]]">
+        <div class="card-content">
+          <object data="[[file]]" type="application/pdf" width="[[width]]" height="[[height]]">
+            <p>
+              It appears your Web browser is not configured to display PDF files. No worries, just <a href="[[file]]">
+              click here to download the PDF file.</a>
+            </p>
+          </object>
+        </div>
+        <div class="card-actions">
+          <paper-button on-click="_download">[[downloadLabel]]</paper-button>
+        </div>
+      </paper-card>
+    </template>
+
+    <template is="dom-if" if="[[!card]]">
+      <object data="[[file]]" type="application/pdf" width="[[width]]" height="[[height]]">
+        <p>
+          It appears your Web browser is not configured to display PDF files. No worries, just <a href="[[file]]">
+          click here to download the PDF file.</a>
+        </p>
+      </object>
+    </template>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'pdf-object',
+      
+        properties: {
+          /**
+           * The location of the PDF file.
+           * 
+           * @type String
+           */
+          file: {
+            type: String,
+            value: 'http://www.polyu.edu.hk/iaee/files/pdf-sample.pdf'
+          },
+          /**
+           * The height of the PDF viewer.
+           * 
+           * @type String
+           */
+          height: {
+            type: String,
+            value: '400px'
+          },
+          /**
+           * The width of the PDF viewer.
+           * 
+           * @type String
+           */
+          width: {
+            type: String,
+            value: '100%'
+          },
+          /**
+           * PDF viewer as a card with download button.
+           * 
+           * @type Boolean
+           */
+          card: {
+            type: Boolean,
+            value: false
+          },
+          /**
+           * Download button label.
+           * 
+           * @type String
+           */
+          downloadLabel: {
+            type: String,
+            value: 'Download'
+          },
+          /**
+           * The z-depth of the card, from 0-5.
+           * 
+           * @type String
+           */
+          elevation: {
+            type: String,
+            value: '1'
+          }
+        },
+
+        /**
+         * Downloads the pdf file
+         */
+        _download: function() {
+          window.location = this.file;
+        }
+    });
+  </script>
+</dom-module>

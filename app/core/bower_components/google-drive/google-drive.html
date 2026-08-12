@@ -1,0 +1,182 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../google-signin/google-signin-aware.html">
+<link rel="import" href="google-drive-upload.html">
+
+<!--
+Element enabling you to upload files to Google Drive.
+
+##### Examples
+
+Manual upload with an Upload button once files are selected:
+
+    <google-drive></google-drive>
+
+Automatic upload on file select, without Upload button:
+
+    <google-drive autoUpload></google-drive>
+
+@demo
+-->
+<dom-module id="google-drive">
+  <link rel="import" type="css" href="google-drive.css">
+  <template>
+    <google-signin-aware
+      scopes="https://www.googleapis.com/auth/drive"
+      on-google-signin-aware-success="_signedIn"
+      on-google-signin-aware-signed-out="_signedOut">
+    </google-signin-aware>
+
+    <span style$="{{_computeSpanStyle(authenticated)}}">
+      <input tabindex="0" type="file" id="files" class="custom-file-input" name="files[]" multiple on-change="_handleFilePick"/>
+
+      <button on-click="_manualUpload" id="upload" style$="{{_computeButtonStyle(autoUpload)}}">Upload files</button>
+    </span>
+  </template>
+</dom-module>
+
+<script>
+
+  Polymer({
+    is: 'google-drive',
+    /**
+     * Fired when the upload status changes
+     *
+     * @event google-drive-upload-status
+     */
+
+    /**
+     * Fired when files have been selected
+     *
+     * @event google-drive-files-selected
+     */
+
+    /**
+     * Fired when the element attempts to upload files
+     *
+     * @event google-drive-upload-started
+     */
+
+    /**
+     * Fired when file uploads have successfully completed
+     *
+     * @event google-drive-upload-completed
+     */
+
+    /**
+     * Fired when file uploads have failed
+     *
+     * @event google-drive-upload-failed
+     */
+
+    /**
+     * Fired when the upload lists are cleared
+     *
+     * @event google-drive-upload-cleared
+     */
+
+    /**
+     * The queue of files being uploaded
+     */
+    _uploadList: [],
+
+    /**
+     * The queue of files that have been uploaded
+     */
+    _uploadedList: [],
+
+    properties: {
+      /**
+       * Whether the user has authenticated or not. Element is hidden until authentication?
+       */
+      authenticated: {
+        type: Boolean,
+        value: false
+      },
+
+      /**
+       * Whether files should be automatically uploaded
+       */
+      autoUpload: {
+        type: Boolean,
+        value: false
+      }
+    },
+
+    ready: function () {
+      this.fire('google-drive-upload-status', { status: 'Authentication required' });
+    },
+
+    _computeSpanStyle: function(authenticated) {
+      return "display:" + (authenticated ? 'inline-block' : 'none');
+    },
+
+    _computeButtonStyle: function(autoUpload) {
+      return "display:" + (autoUpload ? 'none' : 'block');
+    },
+
+    _signedIn: function(e, result) {
+      this.accessToken = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
+      this.authenticated = true;
+      this.fire('google-drive-upload-status', { status: 'Ready' });
+    },
+
+    _signedOut: function(e) {
+      this.authenticated = false;
+      this.fire('google-drive-upload-status', { status: 'Please sign-in to continue.' });
+    },
+
+    _selectFiles: function (files) {
+
+      for (var i = 0, f; f = files[i]; i++) {
+          this._uploadList.push(f);
+      }
+
+      if (this.autoUpload) {
+          this._uploadFiles(files);
+      }
+
+      this.fire('google-drive-files-selected', { files: this._uploadList });
+      this.fire('google-drive-upload-status', { status: 'Files selected'});
+    },
+
+    _manualUpload: function () {
+      this._uploadFiles(this._uploadList);
+    },
+
+    _uploadFiles: function (files) {
+
+      this.fire('google-drive-upload-started', { files: this._uploadList });
+      this.fire('google-drive-upload-status', { status: 'Uploading' });
+
+      for (var i = 0, f; f = files[i]; i++) {
+        var uploader = new MediaUploader({
+          file: f,
+          token: this.accessToken,
+          onError: function (data) {
+            this.fire('google-drive-upload-failed', { data: data })
+          }.bind(this),
+          onComplete: function (data) {
+            this._uploadedList.push(JSON.parse(data));
+            this.fire('google-drive-upload-status', { status: 'Upload successful' });
+            this._uploadList = [];
+            this.fire('google-drive-upload-completed', { files: this._uploadedList, data: data });
+          }.bind(this)
+        });
+        uploader.upload();
+      }
+
+    },
+
+    _handleFilePick: function (evt) {
+      evt.stopPropagation();
+      evt.preventDefault();
+      this._selectFiles(evt.target.files);
+    },
+
+    _clearUploadList: function () {
+      this._uploadedList = [];
+      this._uploadList = [];
+      this.fire('google-drive-upload-cleared', { status: 'Upload lists cleared' });
+    }
+  });
+</script>

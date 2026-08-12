@@ -1,0 +1,13 @@
+{
+  "name": "page",
+  "_cacheHeaders": {
+    "ETag": "W/\"e9e2e2d10d723faaf0e55589e00bd396820ba1ac47678ea78e63623a6f2dba95\"",
+    "Content-Length": "7982",
+    "Content-Type": "text/plain; charset=utf-8"
+  },
+  "_release": "e-tag:W/\"e9e2e2d",
+  "main": "index.js",
+  "_source": "https://raw.githubusercontent.com/jamrizzi/page.js/master/page.js",
+  "_target": "*",
+  "_originalSource": "https://raw.githubusercontent.com/jamrizzi/page.js/master/page.js"
+}
