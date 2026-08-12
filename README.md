@@ -32,7 +32,8 @@ make serve     # dev server (gulp serve inside a node 8 container)
 make build     # legacy production build (vulcanize + minify) -> dist/
 make test      # legacy mocha unit tests (inside the container)
 make test/e2e  # bats smoke test: serves the app, curls rendered output,
-               #   and (if chrome is installed) asserts markdown renders
+               #   and (if chrome + node >= 22 are installed) drives
+               #   headless Chrome over CDP to assert markdown renders
                #   to HTML in a real browser
 make stop      # tear the dev server down
 make clean     # remove build artifacts

@@ -29,25 +29,12 @@ find_chrome() {
   return 1
 }
 
-# chrome_dump_dom <chrome> <url> [timeout-seconds]
-# Print the serialized DOM of <url> after JS ran (virtual time budget).
-# Chrome is killed after the timeout: some builds leave updater/crash
-# handler children running long after --dump-dom already finished.
-chrome_dump_dom() {
-  _dd_out=$(mktemp)
-  _dd_profile=$(mktemp -d)
-  "$1" --headless --disable-gpu --no-sandbox --no-first-run \
-    --disable-background-networking --disable-component-update \
-    --user-data-dir="$_dd_profile" \
-    --virtual-time-budget=20000 --dump-dom "$2" >"$_dd_out" 2>/dev/null &
-  _dd_pid=$!
-  _dd_i=0
-  while kill -0 "$_dd_pid" 2>/dev/null && [ "$_dd_i" -lt "${3:-120}" ]; do
-    sleep 1
-    _dd_i=$((_dd_i + 1))
-  done
-  kill "$_dd_pid" 2>/dev/null
-  wait "$_dd_pid" 2>/dev/null
-  cat "$_dd_out"
-  rm -rf "$_dd_out" "$_dd_profile"
+# cdp_probe <chrome> <url> <expect> [timeout-seconds]
+# Load <url> in headless Chrome and poll the DOM over the DevTools
+# Protocol until it contains <expect>; prints the serialized DOM.
+# Returns non-zero if the content never renders. Fast: exits as soon
+# as the SPA has rendered instead of waiting on a chrome process that
+# never terminates (--dump-dom hangs on modern Chrome builds).
+cdp_probe() {
+  node "$PROJECT_ROOT/tests/cdp_probe.js" "$@"
 }

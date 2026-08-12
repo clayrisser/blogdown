@@ -44,7 +44,8 @@ load helper.sh
 
 @test "markdown renders to HTML in a real browser" {
   CHROME=$(find_chrome) || skip "no chrome/chromium binary found"
-  run chrome_dump_dom "$CHROME" "$BLOGDOWN_URL/#!/posts/hello-2026"
+  command -v node >/dev/null || skip "node >= 22 not found (needed for the CDP probe)"
+  run cdp_probe "$CHROME" "$BLOGDOWN_URL/#!/posts/hello-2026" '>Hello from 2026</h1>' 45
   [ "$status" -eq 0 ]
   printf '%s' "$output" | grep -Eq '<h1[^>]*>Hello from 2026</h1>'
   printf '%s' "$output" | grep -q 'preservation revival'
