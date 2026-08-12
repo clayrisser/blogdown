@@ -67,8 +67,12 @@ yarn.lock
 .idea/
 
 # Application
-dist/
-.tmp/
+# NOTE(2026 preservation): anchored to the repo root on purpose. An
+# unanchored `dist/` also ignores the dist/ dirs INSIDE the vendored
+# app/core/bower_components (logdown, pouchdb, ...), which the app loads
+# at runtime — a fresh clone would 404 on them and never boot.
+/dist/
+/.tmp/
 
 # Make state (see make.mk)
 .make/
