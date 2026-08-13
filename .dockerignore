@@ -67,3 +67,6 @@ yarn.lock
 # Application
 dist/
 .tmp/
+
+# Git history (not needed in any image build context)
+.git/

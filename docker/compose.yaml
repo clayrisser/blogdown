@@ -1,0 +1,22 @@
+name: blogdown
+
+services:
+  blogdown:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: blogdown-dev:latest
+    command: npm start
+    ports:
+      - "${BLOGDOWN_PORT:-8801}:8801"
+    volumes:
+      - ..:/app
+      # keep the image's node_modules; the bind mount above would
+      # otherwise shadow it with the (empty) host directory
+      - /app/node_modules
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8801/"]
+      interval: 5s
+      timeout: 5s
+      retries: 60
+      start_period: 20s

@@ -1,0 +1,31 @@
+{
+  "name": "pdf-object",
+  "version": "1.0.0",
+  "authors": [
+    "JamRizzi Technologies"
+  ],
+  "description": "Embeddable PDF viewer for Polymer.",
+  "keywords": [
+    "web-components",
+    "polymer",
+    "pdf",
+    "viewer",
+    "object"
+  ],
+  "main": "pdf-object.html",
+  "license": "https://github.com/jamrizzi/pdf-object/blob/master/LICENSE",
+  "homepage": "https://github.com/jamrizzi/pdf-object",
+  "ignore": [
+    "/.*",
+    "/test/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.4.0",
+    "paper-card": "PolymerElements/paper-card#^1.1.1",
+    "paper-button": "PolymerElements/paper-button#^1.0.11"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.1.5",
+    "paper-styles": "PolymerElements/paper-styles#^1.1.4"
+  }
+}

@@ -83,7 +83,9 @@ gulp.task('vulcanize', ['babel'], () => {
       .pipe($.crisper({
         alwaysWriteScript: true
       }))
-      .pipe($.if('*.js', $.envify({ NODE_ENV })))
+      // gulp-envify pinned a deleted GitHub fork of loose-envify; the same
+      // NODE_ENV substitution is done with gulp-replace (already a dep)
+      .pipe($.if('*.js', $.replace(/process\.env\.NODE_ENV/g, JSON.stringify(NODE_ENV))))
       .pipe($.if('*.js', $.replace('"development" !== \'production\'', 'false')))
       .pipe($.if('*.js', $.uglify().on('error', reject)))
       .pipe($.if('*.html', $.htmlmin({

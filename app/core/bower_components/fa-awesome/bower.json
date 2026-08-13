@@ -1,0 +1,25 @@
+{
+  "name": "fa-awesome",
+  "version": "2.0.1",
+  "authors": [
+    "Peter Kaske"
+  ],
+  "description": "Polymer element that shows icons of font-awesome. Build with Polymer 0.9.",
+  "license": "MIT",
+  "keywords": [
+    "polymer",
+    "web-components"
+  ],
+  "main": "fa-awesome.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.0.0",
+    "neon-animation": "PolymerElements/neon-animation#^1.0.0",
+    "polymer-font-awesome-icons": "pkaske/font-awesome-polymer-icons#^4.0.0",
+    "iron-iconset-svg": "PolymerElements/iron-iconset-svg#^1.0.0",
+    "iron-icon": "PolymerElements/iron-icon#^1.0.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0"
+  }
+}

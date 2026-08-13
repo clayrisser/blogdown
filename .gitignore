@@ -24,7 +24,9 @@ coverage
 .grunt
 
 # Bower dependency directory (https://bower.io/)
-bower_components
+# NOTE(2026 preservation): app/core/bower_components is vendored (committed)
+# so the app keeps working even if the bower registry or upstream GitHub
+# repos disappear. Do not re-ignore it.
 
 # node-waf configuration
 .lock-wscript
@@ -65,5 +67,12 @@ yarn.lock
 .idea/
 
 # Application
-dist/
-.tmp/
+# NOTE(2026 preservation): anchored to the repo root on purpose. An
+# unanchored `dist/` also ignores the dist/ dirs INSIDE the vendored
+# app/core/bower_components (logdown, pouchdb, ...), which the app loads
+# at runtime — a fresh clone would 404 on them and never boot.
+/dist/
+/.tmp/
+
+# Make state (see make.mk)
+.make/

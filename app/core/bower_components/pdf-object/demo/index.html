@@ -1,0 +1,62 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <title>pdf-object Demo</title>
+  <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+  <link rel="import" href="../pdf-object.html">
+
+</head>
+
+<body unresolved>
+  <template is="dom-bind" id="app">
+    <style>
+      body {
+        font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      }
+      
+      paper-card {
+        width: 100%;
+      }
+      
+      hr {
+        margin: 40px 0px 40px 0px;
+      }
+    </style>
+
+    <h2>Example:</h2>
+    <code>&lt;pdf-object file="http://www.polyu.edu.hk/iaee/files/pdf-sample.pdf"&gt;&lt;/pdf-object&gt;</code>
+    <br>&nbsp;</br>
+    <pdf-object file="http://www.polyu.edu.hk/iaee/files/pdf-sample.pdf"></pdf-object>
+    <hr>
+
+    <h2>Example - with card enabled and elevation set to 5:</h2>
+    <code>&lt;pdf-object file="[[pdfUrl]]" elevation="5" card="true"&gt;&lt;/pdf-object&gt;</code>
+    <br>&nbsp;</br>
+    <pdf-object file="[[pdfUrl]]" elevation="5" card="true"></pdf-object>
+    <hr>
+
+    <h2>Example - with data binding and custom height:</h2>
+    <code>&lt;pdf-object file="[[pdfUrl]]" height="800px"&gt;&lt;/pdf-object&gt;</code>
+    <br>&nbsp;</br>
+    <pdf-object file="[[pdfUrl]]" height="800px"></pdf-object>
+
+  </template>
+  <script>
+    var app = document.querySelector('#app');
+      app.pdfUrl = 'http://www.polyu.edu.hk/iaee/files/pdf-sample.pdf';
+  </script>
+</body>
+
+</html>

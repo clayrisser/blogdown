@@ -1,0 +1,42 @@
+{
+  "name": "logdown",
+  "homepage": "https://github.com/caiogondim/logdown",
+  "authors": [
+    "Caio Gondim <me@caiogondim.com>"
+  ],
+  "description": "Debug utility with markdown support that runs on browser and server",
+  "main": "dist/logdown.js",
+  "moduleType": [
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "log",
+    "markdown",
+    "debug",
+    "console",
+    "info",
+    "error",
+    "logging"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "img",
+    "gulpfile.js"
+  ],
+  "version": "2.2.0",
+  "_release": "2.2.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.2.0",
+    "commit": "a03e21b431c3ecb32ee77d4713961fad7023e5ac"
+  },
+  "_source": "https://github.com/caiogondim/logdown.git",
+  "_target": "^2.2.0",
+  "_originalSource": "logdown"
+}

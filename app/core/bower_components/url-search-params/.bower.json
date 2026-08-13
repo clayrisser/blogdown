@@ -1,0 +1,12 @@
+{
+  "name": "url-search-params",
+  "_cacheHeaders": {
+    "Last-Modified": "Mon, 04 May 2020 16:17:26 GMT",
+    "Content-Length": "1597",
+    "Content-Type": "application/javascript; charset=utf-8"
+  },
+  "main": "index.js",
+  "_source": "https://cdnjs.cloudflare.com/ajax/libs/url-search-params/0.9.0/url-search-params.js",
+  "_target": "*",
+  "_originalSource": "https://cdnjs.cloudflare.com/ajax/libs/url-search-params/0.9.0/url-search-params.js"
+}

@@ -1,0 +1,64 @@
+{
+  "name": "logdown",
+  "version": "2.2.0",
+  "description": "Debug utility with markdown support that runs on browser and server",
+  "main": "dist/logdown.js",
+  "types": "dist/logdown.d.ts",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "npm run build && gulp test && npm run test:lint",
+    "test:server": "gulp mocha",
+    "test:client": "npm run build && gulp karma",
+    "test:lint": "standard './src/**/*.js' './test/**/*.js'",
+    "test:lint:fix": "standard './src/**/*.js' './test/**/*.js' --fix",
+    "start": "gulp dev",
+    "build": "gulp build",
+    "deploy:example": "gulp deploy:example",
+    "test:travisci": "gulp test:travisci",
+    "preversion": "npm run test",
+    "version": "npm run build && git add ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/caiogondim/logdown"
+  },
+  "keywords": [
+    "log",
+    "markdown",
+    "debug",
+    "console",
+    "info",
+    "error",
+    "logging"
+  ],
+  "author": "Caio Gondim <me@caiogondim.com> (http://caiogondim.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/caiogondim/logdown/issues"
+  },
+  "homepage": "https://github.com/caiogondim/logdown",
+  "devDependencies": {
+    "browser-sync": "^2.18.2",
+    "chai": "^3.5.0",
+    "gulp": "^3.9.1",
+    "gulp-gh-pages": "^0.5.4",
+    "gulp-header": "^1.8.2",
+    "gulp-mocha": "^2.2.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sourcemaps": "^2.4.0",
+    "gulp-uglify": "^1.5.3",
+    "karma": "^0.13.0",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^1.0.0",
+    "karma-cli": "1.0.0",
+    "karma-firefox-launcher": "^1.0.0",
+    "karma-mocha": "^1.0.0",
+    "karma-sinon": "^1.0.5",
+    "mocha": "^2.5.3",
+    "sinon": "^1.17.5",
+    "standard": "^8.0.0"
+  },
+  "dependencies": {}
+}

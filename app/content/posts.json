@@ -1,5 +1,14 @@
 [
   {
+    "title": "Hello from 2026",
+    "slug": "hello-2026",
+    "date": "aug 12, 2026",
+    "status": "published",
+    "featuredImage": false,
+    "description": "A sample post proving the 2026 preservation revival renders markdown end-to-end",
+    "author": "jamrizzi"
+  },
+  {
     "title": "Post 1",
     "slug": "post1",
     "date": "feb 28, 1017",
